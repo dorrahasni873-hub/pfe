@@ -2,21 +2,9 @@ import type { RegisterInput, User } from "@/@types/types";
 import api from "./axios";
 
 export const userApi = () => {
-  const createUser = async (
-    nom: string,
-    prenom: string,
-    email: string,
-    motDePasse: string,
-    tel: string,
-  ) => {
+  const createUser = async (data: User) => {
     try {
-      const res = await api.post("/users/", {
-        nom,
-        prenom,
-        email,
-        motDePasse,
-        tel,
-      });
+      const res = await api.post("/utilisateurs/", data);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -24,7 +12,7 @@ export const userApi = () => {
   };
   const getUsers = async () => {
     try {
-      const res = await api.get<User[]>("/users/", { withCredentials: true });
+      const res = await api.get("/utilisateurs/");
       return res.data;
     } catch (error) {
       console.log(error);
@@ -33,9 +21,7 @@ export const userApi = () => {
 
   const deleteUser = async (id: string) => {
     try {
-      const res = await api.delete<{ message: string }>(`/users/${id}`, {
-        withCredentials: true,
-      });
+      const res = await api.delete(`/utilisateurs/${id}`);
       return res.data;
     } catch (error) {
       console.log(error);
@@ -44,9 +30,10 @@ export const userApi = () => {
 
   const updateUser = async (id: string, data: RegisterInput) => {
     try {
-      const res = await api.put<{ message: string }>(`/users/${id}`, data, {
-        withCredentials: true,
-      });
+      const res = await api.put<{ message: string }>(
+        `/utilisateurs/${id}`,
+        data,
+      );
       return res.data;
     } catch (error) {
       console.log(error);

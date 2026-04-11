@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,6 +20,7 @@ export function SignupForm({
 }: React.ComponentProps<"div">) {
   const { register } = useAuth();
   const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [confirmMotDePasse, setConfirmMotDePasse] = useState("");
@@ -30,13 +32,7 @@ export function SignupForm({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("from register form ", {
-      email,
-      motDePasse,
-      nom,
-      prenom,
-      tel,
-    });
+
     setError(null);
 
     if (
@@ -50,12 +46,14 @@ export function SignupForm({
       setError("All fields are required");
       return;
     }
+
     if (motDePasse !== confirmMotDePasse) {
       setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
+
     const success = await register({
       email,
       motDePasse,
@@ -63,160 +61,116 @@ export function SignupForm({
       prenom,
       tel,
     });
+
     setLoading(false);
 
-    if (success) {
-      console.log({
-        email,
-        password: motDePasse,
-        firstName: nom,
-        lastName: prenom,
-        tel,
-      });
-
-      navigate("/");
-    } else {
-      setError("Failed to register. Try again.");
-    }
+    if (success) navigate("/");
+    else setError("Failed to register. Try again.");
   };
 
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card className="overflow-hidden p-0">
-        <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" onSubmit={handleSubmit}>
-            <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Créer votre compte</h1>
-                <p className="text-muted-foreground text-sm text-balance">
-                  Entrez vos informations ci-dessous pour créer votre compte
-                </p>
-              </div>
+    <div className="relative min-h-screen">
+      {/* ✅ FULL SCREEN IMAGE BACKGROUND */}
+      <div className="fixed inset-0">
+        <img
+          src="/car.png"
+          alt="background"
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/60" />
+      </div>
 
-              {error && (
-                <p className="text-red-600 text-sm text-center">{error}</p>
-              )}
+      {/* ✅ FORM ON TOP */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md bg-white/95 backdrop-blur-md shadow-2xl">
+          <CardContent className="p-6 md:p-8">
+            <form onSubmit={handleSubmit}>
+              <FieldGroup>
+                <div className="text-center space-y-2">
+                  <h1 className="text-2xl font-bold">Créer votre compte</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Inscrivez-vous pour continuer
+                  </p>
+                </div>
 
-              <Field>
-                <FieldLabel htmlFor="nom">Prénom</FieldLabel>
-                <Input
-                  id="nom"
-                  type="text"
-                  placeholder="John"
-                  value={nom}
-                  onChange={(e) => setNom(e.target.value)}
-                  required
-                />
-              </Field>
+                {error && (
+                  <p className="text-red-600 text-sm text-center">{error}</p>
+                )}
 
-              <Field>
-                <FieldLabel htmlFor="prenom">Nom de famille</FieldLabel>
-                <Input
-                  id="prenom"
-                  type="text"
-                  placeholder="Doe"
-                  value={prenom}
-                  onChange={(e) => setPrenom(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="tel">Téléphone</FieldLabel>
-                <Input
-                  id="tel"
-                  type="tel"
-                  placeholder="+1234567890"
-                  value={tel}
-                  onChange={(e) => setTel(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field className="grid grid-cols-2 gap-4">
                 <Field>
-                  <FieldLabel htmlFor="password">Mot de passe</FieldLabel>
+                  <FieldLabel>Prénom</FieldLabel>
+                  <Input value={nom} onChange={(e) => setNom(e.target.value)} />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Nom</FieldLabel>
                   <Input
-                    id="password"
-                    type="password"
-                    value={motDePasse}
-                    onChange={(e) => setMotDePasse(e.target.value)}
-                    required
+                    value={prenom}
+                    onChange={(e) => setPrenom(e.target.value)}
                   />
                 </Field>
 
                 <Field>
-                  <FieldLabel htmlFor="confirm-password">
-                    Confirmer le mot de passe
-                  </FieldLabel>
+                  <FieldLabel>Téléphone</FieldLabel>
+                  <Input value={tel} onChange={(e) => setTel(e.target.value)} />
+                </Field>
+
+                <Field>
+                  <FieldLabel>Email</FieldLabel>
                   <Input
-                    id="confirm-password"
-                    type="password"
-                    value={confirmMotDePasse}
-                    onChange={(e) => setConfirmMotDePasse(e.target.value)}
-                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </Field>
-              </Field>
 
-              <FieldDescription>
-                Doit contenir au moins 8 caractères.
-              </FieldDescription>
+                <Field className="grid grid-cols-2 gap-3">
+                  <Field>
+                    <FieldLabel>Mot de passe</FieldLabel>
+                    <Input
+                      type="password"
+                      value={motDePasse}
+                      onChange={(e) => setMotDePasse(e.target.value)}
+                    />
+                  </Field>
 
-              <Field>
-                <Button type="submit" disabled={loading}>
-                  {loading ? "Création du compte..." : "Créer un compte"}
+                  <Field>
+                    <FieldLabel>Confirmer</FieldLabel>
+                    <Input
+                      type="password"
+                      value={confirmMotDePasse}
+                      onChange={(e) => setConfirmMotDePasse(e.target.value)}
+                    />
+                  </Field>
+                </Field>
+
+                <FieldDescription>Minimum 8 caractères</FieldDescription>
+
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Création..." : "Créer un compte"}
                 </Button>
-              </Field>
 
-              <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
-                Ou continuez avec
-              </FieldSeparator>
+                <FieldSeparator>Ou continuer avec</FieldSeparator>
 
-              {/* Social buttons here */}
-              <Field className="grid grid-cols-3 gap-4">
-                <Button variant="outline" type="button">
-                  Apple
-                </Button>
-                <Button variant="outline" type="button">
-                  Google
-                </Button>
-                <Button variant="outline" type="button">
-                  Meta
-                </Button>
-              </Field>
+                <div className="grid grid-cols-3 gap-3">
+                  <Button type="button" variant="outline">
+                    Apple
+                  </Button>
+                  <Button type="button" variant="outline">
+                    Google
+                  </Button>
+                  <Button type="button" variant="outline">
+                    Meta
+                  </Button>
+                </div>
 
-              <FieldDescription className="text-center">
-                Vous avez déjà un compte ? <Link to="/login">Se connecter</Link>
-              </FieldDescription>
-            </FieldGroup>
-          </form>
-
-          <div className="bg-muted relative hidden md:block">
-            <img
-              src="/placeholder.svg"
-              alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-            />
-          </div>
-        </CardContent>
-      </Card>
-      <FieldDescription className="px-6 text-center">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
-      </FieldDescription>
+                <FieldDescription className="text-center">
+                  Déjà un compte ? <Link to="/login">Se connecter</Link>
+                </FieldDescription>
+              </FieldGroup>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

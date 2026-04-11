@@ -4,16 +4,13 @@ import { z } from "zod";
 
 const paramsSchema = z.object({ matricule: z.string() });
 
-// Body schema
 const createVehiculeSchema = z.object({
-  matricule: z.number(),
+  matricule: z.string(),
   marqueVoiture: z.string(),
   dateCirculation: z.string(),
   dateVisite: z.string(),
   dateTaxe: z.string(),
   etat: z.string(),
-  dateCreation: z.string(),
-  dateMiseAJour: z.string(),
 });
 
 export const getVehicules = async (
@@ -22,7 +19,7 @@ export const getVehicules = async (
   next: NextFunction,
 ) => {
   try {
-    const vehicles = await vehiculeService.getVehiculesWithMaintenances();
+    const vehicles = await vehiculeService.getVehicules();
     res.json(vehicles);
   } catch (err) {
     next(err);
@@ -36,9 +33,7 @@ export const getVehicule = async (
 ) => {
   try {
     const { matricule } = paramsSchema.parse(req.params);
-    const vehicle = await vehiculeService.getVehiculeByMatricule(
-      Number(matricule),
-    );
+    const vehicle = await vehiculeService.getVehiculeByMatricule(matricule);
     res.json(vehicle);
   } catch (err) {
     next(err);
@@ -50,11 +45,16 @@ export const createVehicule = async (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log("BODY RECEIVED:", req.body);
+
   try {
     const data = createVehiculeSchema.parse(req.body);
+
     const vehicle = await vehiculeService.createVehicule(data);
-    res.status(201).json(vehicle);
+
+    return res.status(201).json(vehicle);
   } catch (err) {
+    console.error("CREATE VEHICULE ERROR:", err);
     next(err);
   }
 };
@@ -67,10 +67,7 @@ export const updateVehicule = async (
   try {
     const { matricule } = paramsSchema.parse(req.params);
     const data = req.body; // add Zod validation if needed
-    const vehicle = await vehiculeService.updateVehicule(
-      Number(matricule),
-      data,
-    );
+    const vehicle = await vehiculeService.updateVehicule(matricule, data);
     res.json(vehicle);
   } catch (err) {
     next(err);
@@ -84,7 +81,7 @@ export const deleteVehicule = async (
 ) => {
   try {
     const { matricule } = paramsSchema.parse(req.params);
-    await vehiculeService.deleteVehicule(Number(matricule));
+    await vehiculeService.deleteVehicule(matricule);
     res.json({ message: "Vehicule supprimé" });
   } catch (err) {
     next(err);

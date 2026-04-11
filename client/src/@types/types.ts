@@ -10,7 +10,7 @@ export const UserSchema = z.object({
   tel: z.string(),
 });
 
-export const NewUserSchema = UserSchema.omit({ id: true, role: true });
+export const NewUserSchema = UserSchema.omit({ id: true });
 
 export type User = z.infer<typeof UserSchema>;
 export type RegisterInput = Omit<User, "id" | "role">;
@@ -31,3 +31,29 @@ export const updateChauffeurSchema = chauffeurSchema
   .partial()
   .omit({ id: true });
 export type UpdateChauffeur = z.infer<typeof updateChauffeurSchema>;
+
+export const VehiculeSchema = z.object({
+  matricule: z.string(),
+  marqueVoiture: z.string(),
+  dateCirculation: z.date(),
+  dateVisite: z.date(),
+  dateTaxe: z.date(),
+  etat: z.string(),
+});
+
+export type Vehicule = z.infer<typeof VehiculeSchema>;
+
+export const updateVehiculeSchema = VehiculeSchema.partial().omit({
+  matricule: true,
+});
+
+export type VehiculePayload = {
+  matricule: string;
+  marqueVoiture: string;
+  dateCirculation: string;
+  dateVisite: string;
+  dateTaxe: string;
+  etat: string;
+};
+
+export type UpdateVehicule = VehiculePayload;

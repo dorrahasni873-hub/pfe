@@ -10,6 +10,8 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChauffeursPage from "@/pages/ChauffeursPage";
+import VehiculesPage from "@/pages/VehiculesPage";
+import UsersPage from "@/pages/usersPage";
 
 export const AppRoutes = () => {
   return (
@@ -28,6 +30,8 @@ export const AppRoutes = () => {
         >
           <Route index element={<Dashboard />} />
           <Route path="chauffeurs" element={<ChauffeursPage />} />
+          <Route path="vehicules" element={<VehiculesPage />} />
+          <Route path="utilisateurs" element={<UsersPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -5,15 +5,12 @@ import { z } from "zod";
 const paramsSchema = z.object({ id: z.string() });
 
 const createUserSchema = z.object({
-  id: z.string(),
   nom: z.string(),
   prenom: z.string(),
   email: z.string().email().optional(),
   motDePasse: z.string(),
   tel: z.string().optional(),
   role: z.string(),
-  dateCreation: z.string(),
-  dateMiseAJour: z.string(),
 });
 
 export const getUtilisateurs = async (
@@ -22,7 +19,7 @@ export const getUtilisateurs = async (
   next: NextFunction,
 ) => {
   try {
-    const users = await utilisateurService.getUsersWithMaintenances();
+    const users = await utilisateurService.getUsers();
     res.json(users);
   } catch (err) {
     next(err);

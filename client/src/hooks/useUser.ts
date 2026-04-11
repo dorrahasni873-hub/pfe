@@ -1,18 +1,11 @@
 import type { RegisterInput, User } from "@/@types/types";
-import api from "@/api/axios";
 import { userApi } from "@/api/userApi";
 
 export const useUser = () => {
-  const createUser = async ({
-    nom,
-    prenom,
-    email,
-    motDePasse,
-    tel,
-  }: RegisterInput) => {
+  const createUser = async (data: User) => {
     try {
       const { createUser } = userApi();
-      const res = await createUser(nom, prenom, email, motDePasse, tel);
+      const res = await createUser(data);
       return res;
     } catch (error) {
       console.log(error);
@@ -21,8 +14,9 @@ export const useUser = () => {
 
   const getUsers = async (): Promise<User[] | undefined> => {
     try {
-      const res = await api.get<{ message: string; data: User[] }>("/users");
-      return res.data.data;
+      const { getUsers } = userApi();
+      const res = await getUsers();
+      return res;
     } catch (error) {
       console.log(error);
     }
@@ -39,8 +33,6 @@ export const useUser = () => {
   };
 
   const updateUser = async (id: string, data: RegisterInput) => {
-    console.log("data from userHook", data);
-
     try {
       const { updateUser } = userApi();
       const res = await updateUser(id, data);

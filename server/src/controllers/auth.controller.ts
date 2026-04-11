@@ -75,7 +75,10 @@ export const checkAuth = async (
     const user = req.user;
     if (!user) return res.status(401).json({ message: "Unauthorized" });
 
-    res.json({ user });
+    const getUser = await db.query.utilisateur.findFirst({
+      where: eq(utilisateur.id, user.id),
+    });
+    res.json({ getUser });
   } catch (err) {
     next(err);
   }

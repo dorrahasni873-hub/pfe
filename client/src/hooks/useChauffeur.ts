@@ -35,9 +35,21 @@ export const useChauffeur = () => {
     }
   };
 
+  const deleteChauffeur = async (id: string) => {
+    const { deleteChauffeur } = chauffeurApi;
+    try {
+      await deleteChauffeur(id);
+      return true;
+    } catch (error) {
+      console.error("Error deleting chauffeur:", error);
+      throw error;
+    }
+  };
+
   return {
     getChauffeurs,
     createChauffeur,
     updateChauffeur,
+    deleteChauffeur,
   };
 };

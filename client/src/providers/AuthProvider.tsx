@@ -15,23 +15,36 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
+
       if (!token) {
         setLoading(false);
         return;
       }
+
+      const storedUser = localStorage.getItem("data");
+      if (storedUser) {
+        setUser(JSON.parse(storedUser));
+      }
+
       try {
         const data = await checkMe();
-        setUser(data?.user || null);
+
+        const userData = data?.getUser;
+
+        setUser(userData);
+        localStorage.setItem("data", JSON.stringify(userData));
       } catch (err) {
         console.log(err);
         setUser(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("data");
       } finally {
         setLoading(false);
       }
     };
+
     fetchUser();
   }, [checkMe]);
-
   const login = async ({ email, motDePasse }: LoginInput) => {
     const data = await loginApi(email, motDePasse);
 

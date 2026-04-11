@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import type { Chauffeur } from "@/@types/types";
-import { ChauffeurDataTable } from "@/components/chauffeur-data-table";
+import { ChauffeurDataTable } from "@/components/chauffeur/chauffeur-data-table";
 import { useChauffeur } from "@/hooks/useChauffeur";
 
-const DriversPage = () => {
+const ChauffeursPage = () => {
   const { getChauffeurs } = useChauffeur();
   const [data, setData] = useState<Chauffeur[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,11 +35,11 @@ const DriversPage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 px-6">Liste d'utilisateur</h1>
+      <h1 className="text-2xl font-bold mb-4 px-6">Liste des chauffeurs</h1>
 
       <ChauffeurDataTable data={data} />
     </div>
   );
 };
 
-export default DriversPage;
+export default ChauffeursPage;

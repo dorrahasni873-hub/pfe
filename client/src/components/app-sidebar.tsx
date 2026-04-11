@@ -60,16 +60,16 @@ const data = {
       url: "#",
       icon: IconSettings,
     },
-    {
-      title: "Recherche",
-      url: "#",
-      icon: IconSearch,
-    },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
+  const [query, setQuery] = React.useState("");
+
+  const filteredNavMain = data.navMain.filter((item) =>
+    item.title.toLowerCase().includes(query.toLowerCase()),
+  );
 
   if (!user) {
     return null;
@@ -93,8 +93,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={filteredNavMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <div className="p-2">
+          <div className="flex items-center gap-2 border rounded-md px-2">
+            <IconSearch size={16} />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Rechercher..."
+              className="w-full bg-transparent outline-none text-sm p-1"
+            />
+          </div>
+        </div>
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={user} />

@@ -45,15 +45,12 @@ export const getUserById = async (id: string) => {
 };
 
 export const createUser = async (data: {
-  id: string;
   nom: string;
   prenom: string;
   email?: string;
   motDePasse: string;
   tel?: string;
   role: string;
-  dateCreation: string;
-  dateMiseAJour: string;
 }) => {
   return await db.insert(utilisateur).values(data);
 };

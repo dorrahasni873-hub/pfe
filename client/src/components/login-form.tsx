@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -18,6 +18,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const navigate = useNavigate();
   const { login } = useAuth();
+
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -33,103 +34,85 @@ export function LoginForm({
     }
 
     setLoading(true);
-    const success = await login({ email, motDePasse });
-    setLoading(false);
-    console.log(success);
 
-    if (success) {
-      navigate("/");
-    } else {
-      setError("Invalid email or password");
-    }
+    const success = await login({ email, motDePasse });
+
+    setLoading(false);
+
+    if (success) navigate("/");
+    else setError("Invalid email or password");
   };
 
   return (
-    <div className={cn("flex flex-col gap-3", className)} {...props}>
-      <Card className="overflow-hidden p-0 ml-50">
-        <CardContent className="grid p-0 md:grid-cols-2 relative">
-          <form className="p-2 md:p-8 z-10 bg-white " onSubmit={handleSubmit}>
-            <FieldGroup>
-              <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Bienvenue</h1>
-                <p className="text-muted-foreground text-balance">
-                  Connectez-vous à votre compte
-                </p>
-              </div>
-
-              {error && <p className="text-red-600 text-center">{error}</p>}
-
-              <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href="#"
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Mot de passe oublié ?
-                  </a>
-                </div>
-                <Input
-                  id="password"
-                  type="password"
-                  value={motDePasse}
-                  onChange={(e) => setMotDePasse(e.target.value)}
-                  required
-                />
-              </Field>
-
-              <Field>
-                <Button type="submit" disabled={loading}>
-                  {loading ? "Connexion en cours..." : "Se connecter"}
-                </Button>
-              </Field>
-
-              {/* <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">Ou continuez avec</FieldSeparator> */}
-              {/* 
-              <Field className="grid grid-cols-3 gap-4">
-                <Button variant="outline" type="button">
-                  Apple
-                </Button>
-                <Button variant="outline" type="button">
-                  Google
-                </Button>
-                <Button variant="outline" type="button">
-                  Meta
-                </Button>
-              </Field> */}
-
-              <FieldDescription className="text-center">
-                Vous n'avez pas de compte ?{" "}
-                <Link to="/register">S'inscrire</Link>
-              </FieldDescription>
-            </FieldGroup>
-          </form>
-        </CardContent>
-      </Card>
-      <div className="">
+    <div className="relative min-h-screen">
+      {/* 🌄 FULL SCREEN BACKGROUND */}
+      <div className="fixed inset-0">
         <img
           src="/car.png"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-fit dark:brightness-[0.2] dark:grayscale"
+          alt="background"
+          className="h-full w-full object-cover"
         />
+        <div className="absolute inset-0 bg-black/60" />
       </div>
-      <FieldDescription className="px-6 text-center">
-        En cliquant sur continuer, vous acceptez nos{" "}
-        <a href="#">Conditions d'utilisation</a> et notre{" "}
-        <a href="#">Politique de confidentialité</a>.
-      </FieldDescription>
+
+      {/* 🧾 LOGIN FORM OVERLAY */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen p-4">
+        <Card className="w-full max-w-md bg-white/95 backdrop-blur-md shadow-2xl">
+          <CardContent className="p-6 md:p-8">
+            <form onSubmit={handleSubmit}>
+              <FieldGroup>
+                <div className="text-center space-y-2">
+                  <h1 className="text-2xl font-bold">Bienvenue</h1>
+                  <p className="text-sm text-muted-foreground">
+                    Connectez-vous à votre compte
+                  </p>
+                </div>
+
+                {error && (
+                  <p className="text-red-600 text-sm text-center">{error}</p>
+                )}
+
+                <Field>
+                  <FieldLabel>Email</FieldLabel>
+                  <Input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="m@example.com"
+                  />
+                </Field>
+
+                <Field>
+                  <div className="flex items-center">
+                    <FieldLabel>Password</FieldLabel>
+                    <a
+                      href="#"
+                      className="ml-auto text-sm underline hover:underline"
+                    >
+                      Mot de passe oublié ?
+                    </a>
+                  </div>
+
+                  <Input
+                    type="password"
+                    value={motDePasse}
+                    onChange={(e) => setMotDePasse(e.target.value)}
+                  />
+                </Field>
+
+                <Button type="submit" disabled={loading} className="w-full">
+                  {loading ? "Connexion..." : "Se connecter"}
+                </Button>
+
+                <FieldDescription className="text-center">
+                  Vous n'avez pas de compte ?{" "}
+                  <Link to="/register">S'inscrire</Link>
+                </FieldDescription>
+              </FieldGroup>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

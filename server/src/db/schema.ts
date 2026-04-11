@@ -18,7 +18,7 @@ export const utilisateur = pgTable("utilisateur", {
 });
 
 export const vehicules = pgTable("vehicules", {
-  matricule: integer("matricule").primaryKey(),
+  matricule: varchar("matricule", { length: 300 }).primaryKey(),
   marqueVoiture: varchar("marque_voiture", { length: 300 }).notNull(),
   dateCirculation: date("date_circulation").notNull(),
   dateVisite: date("date_visite").notNull(),

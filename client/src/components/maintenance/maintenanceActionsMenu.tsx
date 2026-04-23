@@ -8,22 +8,22 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Pencil, Trash } from "lucide-react";
-import type { User } from "@/@types/types";
-import UserForm from "./UserForm";
-import { useUser } from "@/hooks/useUser";
+import type { Maintenance } from "@/@types/types";
+import { useMaintenance } from "@/hooks/useMaintenance";
+import MaintenanceForm from "./maintenanceForm";
 
-interface UserActionsMenuProps {
+interface MaintenanceActionsMenuProps {
   row: {
-    original: User;
+    original: Maintenance;
   };
 }
 
-const UserActionsMenu = ({ row }: UserActionsMenuProps) => {
-  const { deleteUser } = useUser();
+const MaintenanceActionsMenu = ({ row }: MaintenanceActionsMenuProps) => {
+  const { deleteMaintenance } = useMaintenance();
 
   const onDelete = async (id: string) => {
-    const res = await deleteUser(id);
-    if (res) toast("utilisateur supprimé avec succès");
+    const res = await deleteMaintenance(id);
+    if (res) toast("Maintenance supprimée avec succès");
   };
 
   return (
@@ -34,18 +34,20 @@ const UserActionsMenu = ({ row }: UserActionsMenuProps) => {
             <Pencil />
           </Button>
         </DialogTrigger>
+
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Modifier un Utilisateur</DialogTitle>
+            <DialogTitle>Modifier une maintenance</DialogTitle>
           </DialogHeader>
-          <UserForm user={row.original} />
+
+          <MaintenanceForm maintenance={row.original} />
         </DialogContent>
       </Dialog>
 
       <Button
         variant="destructive"
-        size={"icon"}
-        onClick={() => onDelete(row.original.id_utilisateur || "")}
+        size="icon"
+        onClick={() => onDelete(row.original.id_maintenance || "")}
       >
         <Trash />
       </Button>
@@ -53,4 +55,4 @@ const UserActionsMenu = ({ row }: UserActionsMenuProps) => {
   );
 };
 
-export default UserActionsMenu;
+export default MaintenanceActionsMenu;

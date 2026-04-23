@@ -59,7 +59,7 @@ export const login = async (
     if (!isValid)
       return res.status(401).json({ message: "Invalid credentials" });
 
-    const token = signToken({ id: user.id, role: user.role });
+    const token = signToken({ id: user.id_utilisateur, role: user.role });
     res.json({ token, user });
   } catch (err) {
     next(err);
@@ -76,7 +76,7 @@ export const checkAuth = async (
     if (!user) return res.status(401).json({ message: "Unauthorized" });
 
     const getUser = await db.query.utilisateur.findFirst({
-      where: eq(utilisateur.id, user.id),
+      where: eq(utilisateur.id_utilisateur, user.id),
     });
     res.json({ getUser });
   } catch (err) {

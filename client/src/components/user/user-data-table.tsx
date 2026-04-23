@@ -106,7 +106,7 @@ const columns: ColumnDef<z.infer<typeof UserSchema>>[] = [
   {
     id: "drag",
     header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
+    cell: ({ row }) => <DragHandle id={row.original.id_utilisateur} />,
   },
   {
     id: "select",
@@ -185,7 +185,7 @@ const columns: ColumnDef<z.infer<typeof UserSchema>>[] = [
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof UserSchema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id ?? "",
+    id: row.original.id_utilisateur ?? "",
   });
 
   return (
@@ -236,7 +236,7 @@ export function UserDataTable({
   );
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id ?? "") || [],
+    () => data?.map(({ id_utilisateur: id }) => id ?? "") || [],
     [data],
   );
 
@@ -251,7 +251,7 @@ export function UserDataTable({
       columnFilters,
       pagination,
     },
-    getRowId: (row) => (row.id ?? "").toString(),
+    getRowId: (row) => (row.id_utilisateur ?? "").toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

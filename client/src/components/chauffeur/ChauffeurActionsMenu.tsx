@@ -45,7 +45,7 @@ const ChauffeurActionsMenu = ({ row }: ChauffeurActionsMenuProps) => {
       <Button
         variant="destructive"
         size={"icon"}
-        onClick={() => onDelete(row.original.id || "")}
+        onClick={() => onDelete(row.original.id_chauffeur || "")}
       >
         <Trash />
       </Button>

@@ -1,22 +1,21 @@
 import { useEffect, useState } from "react";
-import type { Chauffeur } from "@/@types/types";
-import { ChauffeurDataTable } from "@/components/chauffeur/chauffeur-data-table";
-import { useChauffeur } from "@/hooks/useChauffeur";
+import type { Affectation } from "@/@types/types";
+import { useAffectation } from "@/hooks/useAffectations";
+import { AffectationDataTable } from "@/components/affectation/affectation-data-table";
 
-const ChauffeursPage = () => {
-  const { getChauffeurs } = useChauffeur();
-  const [data, setData] = useState<Chauffeur[]>([]);
+const AffectationsPage = () => {
+  const { getAffectations } = useAffectation();
+  const [data, setData] = useState<Affectation[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let intervalId: ReturnType<typeof setInterval>;
 
-
     const fetchUsers = async () => {
       try {
-        const users = await getChauffeurs();
+        const affectations = await getAffectations();
 
-        setData(users ?? []);
+        setData(affectations ?? []);
       } catch (error) {
         console.error(error);
       } finally {
@@ -37,11 +36,11 @@ const ChauffeursPage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 px-6">Liste des chauffeurs</h1>
+      <h1 className="text-2xl font-bold mb-4 px-6">Liste des affectations</h1>
 
-      <ChauffeurDataTable data={data} />
+      <AffectationDataTable data={data} />
     </div>
   );
 };
 
-export default ChauffeursPage;
+export default AffectationsPage;

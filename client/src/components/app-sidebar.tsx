@@ -50,7 +50,7 @@ const data = {
     },
     {
       title: "Maintenance",
-      url: "/maintenance",
+      url: "/maintenances",
       icon: IconListDetails,
     },
   ],

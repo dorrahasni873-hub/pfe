@@ -1,4 +1,4 @@
-import type { UpdateChauffeur } from "@/@types/types";
+import type { CreateChauffeur, UpdateChauffeur } from "@/@types/types";
 import api from "./axios";
 
 export const chauffeurApi = {
@@ -7,7 +7,7 @@ export const chauffeurApi = {
 
     return response.data;
   },
-  createChauffeur: async (data: UpdateChauffeur) => {
+  createChauffeur: async (data: CreateChauffeur) => {
     const response = await api.post("/chauffeurs", data);
     return response.data;
   },

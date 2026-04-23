@@ -17,24 +17,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const token = localStorage.getItem("token");
 
       if (!token) {
+        setUser(null);
         setLoading(false);
         return;
       }
 
-      const storedUser = localStorage.getItem("data");
-      if (storedUser) {
-        setUser(JSON.parse(storedUser));
-      }
-
       try {
         const data = await checkMe();
-
         const userData = data?.getUser;
 
         setUser(userData);
         localStorage.setItem("data", JSON.stringify(userData));
-      } catch (err) {
-        console.log(err);
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (error) {
         setUser(null);
         localStorage.removeItem("token");
         localStorage.removeItem("data");
@@ -44,7 +39,8 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     fetchUser();
-  }, [checkMe]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const login = async ({ email, motDePasse }: LoginInput) => {
     const data = await loginApi(email, motDePasse);
 

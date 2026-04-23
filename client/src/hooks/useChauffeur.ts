@@ -1,4 +1,7 @@
-import type { UpdateChauffeur } from "@/@types/types";
+import type {
+   CreateChauffeur,
+  UpdateChauffeur,
+} from "@/@types/types";
 import { chauffeurApi } from "@/api/chauffeurApi";
 
 export const useChauffeur = () => {
@@ -13,7 +16,7 @@ export const useChauffeur = () => {
     }
   };
 
-  const createChauffeur = async (data: UpdateChauffeur) => {
+  const createChauffeur = async (data: CreateChauffeur) => {
     const { createChauffeur } = chauffeurApi;
     try {
       const chauffeur = await createChauffeur(data);

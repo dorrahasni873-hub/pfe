@@ -40,6 +40,8 @@ export const createChauffeur = async (
   res: Response,
   next: NextFunction,
 ) => {
+  console.log("BODY RECEIVED:", req.body);
+
   try {
     const data = createChauffeurSchema.parse(req.body);
     const chauffeur = await chauffeurService.createChauffeur(data);

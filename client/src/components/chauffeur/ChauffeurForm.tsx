@@ -1,6 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { chauffeurSchema, type Chauffeur } from "@/@types/types";
+import {
+  updateChauffeurSchema,
+  type Chauffeur,
+  type CreateChauffeur,
+  type UpdateChauffeur,
+} from "@/@types/types";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
@@ -11,41 +16,57 @@ interface ChauffeurFormProps {
   chauffeur?: Chauffeur;
 }
 
-const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
+const ChauffeurForm = ({ chauffeur }: ChauffeurFormProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Chauffeur>({
-    resolver: zodResolver(chauffeurSchema),
+  } = useForm<UpdateChauffeur>({
+    resolver: zodResolver(updateChauffeurSchema),
     defaultValues: chauffeur
       ? {
-          id: chauffeur.id,
           nom: chauffeur.nom,
           prenom: chauffeur.prenom,
           tel: chauffeur.tel,
           cin: chauffeur.cin,
           numeroPermis: chauffeur.numeroPermis,
         }
-      : {},
+      : {
+          nom: "",
+          prenom: "",
+          tel: "",
+          cin: "",
+          numeroPermis: "",
+        },
   });
 
   const { createChauffeur, updateChauffeur } = useChauffeur();
 
-  const onSubmit = async (data: Chauffeur) => {
+  const onSubmit = async (data: UpdateChauffeur) => {
+    console.log("🔥 FORM SUBMITTED", data);
     try {
       if (chauffeur) {
-        console.log("data from form", data);
+        const updateResult = await updateChauffeur(
+          chauffeur.id_chauffeur,
+          data,
+        );
 
-        if (!chauffeur.id) return toast.error("Utilisateur invalide");
-        const updateResult = await updateChauffeur(chauffeur.id, data);
         if (updateResult) {
-          toast("utilisateur mis à jour avec succès");
+          toast.success("Utilisateur mis à jour avec succès");
         }
       } else {
-        const createResult = await createChauffeur(data);
+        const createData: CreateChauffeur = {
+          nom: data.nom ?? "",
+          prenom: data.prenom ?? "",
+          tel: data.tel ?? "",
+          cin: data.cin ?? "",
+          numeroPermis: data.numeroPermis ?? "",
+        };
+
+        const createResult = await createChauffeur(createData);
+
         if (createResult) {
-          toast("utilisateur créé avec succès");
+          toast.success("Utilisateur créé avec succès");
         }
       }
     } catch (err) {
@@ -55,10 +76,15 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+    <form
+      onSubmit={handleSubmit(onSubmit, (errors) =>
+        console.log("❌ VALIDATION ERRORS", errors),
+      )}
+    >
+      {" "}
       <Input
         {...register("nom")}
-        placeholder="Prénom"
+        placeholder="nom"
         aria-invalid={!!errors.nom}
       />
       {errors.nom && (
@@ -66,10 +92,9 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
           {errors.nom.message}
         </span>
       )}
-
       <Input
         {...register("prenom")}
-        placeholder="Nom"
+        placeholder="prenom"
         aria-invalid={!!errors.prenom}
       />
       {errors.prenom && (
@@ -77,7 +102,6 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
           {errors.prenom.message}
         </span>
       )}
-
       <Input
         {...register("tel")}
         placeholder="Téléphone"
@@ -88,7 +112,6 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
           {errors.tel.message}
         </span>
       )}
-
       <Input
         {...register("cin")}
         placeholder="CIN"
@@ -99,7 +122,6 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
           {errors.cin.message}
         </span>
       )}
-
       <Input
         {...register("numeroPermis")}
         placeholder="Numéro de permis"
@@ -110,7 +132,6 @@ const ChauffeurForm = ({ chauffeur: chauffeur }: ChauffeurFormProps) => {
           {errors.numeroPermis.message}
         </span>
       )}
-
       <Button disabled={isSubmitting} type="submit" className="w-full mt-2">
         {isSubmitting
           ? chauffeur

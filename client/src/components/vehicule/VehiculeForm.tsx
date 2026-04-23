@@ -84,6 +84,7 @@ const VehiculeForm = ({ vehicule }: VehiculeFormProps) => {
     }
   };
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const etat = watch("etat");
 
   return (

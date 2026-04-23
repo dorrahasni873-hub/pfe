@@ -33,7 +33,7 @@ const UserForm = ({ user }: UserFormProps) => {
     resolver: zodResolver(UserSchema),
     defaultValues: user
       ? {
-          id: user.id,
+          id_utilisateur: user.id_utilisateur,
           nom: user.nom,
           prenom: user.prenom,
           tel: user.tel,
@@ -48,6 +48,7 @@ const UserForm = ({ user }: UserFormProps) => {
 
   const { createUser, updateUser } = useUser();
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const role = watch("role");
 
   const onSubmit = async (data: User) => {
@@ -55,9 +56,9 @@ const UserForm = ({ user }: UserFormProps) => {
       if (user) {
         console.log("data from form", data);
 
-        if (!user.id) return toast.error("Utilisateur invalide");
+        if (!user.id_utilisateur) return toast.error("Utilisateur invalide");
 
-        const updateResult = await updateUser(user.id, data);
+        const updateResult = await updateUser(user.id_utilisateur, data);
 
         if (updateResult) {
           toast.success("Utilisateur mis à jour avec succès");

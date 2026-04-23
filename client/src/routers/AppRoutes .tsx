@@ -11,7 +11,9 @@ import RegisterPage from "@/pages/RegisterPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import ChauffeursPage from "@/pages/ChauffeursPage";
 import VehiculesPage from "@/pages/VehiculesPage";
-import UsersPage from "@/pages/usersPage";
+import UsersPage from "@/pages/UsersPage";
+import AffectationsPage from "@/pages/AffectationPage";
+import MaintenancePage from "@/pages/MaintenancePage";
 
 export const AppRoutes = () => {
   return (
@@ -32,6 +34,8 @@ export const AppRoutes = () => {
           <Route path="chauffeurs" element={<ChauffeursPage />} />
           <Route path="vehicules" element={<VehiculesPage />} />
           <Route path="utilisateurs" element={<UsersPage />} />
+          <Route path="affectations" element={<AffectationsPage />} />
+          <Route path="maintenances" element={<MaintenancePage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

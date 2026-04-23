@@ -83,7 +83,7 @@ import ChauffeurForm from "./ChauffeurForm";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const schema = z.object({
-  id: z.string().optional(),
+  id_chauffeur: z.string(),
   nom: z.string(),
   prenom: z.string(),
   cin: z.string(),
@@ -115,7 +115,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
   {
     id: "drag",
     header: () => null,
-    cell: ({ row }) => <DragHandle id={row.original.id} />,
+    cell: ({ row }) => <DragHandle id={row.original.id_chauffeur} />,
   },
   {
     id: "select",
@@ -196,7 +196,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
-    id: row.original.id ?? "",
+    id: row.original.id_chauffeur ?? "",
   });
 
   return (
@@ -247,7 +247,7 @@ export function ChauffeurDataTable({
   );
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data?.map(({ id }) => id ?? "") || [],
+    () => data?.map(({ id_chauffeur }) => id_chauffeur ?? "") || [],
     [data],
   );
 
@@ -262,7 +262,7 @@ export function ChauffeurDataTable({
       columnFilters,
       pagination,
     },
-    getRowId: (row) => (row.id ?? "").toString(),
+    getRowId: (row) => (row.id_chauffeur ?? "").toString(),
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

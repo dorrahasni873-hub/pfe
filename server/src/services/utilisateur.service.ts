@@ -33,7 +33,7 @@ export const getUsers = async () => {
 
 export const getUserById = async (id: string) => {
   return await db.query.utilisateur.findFirst({
-    where: eq(utilisateur.id, id),
+    where: eq(utilisateur.id_utilisateur, id),
     with: {
       maintenances: {
         with: {
@@ -56,7 +56,7 @@ export const createUser = async (data: {
 };
 
 export const deleteUser = async (id: string) => {
-  return await db.delete(utilisateur).where(eq(utilisateur.id, id));
+  return await db.delete(utilisateur).where(eq(utilisateur.id_utilisateur, id));
 };
 
 export const updateUser = async (
@@ -71,5 +71,8 @@ export const updateUser = async (
     dateMiseAJour: string;
   }>,
 ) => {
-  return await db.update(utilisateur).set(data).where(eq(utilisateur.id, id));
+  return await db
+    .update(utilisateur)
+    .set(data)
+    .where(eq(utilisateur.id_utilisateur, id));
 };

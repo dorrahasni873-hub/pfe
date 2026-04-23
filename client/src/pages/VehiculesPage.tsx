@@ -28,6 +28,7 @@ const VehiculesPage = () => {
     intervalId = setInterval(fetchUsers, 3000);
 
     return () => clearInterval(intervalId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) return <div>Chargement...</div>;

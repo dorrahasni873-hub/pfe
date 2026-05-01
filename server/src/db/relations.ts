@@ -6,6 +6,8 @@ import {
   chauffeur,
   panne,
   affectation,
+  entretien,
+  carnetDeBord,
 } from "./schema";
 
 export const utilisateurRelations = relations(utilisateur, ({ many }) => ({
@@ -41,4 +43,32 @@ export const affectationRelations = relations(affectation, ({ one }) => ({
 
 export const chauffeurRelations = relations(chauffeur, ({ many }) => ({
   affectations: many(affectation),
+}));
+
+export const entretienRelations = relations(entretien, ({ one }) => ({
+  vehicule: one(vehicules, {
+    fields: [entretien.matricule],
+    references: [vehicules.matricule],
+  }),
+
+  maintenance: one(maintenance, {
+    fields: [entretien.maintenanceId],
+    references: [maintenance.id_maintenance],
+  }),
+
+  panne: one(panne, {
+    fields: [entretien.panneId],
+    references: [panne.id_panne],
+  }),
+}));
+
+export const carnetDeBordRelations = relations(carnetDeBord, ({ one }) => ({
+  chauffeur: one(chauffeur, {
+    fields: [carnetDeBord.id_chauffeur],
+    references: [chauffeur.id_chauffeur],
+  }),
+  vehicule: one(vehicules, {
+    fields: [carnetDeBord.matricule],
+    references: [vehicules.matricule],
+  }),
 }));

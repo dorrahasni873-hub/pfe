@@ -82,6 +82,7 @@ import VehiculeActionsMenu from "./VehiculeActionsMenu";
 import VehiculeForm from "./VehiculeForm";
 import type { VehiculeSchema } from "@/@types/types";
 import { format } from "date-fns";
+import { useAuth } from "@/hooks/useAuth";
 
 // Create a separate component for the drag handle
 function DragHandle({ id }: { id: string | undefined }) {
@@ -302,7 +303,7 @@ export function VehiculeDataTable({
       });
     }
   }
-
+  const { user } = useAuth();
   return (
     <Tabs
       defaultValue="outline"
@@ -351,10 +352,12 @@ export function VehiculeDataTable({
           </DropdownMenu>
           <Dialog>
             <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconPlus />
-                <span>Créer Vehicule</span>
-              </Button>
+              {user && user.role === "admin" && (
+                <Button variant="outline" size="sm">
+                  <IconPlus />
+                  <span>Créer Vehicule</span>
+                </Button>
+              )}
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>

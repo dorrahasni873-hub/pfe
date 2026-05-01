@@ -11,6 +11,7 @@ import { Pencil, Trash } from "lucide-react";
 import type { Vehicule } from "@/@types/types";
 import VehiculeForm from "./VehiculeForm";
 import { useVehicule } from "@/hooks/useVehicule";
+import { useAuth } from "@/hooks/useAuth";
 
 interface VehiculeActionsMenuProps {
   row: {
@@ -19,20 +20,27 @@ interface VehiculeActionsMenuProps {
 }
 
 const VehiculeActionsMenu = ({ row }: VehiculeActionsMenuProps) => {
+  const { user } = useAuth();
+
   const { deleteVehicule } = useVehicule();
 
   const onDelete = async (id: string) => {
     const res = await deleteVehicule(id);
     if (res) toast("véhicule supprimé avec succès");
   };
+  console.log("User:", user);
+
+  if (user?.role !== "admin") return null;
 
   return (
     <div className="flex gap-3">
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant="outline" size="icon">
-            <Pencil />
-          </Button>
+          {user.role === "admin" && (
+            <Button variant="outline" size="icon">
+              <Pencil />
+            </Button>
+          )}
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

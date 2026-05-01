@@ -1,168 +1,68 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserSchema, type User } from "@/@types/types";
 
-import { Input } from "../ui/input";
-import { Button } from "../ui/button";
-import { toast } from "sonner";
-import { DialogClose } from "../ui/dialog";
+import { createUserSchema, type CreateUser, type User } from "@/@types/types";
+
 import { useUser } from "@/hooks/useUser";
 
-// ✅ Select imports
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface UserFormProps {
   user?: User;
 }
 
-const UserForm = ({ user }: UserFormProps) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors, isSubmitting },
-  } = useForm<User>({
-    resolver: zodResolver(UserSchema),
-    defaultValues: user
-      ? {
-          id_utilisateur: user.id_utilisateur,
-          nom: user.nom,
-          prenom: user.prenom,
-          tel: user.tel,
-          email: user.email,
-          motDePasse: user.motDePasse,
-          role: user.role,
-        }
-      : {
-          role: "",
-        },
-  });
-
+export default function UserForm({ user }: UserFormProps) {
   const { createUser, updateUser } = useUser();
 
-  // eslint-disable-next-line react-hooks/incompatible-library
-  const role = watch("role");
+  const form = useForm<CreateUser>({
+    resolver: zodResolver(createUserSchema),
+    defaultValues: user ?? {
+      nom: "",
+      prenom: "",
+      email: "",
+      motDePasse: "",
+      role: "",
+      tel: "",
+    },
+  });
 
-  const onSubmit = async (data: User) => {
-    try {
-      if (user) {
-        console.log("data from form", data);
-
-        if (!user.id_utilisateur) return toast.error("Utilisateur invalide");
-
-        const updateResult = await updateUser(user.id_utilisateur, data);
-
-        if (updateResult) {
-          toast.success("Utilisateur mis à jour avec succès");
-        }
-      } else {
-        const createResult = await createUser(data);
-
-        if (createResult) {
-          toast.success("Utilisateur créé avec succès");
-        }
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Une erreur est survenue, veuillez réessayer");
+  const onSubmit = async (values: CreateUser) => {
+    if (user) {
+      await updateUser(user.id_utilisateur, values);
+    } else {
+      await createUser(values);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+      <Input placeholder="Nom" {...form.register("nom")} />
+      <Input placeholder="Prénom" {...form.register("prenom")} />
+      <Input type="email" placeholder="Email" {...form.register("email")} />
       <Input
-        {...register("nom")}
-        placeholder="Nom"
-        aria-invalid={!!errors.nom}
-      />
-      {errors.nom && (
-        <span className="text-red-600 text-sm">{errors.nom.message}</span>
-      )}
-
-      <Input
-        {...register("prenom")}
-        placeholder="Prénom"
-        aria-invalid={!!errors.prenom}
-      />
-      {errors.prenom && (
-        <span className="text-red-600 text-sm">{errors.prenom.message}</span>
-      )}
-
-      <Input
-        {...register("tel")}
-        placeholder="Téléphone"
-        aria-invalid={!!errors.tel}
-      />
-      {errors.tel && (
-        <span className="text-red-600 text-sm">{errors.tel.message}</span>
-      )}
-
-      <Input
-        {...register("email")}
-        placeholder="Email"
-        aria-invalid={!!errors.email}
-      />
-      {errors.email && (
-        <span className="text-red-600 text-sm">{errors.email.message}</span>
-      )}
-
-      <Input
-        {...register("motDePasse")}
-        placeholder="Mot de passe"
         type="password"
-        aria-invalid={!!errors.motDePasse}
+        placeholder="Mot de passe"
+        {...form.register("motDePasse")}
       />
-      {errors.motDePasse && (
-        <span className="text-red-600 text-sm">
-          {errors.motDePasse.message}
-        </span>
-      )}
 
-      <div className="flex flex-col gap-1">
-        <Select value={role} onValueChange={(value) => setValue("role", value)}>
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Sélectionner un rôle" />
-          </SelectTrigger>
-
-          <SelectContent>
-            <SelectGroup>
-              <SelectItem value="admin">Admin</SelectItem>
-              <SelectItem value="user">User</SelectItem>
-              <SelectItem value="maintenance">Maintenance</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        {errors.role && (
-          <span className="text-red-600 text-sm">{errors.role.message}</span>
-        )}
+      {/* ROLE SELECT */}
+      <div>
+        <label className="text-sm">Rôle</label>
+        <select
+          className="w-full border rounded p-2"
+          {...form.register("role")}
+        >
+          <option value="">Sélectionner un rôle</option>
+          <option value="admin">Admin</option>
+          <option value="chauffeur">Chauffeur</option>
+          <option value="maintenance">Maintenance</option>
+        </select>
       </div>
 
-      <Button disabled={isSubmitting} type="submit" className="w-full mt-2">
-        {isSubmitting
-          ? user
-            ? "Mise à jour en cours..."
-            : "Création en cours..."
-          : user
-            ? "Mettre à jour l'utilisateur"
-            : "Créer l'utilisateur"}
-      </Button>
+      <Input placeholder="Téléphone" {...form.register("tel")} />
 
-      <DialogClose asChild>
-        <Button type="button" variant="destructive">
-          Annuler
-        </Button>
-      </DialogClose>
+      <Button type="submit">{user ? "Modifier" : "Créer"}</Button>
     </form>
   );
-};
-
-export default UserForm;
+}

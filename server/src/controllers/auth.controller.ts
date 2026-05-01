@@ -3,9 +3,10 @@ import { z } from "zod";
 import { signToken } from "../utils/jwt";
 import { hash, compare } from "bcryptjs";
 import db from "../db";
-import { utilisateur } from "../db/schema";
+import { chauffeur, utilisateur } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { AuthRequest } from "../middlewares/auth.middleware";
+import { Account } from "../utils/types";
 
 const registerSchema = z.object({
   email: z.string().email(),
@@ -28,11 +29,11 @@ export const register = async (
   try {
     const data = registerSchema.parse(req.body);
 
-    const hashedPassword = await hash(data.motDePasse, 10);
+    // const hashedPassword = await hash(data.motDePasse, 10);
 
     const user = await db
       .insert(utilisateur)
-      .values({ ...data, motDePasse: hashedPassword })
+      .values({ ...data })
       .returning();
 
     res.status(201).json(user[0]);
@@ -49,23 +50,53 @@ export const login = async (
   try {
     const { email, motDePasse } = loginSchema.parse(req.body);
 
+    let account: Account | null = null;
+
     const user = await db.query.utilisateur.findFirst({
       where: eq(utilisateur.email, email),
     });
+    if (user) {
+      account = {
+        id: user.id_utilisateur,
+        email: user.email,
+        password: user.motDePasse,
+        role: user.role,
+      };
+    }
 
-    if (!user) return res.status(401).json({ message: "Invalid credentials" });
+    if (!account) {
+      const chauffeurUser = await db.query.chauffeur.findFirst({
+        where: eq(chauffeur.email, email),
+      });
 
-    const isValid = await compare(motDePasse, user.motDePasse);
-    if (!isValid)
+      if (chauffeurUser) {
+        account = {
+          id: chauffeurUser.id_chauffeur,
+          email: chauffeurUser.email,
+          password: chauffeurUser.password,
+          role: "chauffeur",
+        };
+      }
+    }
+
+    if (!account) {
       return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-    const token = signToken({ id: user.id_utilisateur, role: user.role });
-    res.json({ token, user });
+    if (account.password !== motDePasse) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    const token = signToken({
+      id: account.id,
+      role: account.role,
+    });
+
+    return res.json({ token, user: account });
   } catch (err) {
     next(err);
   }
 };
-
 export const checkAuth = async (
   req: AuthRequest,
   res: Response,
@@ -73,12 +104,28 @@ export const checkAuth = async (
 ) => {
   try {
     const user = req.user;
-    if (!user) return res.status(401).json({ message: "Unauthorized" });
 
-    const getUser = await db.query.utilisateur.findFirst({
-      where: eq(utilisateur.id_utilisateur, user.id),
-    });
-    res.json({ getUser });
+    if (!user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    let account = null;
+
+    if (user.role !== "chauffeur") {
+      account = await db.query.utilisateur.findFirst({
+        where: eq(utilisateur.id_utilisateur, user.id),
+      });
+    } else if (user.role === "chauffeur") {
+      account = await db.query.chauffeur.findFirst({
+        where: eq(chauffeur.id_chauffeur, user.id),
+      });
+    }
+
+    if (!account) {
+      return res.status(401).json({ message: "User not found" });
+    }
+
+    return res.json({ user: account });
   } catch (err) {
     next(err);
   }

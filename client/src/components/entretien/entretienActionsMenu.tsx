@@ -8,21 +8,22 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Pencil, Trash } from "lucide-react";
-import type { Chauffeur } from "@/@types/types";
-import { useChauffeur } from "@/hooks/useChauffeur";
-import ChauffeurForm from "./ChauffeurForm";
 
-interface ChauffeurActionsMenuProps {
+import type { Entretien } from "@/@types/types";
+import { useEntretien } from "@/hooks/useEntretien";
+import EntretienForm from "./entretienForm";
+interface EntretienActionsMenuProps {
   row: {
-    original: Chauffeur;
+    original: Entretien;
   };
 }
 
-const ChauffeurActionsMenu = ({ row }: ChauffeurActionsMenuProps) => {
-  const { deleteChauffeur } = useChauffeur();
+const EntretienActionsMenu = ({ row }: EntretienActionsMenuProps) => {
+  const { deleteEntretien } = useEntretien();
+
   const onDelete = async (id: string) => {
-    const res = await deleteChauffeur(id);
-    if (res) toast("utilisateur supprimé avec succès");
+    const res = await deleteEntretien(id);
+    if (res) toast("Entretien supprimé avec succès");
   };
 
   return (
@@ -33,18 +34,20 @@ const ChauffeurActionsMenu = ({ row }: ChauffeurActionsMenuProps) => {
             <Pencil />
           </Button>
         </DialogTrigger>
+
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Modifier un Utilisateur</DialogTitle>
+            <DialogTitle>Modifier entretien</DialogTitle>
           </DialogHeader>
-          <ChauffeurForm chauffeur={row.original} />
+
+          <EntretienForm entretien={row.original} />
         </DialogContent>
       </Dialog>
 
       <Button
         variant="destructive"
-        size={"icon"}
-        onClick={() => onDelete(row.original.id_chauffeur || "")}
+        size="icon"
+        onClick={() => onDelete(row.original.id_entretien)}
       >
         <Trash />
       </Button>
@@ -52,4 +55,4 @@ const ChauffeurActionsMenu = ({ row }: ChauffeurActionsMenuProps) => {
   );
 };
 
-export default ChauffeurActionsMenu;
+export default EntretienActionsMenu;

@@ -6,6 +6,8 @@ export const createChauffeurSchema = z.object({
   cin: z.string().optional(),
   tel: z.string().optional(),
   numeroPermis: z.string().optional(),
+  password: z.string(),
+  email: z.string().email(),
 });
 
 export const updateChauffeurSchema = createChauffeurSchema.partial();

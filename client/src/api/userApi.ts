@@ -1,8 +1,8 @@
-import type { RegisterInput, User } from "@/@types/types";
+import type { User, CreateUser, UpdateUser } from "@/@types/types";
 import api from "./axios";
 
 export const userApi = () => {
-  const createUser = async (data: User) => {
+  const createUser = async (data: CreateUser) => {
     try {
       const res = await api.post("/utilisateurs/", data);
       return res.data;
@@ -10,12 +10,14 @@ export const userApi = () => {
       console.log(error);
     }
   };
-  const getUsers = async () => {
+
+  const getUsers = async (): Promise<User[]> => {
     try {
       const res = await api.get("/utilisateurs/");
       return res.data;
     } catch (error) {
       console.log(error);
+      return [];
     }
   };
 
@@ -28,7 +30,7 @@ export const userApi = () => {
     }
   };
 
-  const updateUser = async (id: string, data: RegisterInput) => {
+  const updateUser = async (id: string, data: UpdateUser) => {
     try {
       const res = await api.put<{ message: string }>(
         `/utilisateurs/${id}`,

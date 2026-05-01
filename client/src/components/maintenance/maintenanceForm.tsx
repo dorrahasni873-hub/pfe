@@ -53,6 +53,7 @@ export default function MaintenanceForm({ maintenance }: Props) {
     fetchData();
   }, []);
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (field: keyof Maintenance, value: any) => {
     setFormData((prev) => ({
       ...prev,

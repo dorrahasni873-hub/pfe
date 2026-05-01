@@ -1,12 +1,11 @@
-import type { RegisterInput, User } from "@/@types/types";
+import type { User, CreateUser, UpdateUser } from "@/@types/types";
 import { userApi } from "@/api/userApi";
 
 export const useUser = () => {
-  const createUser = async (data: User) => {
+  const createUser = async (data: CreateUser) => {
     try {
       const { createUser } = userApi();
-      const res = await createUser(data);
-      return res;
+      return await createUser(data);
     } catch (error) {
       console.log(error);
     }
@@ -15,8 +14,7 @@ export const useUser = () => {
   const getUsers = async (): Promise<User[] | undefined> => {
     try {
       const { getUsers } = userApi();
-      const res = await getUsers();
-      return res;
+      return await getUsers();
     } catch (error) {
       console.log(error);
     }
@@ -32,11 +30,10 @@ export const useUser = () => {
     }
   };
 
-  const updateUser = async (id: string, data: RegisterInput) => {
+  const updateUser = async (id: string, data: UpdateUser) => {
     try {
       const { updateUser } = userApi();
-      const res = await updateUser(id, data);
-      return res;
+      return await updateUser(id, data);
     } catch (error) {
       console.log(error);
     }

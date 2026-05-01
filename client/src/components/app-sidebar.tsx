@@ -27,31 +27,55 @@ const data = {
       title: "Tableau de bord",
       url: "/",
       icon: IconDashboard,
+      roles: ["admin", "chauffeur", "user"],
     },
     {
       title: "Utilisateurs",
       url: "/utilisateurs",
       icon: IconListDetails,
+      roles: ["admin", "user"],
     },
     {
       title: "Chauffeurs",
       url: "/chauffeurs",
       icon: IconListDetails,
+      roles: ["admin", "user"],
     },
     {
       title: "Véhicules",
       url: "/vehicules",
       icon: IconListDetails,
+      roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Affectations",
       url: "/affectations",
       icon: IconListDetails,
+      roles: ["admin", "user"],
     },
     {
       title: "Maintenance",
       url: "/maintenances",
       icon: IconListDetails,
+      roles: ["admin", "user"],
+    },
+    {
+      title: "Carnets de Bord",
+      url: "/carnets",
+      icon: IconListDetails,
+      roles: ["admin", "user", "chauffeur"],
+    },
+    {
+      title: "Entretiens",
+      url: "/entretiens",
+      icon: IconListDetails,
+      roles: ["admin", "user", "chauffeur"],
+    },
+    {
+      title: "Pannes",
+      url: "/pannes",
+      icon: IconListDetails,
+      roles: ["admin", "user", "chauffeur"],
     },
   ],
   navSecondary: [
@@ -67,13 +91,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useAuth();
   const [query, setQuery] = React.useState("");
 
-  const filteredNavMain = data.navMain.filter((item) =>
-    item.title.toLowerCase().includes(query.toLowerCase()),
-  );
+  console.log("User", user);
 
   if (!user) {
     return null;
   }
+
+  const filteredNavMain = data.navMain
+    .filter((item) => user.role && item.roles.includes(user.role))
+    .filter((item) => item.title.toLowerCase().includes(query.toLowerCase()));
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -82,7 +108,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
               <Link to="/" className="flex items-center gap-2">
                 <IconInnerShadowTop className="!size-5" />

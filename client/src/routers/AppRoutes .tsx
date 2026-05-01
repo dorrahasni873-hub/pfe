@@ -14,6 +14,9 @@ import VehiculesPage from "@/pages/VehiculesPage";
 import UsersPage from "@/pages/UsersPage";
 import AffectationsPage from "@/pages/AffectationPage";
 import MaintenancePage from "@/pages/MaintenancePage";
+import CarnetDeBordPage from "@/pages/CarnetDeBordPage";
+import EntretiensPage from "@/pages/EntretienPage";
+import PannesPage from "@/pages/PannePage";
 
 export const AppRoutes = () => {
   return (
@@ -36,6 +39,9 @@ export const AppRoutes = () => {
           <Route path="utilisateurs" element={<UsersPage />} />
           <Route path="affectations" element={<AffectationsPage />} />
           <Route path="maintenances" element={<MaintenancePage />} />
+          <Route path="carnets" element={<CarnetDeBordPage />} />
+          <Route path="entretiens" element={<EntretiensPage />} />
+          <Route path="pannes" element={<PannesPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

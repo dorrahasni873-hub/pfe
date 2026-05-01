@@ -1,18 +1,25 @@
 import { z } from "zod";
 
-export const UserSchema = z.object({
+export const userSchema = z.object({
   id_utilisateur: z.string(),
   nom: z.string(),
   prenom: z.string(),
   email: z.string().email(),
   motDePasse: z.string().min(6),
-  role: z.string().optional(),
+  role: z.string(),
   tel: z.string(),
 });
 
-export const NewUserSchema = UserSchema.omit({ id_utilisateur: true });
+export const createUserSchema = userSchema.omit({
+  id_utilisateur: true,
+});
 
-export type User = z.infer<typeof UserSchema>;
+export const updateUserSchema = createUserSchema.partial();
+
+export type User = z.infer<typeof userSchema>;
+export type CreateUser = z.infer<typeof createUserSchema>;
+export type UpdateUser = z.infer<typeof updateUserSchema>;
+
 export type RegisterInput = Omit<User, "id_utilisateur" | "role">;
 export type LoginInput = Pick<User, "email" | "motDePasse">;
 
@@ -23,6 +30,9 @@ export const chauffeurSchema = z.object({
   cin: z.string(),
   tel: z.string(),
   numeroPermis: z.string(),
+  password: z.string(),
+  email: z.string().email(),
+  role: z.string().optional(),
 });
 
 export type Chauffeur = z.infer<typeof chauffeurSchema>;
@@ -49,6 +59,7 @@ export const createChauffeurSchema = chauffeurSchema.omit({
 export const updateChauffeurSchema = createChauffeurSchema.partial();
 
 export type CreateChauffeur = z.infer<typeof createChauffeurSchema>;
+export type loginChauffeur = Pick<Chauffeur, "email" | "password">;
 export type UpdateChauffeur = z.infer<typeof updateChauffeurSchema>;
 
 export type VehiculePayload = {
@@ -109,3 +120,61 @@ export const createMaintenanceSchema = MaintenanceSchema.omit({
 export type CreateMaintenance = z.infer<typeof createMaintenanceSchema>;
 export const updateMaintenanceSchema = createMaintenanceSchema.partial();
 export type UpdateMaintenance = z.infer<typeof updateMaintenanceSchema>;
+
+export const carnetDeBordSchema = z.object({
+  id_carnet: z.string(),
+  dateDeDebut: z.string(),
+  dateDeFin: z.string(),
+  km_depart: z.number(),
+  km_arrive: z.number(),
+  id_chauffeur: z.string(),
+  matricule: z.string(),
+});
+
+export const createCarnetDeBordSchema = carnetDeBordSchema.omit({
+  id_carnet: true,
+});
+
+export const updateCarnetDeBordSchema = createCarnetDeBordSchema.partial();
+
+export type CarnetDeBord = z.infer<typeof carnetDeBordSchema>;
+export type CreateCarnetDeBord = z.infer<typeof createCarnetDeBordSchema>;
+export type UpdateCarnetDeBord = z.infer<typeof updateCarnetDeBordSchema>;
+
+export const entretienSchema = z.object({
+  id_entretien: z.string(),
+  dateEntretien: z.string(),
+  typeIntervention: z.string(),
+  descriptionIntervention: z.string(),
+  etat: z.string(),
+  matricule: z.string(),
+  maintenanceId: z.string(),
+  panneId: z.string(),
+});
+
+export const createEntretienSchema = entretienSchema.omit({
+  id_entretien: true,
+});
+
+export const updateEntretienSchema = createEntretienSchema.partial();
+
+export type Entretien = z.infer<typeof entretienSchema>;
+export type CreateEntretien = z.infer<typeof createEntretienSchema>;
+export type UpdateEntretien = z.infer<typeof updateEntretienSchema>;
+
+export const panneSchema = z.object({
+  id_panne: z.string(),
+  typePanne: z.string().max(300),
+  dateDeclaration: z.string(),
+  chauffeurId: z.string(),
+});
+
+export const createPanneSchema = panneSchema.omit({
+  id_panne: true,
+});
+
+export const updatePanneSchema = createPanneSchema.partial();
+
+export type Panne = z.infer<typeof panneSchema>;
+export type CreatePanne = z.infer<typeof createPanneSchema>;
+export type UpdatePanne = z.infer<typeof updatePanneSchema>;

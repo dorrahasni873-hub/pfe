@@ -1,8 +1,13 @@
-import type { LoginInput, RegisterInput, User } from "@/@types/types";
+import type {
+  Chauffeur,
+  LoginInput,
+  RegisterInput,
+  User,
+} from "@/@types/types";
 import { createContext } from "react";
 
 export type AuthContextType = {
-  user: User | null;
+  user: User | Chauffeur | null;
   loading: boolean;
   login: (credentials: LoginInput) => Promise<boolean>;
   register: (credentials: RegisterInput) => Promise<boolean>;

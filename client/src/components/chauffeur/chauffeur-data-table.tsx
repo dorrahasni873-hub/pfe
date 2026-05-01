@@ -89,6 +89,8 @@ export const schema = z.object({
   cin: z.string(),
   tel: z.string(),
   numeroPermis: z.string(),
+  password: z.string(),
+  email: z.string().email(),
 });
 
 // Create a separate component for the drag handle
@@ -164,6 +166,17 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
           {row.original.cin}
+        </Badge>
+      </div>
+    ),
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => (
+      <div className="w-32">
+        <Badge variant="outline" className="text-muted-foreground px-1.5">
+          {row.original.email}
         </Badge>
       </div>
     ),

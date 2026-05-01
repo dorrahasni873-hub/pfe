@@ -44,6 +44,8 @@ export const chauffeur = pgTable("chauffeur", {
   cin: varchar("cin").unique(),
   tel: varchar("tel").unique(),
   numeroPermis: varchar("numero_permis").unique(),
+  password: varchar("password", { length: 300 }).notNull(),
+  email: varchar("email", { length: 300 }).unique(),
 });
 
 export const panne = pgTable("panne", {
@@ -51,7 +53,6 @@ export const panne = pgTable("panne", {
   typePanne: varchar("type_panne", { length: 300 }).notNull(),
   dateDeclaration: date("date_declaration").notNull(),
   chauffeurId: uuid("id_chauffeur").notNull(),
-  maintenanceId: uuid("maintenance_id").notNull(),
 });
 
 export const entretien = pgTable("entretien", {
@@ -64,6 +65,7 @@ export const entretien = pgTable("entretien", {
   etat: varchar("etat", { length: 100 }).notNull(),
   matricule: varchar("matricule", { length: 300 }).notNull(),
   maintenanceId: uuid("maintenance_id").notNull(),
+  panneId: uuid("id_panne").notNull(),
 });
 
 export const affectation = pgTable("affectation", {
@@ -72,6 +74,16 @@ export const affectation = pgTable("affectation", {
   dateDebut: date("date_debut").notNull(),
   typeAffectation: varchar("type_affectation", { length: 300 }).notNull(),
   etat: varchar("etat", { length: 100 }).notNull(),
+  id_chauffeur: uuid("id_chauffeur").notNull(),
+  matricule: varchar("matricule", { length: 300 }).notNull(),
+});
+
+export const carnetDeBord = pgTable("carnet_de_bord", {
+  id_carnet: uuid("id_carnet").defaultRandom().primaryKey(),
+  dateDeDebut: date("date_debut").notNull(),
+  dateDeFin: date("date_de_fin").notNull(),
+  km_depart: integer("km_depart").notNull(),
+  km_arrive: integer("km_arrive").notNull(),
   id_chauffeur: uuid("id_chauffeur").notNull(),
   matricule: varchar("matricule", { length: 300 }).notNull(),
 });

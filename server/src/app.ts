@@ -5,6 +5,9 @@ import utilisateurRoutes from "./routes/utilisateur.routes";
 import AffectationRoutes from "./routes/affectation.route";
 import chauffeurRoutes from "./routes/chauffeur.routes";
 import MaintenanceRoutes from "./routes/maintenance.route";
+import carnetDeBordRoutes from "./routes/carnetDeBord.route";
+import panneRoutes from "./routes/panne.route";
+import entretienRoutes from "./routes/entretien.route";
 import authRoutes from "./routes/auth.routes";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -25,7 +28,11 @@ app.use("/api/utilisateurs", utilisateurRoutes);
 app.use("/api/chauffeurs", chauffeurRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/affectations", AffectationRoutes);
+app.use("/api/pannes", panneRoutes);
+app.use("/api/entretiens", entretienRoutes);
 app.use("/api/maintenances", MaintenanceRoutes);
+app.use("/api/carnetsdebord", carnetDeBordRoutes);
 
 app.use(errorHandler);
+
 export default app;

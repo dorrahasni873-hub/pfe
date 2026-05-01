@@ -30,6 +30,8 @@ const ChauffeurForm = ({ chauffeur }: ChauffeurFormProps) => {
           tel: chauffeur.tel,
           cin: chauffeur.cin,
           numeroPermis: chauffeur.numeroPermis,
+          password: chauffeur.password,
+          email: chauffeur.email,
         }
       : {
           nom: "",
@@ -61,6 +63,8 @@ const ChauffeurForm = ({ chauffeur }: ChauffeurFormProps) => {
           tel: data.tel ?? "",
           cin: data.cin ?? "",
           numeroPermis: data.numeroPermis ?? "",
+          password: data.password ?? "",
+          email: data.email ?? "",
         };
 
         const createResult = await createChauffeur(createData);
@@ -100,6 +104,26 @@ const ChauffeurForm = ({ chauffeur }: ChauffeurFormProps) => {
       {errors.prenom && (
         <span role="alert" className="text-red-600 text-sm">
           {errors.prenom.message}
+        </span>
+      )}
+      <Input
+        {...register("email")}
+        placeholder="Email"
+        aria-invalid={!!errors.email}
+      />
+      {errors.email && (
+        <span role="alert" className="text-red-600 text-sm">
+          {errors.email.message}
+        </span>
+      )}
+      <Input
+        {...register("password")}
+        placeholder="Mot de passe"
+        aria-invalid={!!errors.password}
+      />
+      {errors.password && (
+        <span role="alert" className="text-red-600 text-sm">
+          {errors.password.message}
         </span>
       )}
       <Input

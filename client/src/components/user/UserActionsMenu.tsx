@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { toast } from "sonner";
+
 import {
   Dialog,
   DialogContent,
@@ -7,23 +8,25 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+
 import { Pencil, Trash } from "lucide-react";
+
 import type { User } from "@/@types/types";
-import UserForm from "./UserForm";
 import { useUser } from "@/hooks/useUser";
 
-interface UserActionsMenuProps {
+import UserForm from "./UserForm";
+interface Props {
   row: {
     original: User;
   };
 }
 
-const UserActionsMenu = ({ row }: UserActionsMenuProps) => {
+const UserActionsMenu = ({ row }: Props) => {
   const { deleteUser } = useUser();
 
   const onDelete = async (id: string) => {
     const res = await deleteUser(id);
-    if (res) toast("utilisateur supprimé avec succès");
+    if (res) toast("Utilisateur supprimé avec succès");
   };
 
   return (
@@ -34,18 +37,20 @@ const UserActionsMenu = ({ row }: UserActionsMenuProps) => {
             <Pencil />
           </Button>
         </DialogTrigger>
+
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Modifier un Utilisateur</DialogTitle>
+            <DialogTitle>Modifier utilisateur</DialogTitle>
           </DialogHeader>
+
           <UserForm user={row.original} />
         </DialogContent>
       </Dialog>
 
       <Button
         variant="destructive"
-        size={"icon"}
-        onClick={() => onDelete(row.original.id_utilisateur || "")}
+        size="icon"
+        onClick={() => onDelete(row.original.id_utilisateur)}
       >
         <Trash />
       </Button>

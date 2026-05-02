@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
   IconDashboard,
-  IconInnerShadowTop,
   IconListDetails,
   IconSearch,
   IconSettings,
@@ -39,7 +38,7 @@ const data = {
       title: "Chauffeurs",
       url: "/chauffeurs",
       icon: IconListDetails,
-      roles: ["admin", "user"],
+      roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Véhicules",
@@ -79,11 +78,11 @@ const data = {
     },
   ],
   navSecondary: [
-    {
-      title: "Paramètres",
-      url: "#",
-      icon: IconSettings,
-    },
+    // {
+    //   title: "Paramètres",
+    //   url: "#",
+    //   icon: IconSettings,
+    // },
   ],
 };
 
@@ -110,15 +109,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <Link to="/" className="flex items-center gap-2">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">STS Béja.</span>
+              <Link to="/" className="flex items-center gap-3">
+                {/* Logo */}
+                <img
+                  src="/logo.png"
+                  alt="Logo"
+                  className="h-15 w-15 rounded-full object-cover"
+                />
+
+                {/* Text block */}
+                <div className="flex flex-col leading-tight">
+                  <div className="flex items-center gap-2">
+                    <span className="text-3xl font-semibold">STS Béja</span>
+                  </div>
+                </div>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="pt-11">
         <NavMain items={filteredNavMain} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
         <div className="p-2">

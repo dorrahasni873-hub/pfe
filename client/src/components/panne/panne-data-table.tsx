@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
@@ -45,6 +47,7 @@ import {
 } from "@/components/ui/table";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { IconGripVertical, IconPlus } from "@tabler/icons-react";
 
 import {
@@ -61,18 +64,28 @@ import type { Panne } from "@/@types/types";
 import PanneActionsMenu from "./panneActionsMenu";
 import PanneForm from "./panneForm";
 
-// 🔹 Drag Handle
+/* =========================
+   DRAG HANDLE
+========================= */
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({ id });
 
   return (
-    <Button {...attributes} {...listeners} variant="ghost" size="icon">
+    <Button
+      {...attributes}
+      {...listeners}
+      variant="ghost"
+      size="icon"
+      className="text-muted-foreground size-7 hover:bg-transparent"
+    >
       <IconGripVertical className="size-4" />
     </Button>
   );
 }
 
-// 🔹 Columns
+/* =========================
+   COLUMNS (UI MATCHED)
+========================= */
 const getColumns = (): ColumnDef<Panne>[] => [
   {
     id: "drag",
@@ -82,18 +95,32 @@ const getColumns = (): ColumnDef<Panne>[] => [
   {
     accessorKey: "typePanne",
     header: "Type Panne",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground px-2">
+        {row.original.typePanne}
+      </Badge>
+    ),
   },
   {
     accessorKey: "dateDeclaration",
     header: "Date Déclaration",
-    cell: ({ row }) =>
-      row.original.dateDeclaration
-        ? format(new Date(row.original.dateDeclaration), "dd/MM/yyyy")
-        : "-",
+    cell: ({ row }) => {
+      const date = row.original.dateDeclaration;
+      return (
+        <Badge variant="outline" className="text-muted-foreground px-2">
+          {date ? format(new Date(date), "dd/MM/yyyy") : "-"}
+        </Badge>
+      );
+    },
   },
   {
     accessorKey: "chauffeurId",
     header: "Chauffeur",
+    cell: ({ row }) => (
+      <div className="text-sm text-muted-foreground">
+        {row.original.chauffeurId ?? "-"}
+      </div>
+    ),
   },
   {
     id: "actions",
@@ -101,15 +128,20 @@ const getColumns = (): ColumnDef<Panne>[] => [
   },
 ];
 
-// 🔹 Draggable Row
+/* =========================
+   DRAG ROW
+========================= */
 function DraggableRow({ row }: { row: Row<Panne> }) {
-  const { transform, transition, setNodeRef } = useSortable({
+  const { transform, transition, setNodeRef, isDragging } = useSortable({
     id: row.original.id_panne,
   });
 
   return (
     <TableRow
       ref={setNodeRef}
+      data-state={row.getIsSelected() && "selected"}
+      data-dragging={isDragging}
+      className="data-[dragging=true]:opacity-70"
       style={{
         transform: CSS.Transform.toString(transform),
         transition,
@@ -124,7 +156,9 @@ function DraggableRow({ row }: { row: Row<Panne> }) {
   );
 }
 
-// 🔹 Main Component
+/* =========================
+   MAIN COMPONENT
+========================= */
 export function PanneDataTable({ data: initialData }: { data: Panne[] }) {
   const [data, setData] = useState(initialData);
 
@@ -156,22 +190,24 @@ export function PanneDataTable({ data: initialData }: { data: Panne[] }) {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-    if (active.id !== over?.id) {
-      setData((items) => {
-        const oldIndex = dataIds.indexOf(active.id);
-        const newIndex = dataIds.indexOf(over!.id);
-        return arrayMove(items, oldIndex, newIndex);
-      });
-    }
+    if (!over || active.id === over.id) return;
+
+    setData((items) => {
+      const oldIndex = dataIds.indexOf(active.id);
+      const newIndex = dataIds.indexOf(over.id);
+      return arrayMove(items, oldIndex, newIndex);
+    });
   };
 
   return (
-    <Tabs defaultValue="table" className="w-full">
-      <div className="flex justify-between p-4">
+    <Tabs defaultValue="table" className="w-full flex-col gap-6">
+      {/* HEADER ACTIONS */}
+      <div className="flex items-center justify-between px-4 lg:px-6">
         <Dialog>
           <DialogTrigger asChild>
             <Button>
-              <IconPlus /> Créer Panne
+              <IconPlus className="mr-1 size-4" />
+              Créer Panne
             </Button>
           </DialogTrigger>
 
@@ -184,41 +220,53 @@ export function PanneDataTable({ data: initialData }: { data: Panne[] }) {
         </Dialog>
       </div>
 
-      <TabsContent value="table">
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          modifiers={[restrictToVerticalAxis]}
-          onDragEnd={handleDragEnd}
-        >
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((hg) => (
-                <TableRow key={hg.id}>
-                  {hg.headers.map((header) => (
-                    <TableHead key={header.id}>
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext(),
-                      )}
-                    </TableHead>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHeader>
-
-            <TableBody>
-              <SortableContext
-                items={dataIds}
-                strategy={verticalListSortingStrategy}
-              >
-                {table.getRowModel().rows.map((row) => (
-                  <DraggableRow key={row.id} row={row} />
+      <TabsContent value="table" className="px-4 lg:px-6">
+        {/* TABLE WRAPPER (IMPORTANT) */}
+        <div className="overflow-hidden rounded-lg border">
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            modifiers={[restrictToVerticalAxis]}
+            onDragEnd={handleDragEnd}
+          >
+            <Table>
+              {/* HEADER */}
+              <TableHeader className="bg-muted sticky top-0 z-10">
+                {table.getHeaderGroups().map((hg) => (
+                  <TableRow key={hg.id}>
+                    {hg.headers.map((header) => (
+                      <TableHead key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext(),
+                            )}
+                      </TableHead>
+                    ))}
+                  </TableRow>
                 ))}
-              </SortableContext>
-            </TableBody>
-          </Table>
-        </DndContext>
+              </TableHeader>
+
+              {/* BODY */}
+              <TableBody>
+                <SortableContext
+                  items={dataIds}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {table.getRowModel().rows.map((row) => (
+                    <DraggableRow key={row.id} row={row} />
+                  ))}
+                </SortableContext>
+              </TableBody>
+            </Table>
+          </DndContext>
+        </div>
+
+        {/* FOOTER INFO */}
+        <div className="flex items-center justify-between px-2 py-4 text-sm text-muted-foreground">
+          <div>{data.length} panne(s) au total</div>
+        </div>
       </TabsContent>
     </Tabs>
   );

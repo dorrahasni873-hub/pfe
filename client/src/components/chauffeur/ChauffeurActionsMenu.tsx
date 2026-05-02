@@ -11,6 +11,7 @@ import { Pencil, Trash } from "lucide-react";
 import type { Chauffeur } from "@/@types/types";
 import { useChauffeur } from "@/hooks/useChauffeur";
 import ChauffeurForm from "./ChauffeurForm";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ChauffeurActionsMenuProps {
   row: {
@@ -20,11 +21,12 @@ interface ChauffeurActionsMenuProps {
 
 const ChauffeurActionsMenu = ({ row }: ChauffeurActionsMenuProps) => {
   const { deleteChauffeur } = useChauffeur();
+  const { user } = useAuth();
   const onDelete = async (id: string) => {
     const res = await deleteChauffeur(id);
     if (res) toast("utilisateur supprimé avec succès");
   };
-
+  if (user?.role !== "admin") return null;
   return (
     <div className="flex gap-3">
       <Dialog>

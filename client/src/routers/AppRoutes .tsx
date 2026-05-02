@@ -17,6 +17,7 @@ import MaintenancePage from "@/pages/MaintenancePage";
 import CarnetDeBordPage from "@/pages/CarnetDeBordPage";
 import EntretiensPage from "@/pages/EntretienPage";
 import PannesPage from "@/pages/PannePage";
+import Profile from "@/components/profile/profile";
 
 export const AppRoutes = () => {
   return (
@@ -42,6 +43,7 @@ export const AppRoutes = () => {
           <Route path="carnets" element={<CarnetDeBordPage />} />
           <Route path="entretiens" element={<EntretiensPage />} />
           <Route path="pannes" element={<PannesPage />} />
+          <Route path="profile" element={<Profile />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

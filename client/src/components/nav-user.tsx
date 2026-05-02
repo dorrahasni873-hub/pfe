@@ -1,8 +1,4 @@
-import {
-  IconDotsVertical,
-  IconNotification,
-  IconUserCircle,
-} from "@tabler/icons-react";
+import { IconDotsVertical, IconUserCircle } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -22,7 +18,7 @@ import {
 import { ModeToggle } from "./mode-toggle";
 import { Button } from "./ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function NavUser({
   user,
@@ -98,11 +94,10 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem>
                 <IconUserCircle />
-                Profile
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
+
+                <Link to="/profile" className="ml-2 text-sm">
+                  Profil
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <SidebarMenuItem>

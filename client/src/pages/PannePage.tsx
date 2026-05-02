@@ -34,8 +34,17 @@ const PannePage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 px-6">Liste des Pannes</h1>
+      <div className="flex flex-col items-center justify-center mb-6 px-6 text-center">
+        <h1 className="text-4xl font-light italic tracking-wide text-primary/80">
+          Liste des Pannes
+        </h1>
 
+        <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
+          Suivi élégant des incidents et dysfonctionnements des véhicules
+        </p>
+
+        <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      </div>
       <PanneDataTable data={data} />
     </div>
   );

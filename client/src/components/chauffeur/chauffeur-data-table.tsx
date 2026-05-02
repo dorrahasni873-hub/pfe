@@ -26,13 +26,11 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import {
-  IconChevronDown,
   IconChevronLeft,
   IconChevronRight,
   IconChevronsLeft,
   IconChevronsRight,
   IconGripVertical,
-  IconLayoutColumns,
   IconPlus,
 } from "@tabler/icons-react";
 import {
@@ -55,12 +53,7 @@ import { z } from "zod";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -80,6 +73,7 @@ import {
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import ChauffeurActionsMenu from "./ChauffeurActionsMenu";
 import ChauffeurForm from "./ChauffeurForm";
+import { useAuth } from "@/hooks/useAuth";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const schema = z.object({
@@ -238,6 +232,7 @@ export function ChauffeurDataTable({
   data: z.infer<typeof schema>[];
 }) {
   const [data, setData] = React.useState(() => initialData);
+  const { user } = useAuth();
   React.useEffect(() => {
     setData(initialData);
   }, [initialData]);
@@ -312,55 +307,22 @@ export function ChauffeurDataTable({
         </Label>
         <div></div>
         <div className="flex items-center gap-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconLayoutColumns />
-                <span className="hidden lg:inline">
-                  Personnaliser les colonnes
-                </span>
-                <span className="lg:hidden">Columns</span>
-                <IconChevronDown />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-56">
-              {table
-                .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide(),
-                )
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  );
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline" size="sm">
-                <IconPlus />
-                <span>Créer Chauffeur</span>
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Créer un nouveau Chauffeur</DialogTitle>
-              </DialogHeader>
-              <ChauffeurForm />
-            </DialogContent>
-          </Dialog>
+          {user && user.role === "admin" && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <IconPlus />
+                  <span>Créer Chauffeur</span>
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Créer un nouveau Chauffeur</DialogTitle>
+                </DialogHeader>
+                <ChauffeurForm />
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
       </div>
       <TabsContent

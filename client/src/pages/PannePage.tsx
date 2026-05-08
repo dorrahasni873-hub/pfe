@@ -40,7 +40,7 @@ const PannePage = () => {
         </h1>
 
         <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
-          Suivi élégant des incidents et dysfonctionnements des véhicules
+          Suivi élégant des incidents et pannes des véhicules
         </p>
 
         <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

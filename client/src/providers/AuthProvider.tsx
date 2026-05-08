@@ -24,11 +24,11 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
       try {
         const data = await checkMe();
-        const userData = data?.getUser;
+        const userData = data?.user;
 
         setUser(userData);
         localStorage.setItem("data", JSON.stringify(userData));
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
         setUser(null);
         localStorage.removeItem("token");
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     fetchUser();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const login = async ({ email, motDePasse }: LoginInput) => {
     const data = await loginApi(email, motDePasse);

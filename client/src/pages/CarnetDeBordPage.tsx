@@ -40,7 +40,8 @@ const CarnetDeBordPage = () => {
         </h1>
 
         <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
-          Suivi raffiné des trajets et performances des véhicules
+          Vue globale élégante de votre activité et performance des carnets de
+          bord
         </p>
 
         <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

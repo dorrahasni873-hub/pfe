@@ -21,7 +21,7 @@ import {
 import { useCarnetDeBord } from "@/hooks/useCarnetDeBord";
 import type { CreateCarnetDeBord } from "@/@types/types";
 
-export function ChartKmBeforeAfter() {
+export function ChartVehicle() {
   const { getCarnets } = useCarnetDeBord();
   const [carnets, setCarnets] = React.useState<CreateCarnetDeBord[]>([]);
 

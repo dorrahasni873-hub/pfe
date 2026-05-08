@@ -35,7 +35,17 @@ const MaintenancePage = () => {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 px-6">Liste des Maintenances</h1>
+      <div className="flex flex-col items-center justify-center mb-6 px-6 text-center">
+        <h1 className="text-4xl font-light italic tracking-wide text-primary/80">
+          Liste des maintenances
+        </h1>
+
+        <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
+          Gestion élégante des maintenances et opérations de maintenance
+        </p>
+
+        <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      </div>
 
       <MaintenanceDataTable data={data} />
     </div>

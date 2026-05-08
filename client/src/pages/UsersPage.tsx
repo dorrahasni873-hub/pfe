@@ -42,7 +42,7 @@ const UsersPage = () => {
         </h1>
 
         <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
-          Gestion élégante des comptes et des accès système
+          Gestion élégante de vos utilisateurs et rôles
         </p>
 
         <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

@@ -40,7 +40,7 @@ const EntretienPage = () => {
         </h1>
 
         <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
-          Suivi raffiné des opérations de maintenance
+          Vue globale élégante de votre activité et performance des entretiens
         </p>
 
         <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

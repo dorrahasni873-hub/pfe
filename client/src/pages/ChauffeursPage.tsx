@@ -42,7 +42,7 @@ const ChauffeursPage = () => {
         </h1>
 
         <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
-          Gestion élégante des conducteurs et affectations
+          Gestion élégante des chauffeurs et de leurs performances
         </p>
 
         <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />

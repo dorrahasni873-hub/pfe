@@ -51,7 +51,6 @@ export function ChartRadialStackedPannes() {
     })();
   }, [getVehicules]);
 
-  // ✅ FIXED DATA STRUCTURE
   const chartData = React.useMemo(() => {
     const counts = {
       disponible: 0,
@@ -92,33 +91,35 @@ export function ChartRadialStackedPannes() {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        <CardTitle>État des véhicules</CardTitle>
-        <CardDescription>Répartition globale des véhicules</CardDescription>
+      <CardHeader className="items-center pb-0 pt-4 space-y-1">
+        <CardTitle className="text-sm">État des véhicules</CardTitle>
+
+        <CardDescription className="text-xs text-center">
+          Répartition globale des véhicules
+        </CardDescription>
       </CardHeader>
 
-      <CardContent className="flex flex-1 items-center pb-0">
+      <CardContent className="flex flex-1 items-center justify-center p-2">
         <ChartContainer
           config={chartConfig}
-          className="mx-auto aspect-square w-full max-w-[250px]"
+          className="mx-auto h-[170px] w-[170px]"
         >
           <RadialBarChart
             data={chartData}
             startAngle={180}
             endAngle={0}
-            innerRadius={80}
-            outerRadius={110}
+            innerRadius={55}
+            outerRadius={75}
           >
             <RadialBar dataKey="value" cornerRadius={5} background />
 
-            {/* ✅ Tooltip FIXED */}
             <ChartTooltip
               cursor={false}
               content={({ payload }) => {
                 if (!payload?.length) return null;
 
                 return (
-                  <div className="rounded-md border bg-background p-2 text-sm shadow">
+                  <div className="rounded-md border bg-background p-2 text-xs shadow">
                     {payload.map((entry: any) => (
                       <div
                         key={entry.payload.name}
@@ -126,9 +127,13 @@ export function ChartRadialStackedPannes() {
                       >
                         <span
                           className="h-2 w-2 rounded-full"
-                          style={{ background: entry.payload.fill }}
+                          style={{
+                            background: entry.payload.fill,
+                          }}
                         />
-                        <span>{entry.payload.name}</span>:
+
+                        <span>{entry.payload.name}</span>
+
                         <strong>{entry.value}</strong>
                       </div>
                     ))}
@@ -137,7 +142,6 @@ export function ChartRadialStackedPannes() {
               }}
             />
 
-            {/* Center Label */}
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
                 content={({ viewBox }) => {
@@ -146,51 +150,49 @@ export function ChartRadialStackedPannes() {
                       <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) - 10}
-                          className="fill-foreground text-2xl font-bold"
+                          y={(viewBox.cy || 0) - 6}
+                          className="fill-foreground text-xl font-bold"
                         >
                           {totalVehicles}
                         </tspan>
+
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 12}
-                          className="fill-muted-foreground"
+                          y={(viewBox.cy || 0) + 16}
+                          className="fill-muted-foreground text-[11px]"
                         >
                           Véhicules
                         </tspan>
                       </text>
                     );
                   }
+
+                  return null;
                 }}
               />
             </PolarRadiusAxis>
           </RadialBarChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter className="flex items-center justify-between gap-2 text-sm">
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[var(--chart-1)]" />
-          <Badge>
-            Disponible
-            <strong className="ml-1">{chartData[0].value}</strong>
-          </Badge>
-        </div>
 
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[var(--chart-2)]" />
-          <Badge>
-            En service
-            <strong className="ml-1">{chartData[1].value}</strong>
-          </Badge>
-        </div>
+      <CardFooter className="flex flex-wrap items-center justify-center gap-1 pt-1 text-[10px]">
+        <Badge className="flex items-center gap-1 px-1.5 py-0 text-[10px] font-normal">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--chart-1)]" />
+          Disponible
+          <strong className="text-[10px]">{chartData[0].value}</strong>
+        </Badge>
 
-        <div className="flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[var(--chart-3)]" />
-          <Badge>
-            En panne
-            <strong className="ml-1">{chartData[2].value}</strong>
-          </Badge>
-        </div>
+        <Badge className="flex items-center gap-1 px-1.5 py-0 text-[10px] font-normal">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--chart-2)]" />
+          En service
+          <strong className="text-[10px]">{chartData[1].value}</strong>
+        </Badge>
+
+        <Badge className="flex items-center gap-1 px-1.5 py-0 text-[10px] font-normal">
+          <span className="h-1.5 w-1.5 rounded-full bg-[var(--chart-3)]" />
+          En panne
+          <strong className="text-[10px]">{chartData[2].value}</strong>
+        </Badge>
       </CardFooter>
     </Card>
   );

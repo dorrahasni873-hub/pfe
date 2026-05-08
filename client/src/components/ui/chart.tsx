@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 "use client";
 
 import * as React from "react";
@@ -91,15 +92,12 @@ ${colorConfig
 export const ChartTooltip = RechartsPrimitive.Tooltip;
 export const ChartLegend = RechartsPrimitive.Legend;
 
-/* =========================
-   TOOLTIP CONTENT
-========================= */
-
 export function ChartTooltipContent({
   active,
   payload,
   className,
   label,
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 }: any) {
   const { config } = useChart();
 

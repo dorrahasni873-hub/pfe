@@ -29,15 +29,24 @@ const AffectationsPage = () => {
     intervalId = setInterval(fetchUsers, 3000);
 
     return () => clearInterval(intervalId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) return <div>Chargement...</div>;
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4 px-6">Liste des affectations</h1>
+      <div className="flex flex-col items-center justify-center mb-6 px-6 text-center">
+        <h1 className="text-4xl font-light italic tracking-wide text-primary/80">
+          Liste des affectations
+        </h1>
 
+        <p className="mt-2 text-sm italic tracking-wider text-muted-foreground">
+          Gestion élégante des conducteurs et affectations
+        </p>
+
+        <div className="mt-4 h-[1px] w-28 bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+      </div>
       <AffectationDataTable data={data} />
     </div>
   );

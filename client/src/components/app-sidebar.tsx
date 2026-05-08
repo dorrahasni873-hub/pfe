@@ -1,9 +1,14 @@
 import * as React from "react";
 import {
   IconDashboard,
-  IconListDetails,
+  IconUsers,
+  IconSteeringWheel,
+  IconTruck,
+  IconArrowsExchange,
+  IconTools,
+  IconBook,
+  IconAlertTriangle,
   IconSearch,
-  IconSettings,
 } from "@tabler/icons-react";
 import { NavMain } from "@/components/nav-main";
 import { NavSecondary } from "@/components/nav-secondary";
@@ -31,59 +36,53 @@ const data = {
     {
       title: "Utilisateurs",
       url: "/utilisateurs",
-      icon: IconListDetails,
+      icon: IconUsers,
       roles: ["admin", "user"],
     },
     {
       title: "Chauffeurs",
       url: "/chauffeurs",
-      icon: IconListDetails,
+      icon: IconSteeringWheel,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Véhicules",
       url: "/vehicules",
-      icon: IconListDetails,
+      icon: IconTruck,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Affectations",
       url: "/affectations",
-      icon: IconListDetails,
+      icon: IconArrowsExchange,
       roles: ["admin", "user"],
     },
     {
       title: "Maintenance",
       url: "/maintenances",
-      icon: IconListDetails,
+      icon: IconTools,
       roles: ["admin", "user"],
     },
     {
       title: "Carnets de Bord",
       url: "/carnets",
-      icon: IconListDetails,
+      icon: IconBook,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Entretiens",
       url: "/entretiens",
-      icon: IconListDetails,
+      icon: IconTools,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Pannes",
       url: "/pannes",
-      icon: IconListDetails,
+      icon: IconAlertTriangle,
       roles: ["admin", "user", "chauffeur"],
     },
   ],
-  navSecondary: [
-    // {
-    //   title: "Paramètres",
-    //   url: "#",
-    //   icon: IconSettings,
-    // },
-  ],
+  navSecondary: [],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

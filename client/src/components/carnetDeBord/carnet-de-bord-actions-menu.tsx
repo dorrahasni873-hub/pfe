@@ -48,7 +48,10 @@ const CarnetDeBordActionsMenu = ({ row }: Props) => {
       <Button
         variant="destructive"
         size="icon"
-        onClick={() => onDelete(row.original.id_carnet)}
+        onClick={() => {
+          console.log("done");
+          onDelete(row.original.id_carnet);
+        }}
       >
         <Trash />
       </Button>

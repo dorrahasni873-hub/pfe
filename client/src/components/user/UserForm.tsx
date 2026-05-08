@@ -46,7 +46,6 @@ export default function UserForm({ user }: UserFormProps) {
         {...form.register("motDePasse")}
       />
 
-      {/* ROLE SELECT */}
       <div>
         <label className="text-sm">Rôle</label>
         <select
@@ -55,7 +54,6 @@ export default function UserForm({ user }: UserFormProps) {
         >
           <option value="">Sélectionner un rôle</option>
           <option value="admin">Admin</option>
-          <option value="chauffeur">Chauffeur</option>
           <option value="maintenance">Maintenance</option>
         </select>
       </div>

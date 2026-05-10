@@ -14,6 +14,7 @@ import {
   IconSteeringWheel,
   IconAlertTriangle,
 } from "@tabler/icons-react";
+import { useAuth } from "@/hooks/useAuth";
 export function SectionCards() {
   const { getChauffeurs } = useChauffeur();
   const { getVehicules } = useVehicule();
@@ -26,6 +27,8 @@ export function SectionCards() {
   const [pannes, setPannes] = useState(0);
   const [affectations, setAffectations] = useState(0);
   const [maintenances, setMaintenances] = useState(0);
+
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,11 +57,8 @@ export function SectionCards() {
   ]);
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3 px-4 lg:px-6">
-      <div className="scale-90">
-        <ChartRadialStackedPannes />
-      </div>
-
+    <div className="flex flex-wrap gap-10 px-4 lg:px-6">
+      <ChartRadialStackedPannes />
       <ChartRadialText
         title="Total Véhicules"
         icon={IconTruck}
@@ -66,31 +66,33 @@ export function SectionCards() {
         description="Nombre total de véhicules"
         bg="from-sky-100 via-sky-200 to-sky-300"
       />
-
-      <ChartRadialText
-        title="Total Affectations"
-        icon={IconArrowsExchange}
-        value={affectations}
-        description="Nombre total de affectations"
-        bg="from-indigo-100 via-indigo-200 to-indigo-300"
-      />
-
-      <ChartRadialText
-        title="Total Maintenances"
-        icon={IconTools}
-        value={maintenances}
-        description="Nombre total de maintenances"
-        bg="from-purple-100 via-purple-200 to-purple-300"
-      />
-
-      <ChartRadialText
-        title="Total Chauffeurs"
-        icon={IconSteeringWheel}
-        value={chauffeurs}
-        description="Nombre total de chauffeurs"
-        bg="from-emerald-100 via-emerald-200 to-emerald-300"
-      />
-
+      {user?.role === "admin" && (
+        <ChartRadialText
+          title="Total Affectations"
+          icon={IconArrowsExchange}
+          value={affectations}
+          description="Nombre total de affectations"
+          bg="from-indigo-100 via-indigo-200 to-indigo-300"
+        />
+      )}
+      {user?.role === "admin" && (
+        <ChartRadialText
+          title="Total Maintenances"
+          icon={IconTools}
+          value={maintenances}
+          description="Nombre total de maintenances"
+          bg="from-purple-100 via-purple-200 to-purple-300"
+        />
+      )}
+      {user?.role === "admin" && (
+        <ChartRadialText
+          title="Total Chauffeurs"
+          icon={IconSteeringWheel}
+          value={chauffeurs}
+          description="Nombre total de chauffeurs"
+          bg="from-emerald-100 via-emerald-200 to-emerald-300"
+        />
+      )}
       <ChartRadialText
         title="Total Pannes"
         icon={IconAlertTriangle}

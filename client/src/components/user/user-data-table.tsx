@@ -185,7 +185,7 @@ export function UserDataTable({ data: initialData }: { data: User[] }) {
   return (
     <Tabs defaultValue="table" className="w-full">
       {/* TOP BAR */}
-      <div className="flex justify-between p-4">
+      <div className="flex items-center gap-2">
         <Dialog>
           <DialogTrigger asChild>
             <Button>
@@ -200,6 +200,7 @@ export function UserDataTable({ data: initialData }: { data: User[] }) {
             <UserForm />
           </DialogContent>
         </Dialog>
+        <div></div>
       </div>
 
       <TabsContent value="table">

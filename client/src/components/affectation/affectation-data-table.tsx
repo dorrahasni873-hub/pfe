@@ -279,29 +279,11 @@ export function AffectationDataTable({
     <Tabs defaultValue="table" className="w-full">
       {/* HEADER ACTIONS */}
       <div className="flex justify-between p-4">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline">
-              <IconLayoutColumns /> Colonnes
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent>
-            {table.getAllColumns().map((col) => (
-              <DropdownMenuCheckboxItem
-                key={col.id}
-                checked={col.getIsVisible()}
-                onCheckedChange={() => col.toggleVisibility()}
-              >
-                {col.id}
-              </DropdownMenuCheckboxItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+     
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button>
+            <Button size="sm">
               <IconPlus /> Créer Affectation
             </Button>
           </DialogTrigger>

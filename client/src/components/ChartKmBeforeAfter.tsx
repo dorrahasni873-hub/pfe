@@ -20,6 +20,7 @@ import {
 
 import { useCarnetDeBord } from "@/hooks/useCarnetDeBord";
 import type { CreateCarnetDeBord } from "@/@types/types";
+import { Gauge, StretchVertical, StrikethroughIcon } from "lucide-react";
 
 export function ChartVehicle() {
   const { getCarnets } = useCarnetDeBord();
@@ -72,8 +73,11 @@ export function ChartVehicle() {
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Kilométrage avant / après</CardTitle>
+      <CardHeader className="text-center">
+        <div className="justify-center gap-2 flex">
+          <Gauge />
+          <CardTitle>Kilométrage avant / après</CardTitle>
+        </div>
         <CardDescription>
           Comparaison du compteur kilométrique par véhicule
         </CardDescription>

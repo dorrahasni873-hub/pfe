@@ -305,12 +305,11 @@ export function ChauffeurDataTable({
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <div></div>
         <div className="flex items-center gap-2">
           {user && user.role === "admin" && (
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" size="sm">
+                <Button size="sm">
                   <IconPlus />
                   <span>Créer Chauffeur</span>
                 </Button>

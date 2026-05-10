@@ -25,7 +25,6 @@ type Props = {
   description?: string;
   value: number;
   color?: string;
-  gradient?: string;
   bg?: string;
 };
 
@@ -50,47 +49,51 @@ export function ChartRadialText({
     <Card
       className={`
         relative flex flex-col overflow-hidden
-        text-white
         shadow-xl
         border border-white/10
-    bg-linear-to-br ${bg}
+        bg-linear-to-br ${bg}
+        w-[200px] h-[200px]
+        p-1
       `}
     >
       {/* soft glow overlay */}
       <div className="absolute inset-0 bg-white/10 opacity-20 pointer-events-none" />
 
-      <CardHeader className="items-center pb-0 pt-4 space-y-1 relative">
-        <CardTitle className="text-sm flex items-center gap-2 text-slate-900">
-          {" "}
-          {Icon && <Icon className="h-4 w-4 text-slate-700" />}
+      <CardHeader className="items-center pb-0 pt-2 space-y-0 relative z-10">
+        <CardTitle className="flex items-center gap-1 text-[11px] font-semibold text-slate-900 text-center">
+          {Icon && <Icon className="h-3 w-3 text-slate-700" />}
           {title}
         </CardTitle>
 
         {description && (
-          <CardDescription className="text-xs text-slate-600 text-center">
-            {" "}
+          <CardDescription className="text-[9px] leading-tight text-slate-600 text-center">
             {description}
           </CardDescription>
         )}
       </CardHeader>
 
-      <CardContent className="flex flex-1 items-center justify-center p-2 relative">
-        <ChartContainer config={{}} className="mx-auto h-[160px] w-[160px]">
+      <CardContent className="flex flex-1 items-center justify-center p-1 relative z-10">
+        <ChartContainer config={{}} className="mx-auto h-[90px] w-[90px]">
           <RadialBarChart
             data={chartData}
             startAngle={0}
             endAngle={250}
-            outerRadius={60}
-            innerRadius={48}
+            outerRadius={45}
+            innerRadius={35}
           >
             <PolarGrid
               gridType="circle"
               radialLines={false}
               stroke="none"
-              polarRadius={[60, 48]}
+              polarRadius={[45, 35]}
             />
 
-            <RadialBar dataKey="value" fill={color} cornerRadius={10} />
+            <RadialBar
+              dataKey="value"
+              fill={color}
+              cornerRadius={8}
+              background
+            />
 
             <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
               <Label
@@ -106,15 +109,15 @@ export function ChartRadialText({
                         <tspan
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-slate-900 text-2xl font-bold"
+                          className="fill-slate-900 text-lg font-bold"
                         >
                           {Number.isFinite(value) ? value : 0}
                         </tspan>
 
                         <tspan
                           x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 18}
-                          className="fill-slate-600 text-[11px]"
+                          y={(viewBox.cy || 0) + 14}
+                          className="fill-slate-600 text-[8px]"
                         >
                           Total
                         </tspan>

@@ -306,12 +306,11 @@ export function VehiculeDataTable({
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <div></div>
         <div className="flex items-center gap-2">
           <Dialog>
             <DialogTrigger asChild>
               {user && user.role === "admin" && (
-                <Button variant="outline" size="sm">
+                <Button size="sm">
                   <IconPlus />
                   <span>Créer Vehicule</span>
                 </Button>

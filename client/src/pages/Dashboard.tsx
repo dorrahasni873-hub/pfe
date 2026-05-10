@@ -1,4 +1,5 @@
 import { ChartVehicle } from "@/components/ChartKmBeforeAfter";
+import { ChartPieInteractive } from "@/components/ChartPieInteractive";
 import { SectionCards } from "@/components/section-cards";
 
 const Dashboard = () => {
@@ -19,9 +20,9 @@ const Dashboard = () => {
           </div>
 
           <SectionCards />
-
-          <div className="px-4 lg:px-6">
+          <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:px-6">
             <ChartVehicle />
+            <ChartPieInteractive />
           </div>
         </div>
       </div>

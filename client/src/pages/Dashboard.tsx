@@ -22,10 +22,16 @@ const Dashboard = () => {
           </div>
 
           <SectionCards />
-          <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:px-6">
-            <ChartVehicle />
-            {user?.role === "admin" && <ChartPieInteractive />}
-          </div>
+          {user?.role === "admin" ? (
+            <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:px-6">
+              <ChartVehicle />
+              <ChartPieInteractive />
+            </div>
+          ) : (
+            <div className="px-4 lg:px-6">
+              <ChartVehicle />
+            </div>
+          )}
         </div>
       </div>
     </div>

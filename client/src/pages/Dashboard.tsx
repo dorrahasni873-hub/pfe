@@ -1,8 +1,10 @@
 import { ChartVehicle } from "@/components/ChartKmBeforeAfter";
 import { ChartPieInteractive } from "@/components/ChartPieInteractive";
 import { SectionCards } from "@/components/section-cards";
+import { useAuth } from "@/hooks/useAuth";
 
 const Dashboard = () => {
+  const { user } = useAuth();
   return (
     <div className="flex flex-1 flex-col">
       <div className="@container/main flex flex-1 flex-col gap-2">
@@ -22,7 +24,7 @@ const Dashboard = () => {
           <SectionCards />
           <div className="grid grid-cols-1 gap-4 px-4 lg:grid-cols-2 lg:px-6">
             <ChartVehicle />
-            <ChartPieInteractive />
+            {user?.role === "admin" && <ChartPieInteractive />}
           </div>
         </div>
       </div>

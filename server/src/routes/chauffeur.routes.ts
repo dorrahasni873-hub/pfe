@@ -1,13 +1,13 @@
 import { Router } from "express";
-import * as chauffeurController from "../controllers/chauffeur.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import * as chauffeurController from "../controleurs/chauffeur.controller";
+import { middlewareAuthentification } from "../middlewares/authentification.middleware";
 
 const router = Router();
 
-router.get("/", authMiddleware, chauffeurController.getChauffeurs);
-router.get("/:id", authMiddleware, chauffeurController.getChauffeur);
-router.post("/", authMiddleware, chauffeurController.createChauffeur);
-router.put("/:id", authMiddleware, chauffeurController.updateChauffeur);
-router.delete("/:id", authMiddleware, chauffeurController.deleteChauffeur);
+router.get("/", middlewareAuthentification, chauffeurController.getChauffeurs);
+router.get("/:id", middlewareAuthentification, chauffeurController.getChauffeur);
+router.post("/", middlewareAuthentification, chauffeurController.createChauffeur);
+router.put("/:id", middlewareAuthentification, chauffeurController.updateChauffeur);
+router.delete("/:id", middlewareAuthentification, chauffeurController.deleteChauffeur);
 
 export default router;

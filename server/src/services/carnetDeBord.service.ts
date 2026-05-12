@@ -1,5 +1,5 @@
-import db from "../db";
-import { carnetDeBord } from "../db/schema";
+import db from "../base-de-donnees";
+import { carnetDeBord } from "../base-de-donnees/schema";
 import { eq } from "drizzle-orm";
 import type { InferModel } from "drizzle-orm";
 import { AffectationUpdate } from "./affectation.service";

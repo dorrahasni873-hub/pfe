@@ -1,13 +1,13 @@
 import { Router } from "express";
-import * as vehiculeController from "../controllers/vehicule.controller";
-import { authMiddleware } from "../middlewares/auth.middleware";
+import * as vehiculeController from "../controleurs/vehicule.controller";
+import { middlewareAuthentification } from "../middlewares/authentification.middleware";
 
 const router = Router();
 
-router.get("/", authMiddleware, vehiculeController.getVehicules);
-router.get("/:matricule", authMiddleware, vehiculeController.getVehicule);
-router.post("/", authMiddleware, vehiculeController.createVehicule);
-router.put("/:matricule", authMiddleware, vehiculeController.updateVehicule);
-router.delete("/:matricule", authMiddleware, vehiculeController.deleteVehicule);
+router.get("/", middlewareAuthentification, vehiculeController.getVehicules);
+router.get("/:matricule", middlewareAuthentification, vehiculeController.getVehicule);
+router.post("/", middlewareAuthentification, vehiculeController.createVehicule);
+router.put("/:matricule", middlewareAuthentification, vehiculeController.updateVehicule);
+router.delete("/:matricule", middlewareAuthentification, vehiculeController.deleteVehicule);
 
 export default router;

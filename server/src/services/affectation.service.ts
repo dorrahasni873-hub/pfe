@@ -1,5 +1,5 @@
-import db from "../db";
-import { affectation } from "../db/schema";
+import db from "../base-de-donnees";
+import { affectation } from "../base-de-donnees/schema";
 import { eq } from "drizzle-orm";
 import type { InferModel } from "drizzle-orm";
 

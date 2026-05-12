@@ -1,5 +1,5 @@
-import db from "../db";
-import { utilisateur } from "../db/schema";
+import db from "../base-de-donnees";
+import { utilisateur } from "../base-de-donnees/schema";
 import { eq } from "drizzle-orm";
 
 export const getUsersWithMaintenances = async () => {

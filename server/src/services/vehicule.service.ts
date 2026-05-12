@@ -1,5 +1,5 @@
-import db from "../db";
-import { vehicules, maintenance } from "../db/schema";
+import db from "../base-de-donnees";
+import { vehicules, maintenance } from "../base-de-donnees/schema";
 import { eq } from "drizzle-orm";
 
 export const getVehicules = async () => {

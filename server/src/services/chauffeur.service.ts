@@ -1,5 +1,5 @@
-import db from "../db";
-import { chauffeur } from "../db/schema";
+import db from "../base-de-donnees";
+import { chauffeur } from "../base-de-donnees/schema";
 import { eq } from "drizzle-orm";
 import type { InferModel } from "drizzle-orm";
 

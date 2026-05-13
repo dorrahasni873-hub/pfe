@@ -7,15 +7,15 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import EntretienActionsMenu from "./InterventionActionsMenu";
 import EntretienForm from "./InterventionForm";
-import type { Entretien } from "@/shared/types/types";
+import type { Entretien } from "@/features/interventions/types";
 import { IconTools } from "@tabler/icons-react";
-import { useEntretien } from "@/features/interventions/hooks/useInterventions";
+import { useInterventions } from "@/features/interventions/hooks/useInterventions";
 
 const typeColors: Record<string, string> = { préventive: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", corrective: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" };
 const etatColors: Record<string, string> = { en_attente: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300", en_cours: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", terminé: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" };
 
 export function EntretienDataTable({ data }: { data: Entretien[] }) {
-  const { deleteEntretien } = useEntretien();
+  const { remove: deleteEntretien } = useInterventions();
   const columns: ColumnDef<Entretien>[] = [
     { id: "select", header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />, cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} /> },
     { accessorKey: "dateEntretien", header: "Date", cell: ({ row }) => <Badge variant="outline">{row.original.dateEntretien}</Badge> },

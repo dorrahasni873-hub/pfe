@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createCarnetDeBordSchema, type CreateCarnetDeBord, type CarnetDeBord, type Chauffeur, type Vehicule } from "@/shared/types/types";
-import { useCarnetDeBord } from "@/features/logbooks/hooks/useLogbooks";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { createCarnetDeBordSchema, type CreateCarnetDeBord, type CarnetDeBord } from "@/features/logbooks/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import type { Vehicule } from "@/features/vehicles/types";
+import { useLogbooks } from "@/features/logbooks/hooks/useLogbooks";
+import { driverService } from "@/features/drivers/api/driverService";
+import { vehicleService } from "@/features/vehicles/api/vehicleService";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
@@ -15,9 +17,7 @@ import { toast } from "sonner";
 type Props = { carnet?: CarnetDeBord };
 
 export default function CarnetDeBordForm({ carnet }: Props) {
-  const { createCarnet, updateCarnet } = useCarnetDeBord();
-  const { getChauffeurs } = useChauffeur();
-  const { getVehicules } = useVehicule();
+  const { create, update } = useLogbooks();
   const [chauffeurs, setChauffeurs] = useState<Chauffeur[]>([]);
   const [vehicules, setVehicules] = useState<Vehicule[]>([]);
 
@@ -27,13 +27,13 @@ export default function CarnetDeBordForm({ carnet }: Props) {
   });
 
   useEffect(() => {
-    Promise.all([getChauffeurs(), getVehicules()]).then(([c, v]) => { setChauffeurs(c ?? []); setVehicules(v ?? []); }).catch(() => toast.error("Erreur de chargement"));
+    Promise.all([driverService.getAll(), vehicleService.getAll()]).then(([c, v]) => { setChauffeurs(c ?? []); setVehicules(v ?? []); }).catch(() => toast.error("Erreur de chargement"));
   }, []);
 
   const onSubmit = async (values: CreateCarnetDeBord) => {
     try {
-      if (carnet) { await updateCarnet(carnet.id_carnet, values); toast.success("Carnet mis à jour"); }
-      else { await createCarnet(values); toast.success("Carnet créé"); }
+      if (carnet) { await update(carnet.id_carnet, values); toast.success("Carnet mis à jour"); }
+      else { await create(values); toast.success("Carnet créé"); }
     } catch { toast.error("Une erreur est survenue"); }
   };
 

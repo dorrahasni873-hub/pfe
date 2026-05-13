@@ -18,12 +18,12 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { useCarnetDeBord } from "@/features/logbooks/hooks/useLogbooks";
-import type { CreateCarnetDeBord } from "@/shared/types/types";
+import { useLogbooks } from "@/features/logbooks/hooks/useLogbooks";
+import type { CreateCarnetDeBord } from "@/features/logbooks/types";
 import { Gauge } from "lucide-react";
 
 export function GraphiqueKm() {
-  const { getCarnets } = useCarnetDeBord();
+  const { getAll: getCarnets } = useLogbooks();
   const [carnets, setCarnets] = React.useState<CreateCarnetDeBord[]>([]);
 
   React.useEffect(() => {

@@ -1,33 +1,29 @@
-import type { VehiculePayload } from "@/shared/types/types";
+import type { VehiculePayload } from "@/features/vehicles/types";
 import api from "@/shared/lib/axios";
 
-export const vehiculeService = () => {
-  const getVehicules = async () => {
+export const vehicleService = {
+  getAll: async () => {
     const response = await api.get("/vehicules");
     return response.data;
-  };
+  },
 
-  const createVehicule = async (data: VehiculePayload) => {
-    console.log("data", data);
+  getByMatricule: async (matricule: string) => {
+    const response = await api.get(`/vehicules/${matricule}`);
+    return response.data;
+  },
 
+  create: async (data: VehiculePayload) => {
     const response = await api.post("/vehicules", data);
     return response.data;
-  };
+  },
 
-  const updateVehicule = async (id: string, data: VehiculePayload) => {
-    const response = await api.put(`/vehicules/${id}`, data);
+  update: async (matricule: string, data: Partial<VehiculePayload>) => {
+    const response = await api.put(`/vehicules/${matricule}`, data);
     return response.data;
-  };
+  },
 
-  const deleteVehicule = async (matricule: string) => {
+  remove: async (matricule: string) => {
     const response = await api.delete(`/vehicules/${matricule}`);
     return response.data;
-  };
-
-  return {
-    getVehicules,
-    createVehicule,
-    updateVehicule,
-    deleteVehicule,
-  };
+  },
 };

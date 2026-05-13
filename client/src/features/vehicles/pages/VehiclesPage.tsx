@@ -1,35 +1,17 @@
-import { useEffect, useState } from "react";
-import type { Vehicule } from "@/shared/types/types";
+import { useEffect } from "react";
 import { IconTruck } from "@tabler/icons-react";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { VehiculeDataTable } from "@/features/vehicles/components/VehicleDataTable";
 import EntetePage from "@/shared/components/EntetePage/EntetePage";
 import { SqueletteTableau } from "@/shared/components/SqueletteTableau/SqueletteTableau";
 
 const VehiculesPage = () => {
-  const { getVehicules } = useVehicule();
-  const [data, setData] = useState<Vehicule[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, refetch } = useVehicles();
 
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval>;
-
-    const fetchUsers = async () => {
-      try {
-        const users = await getVehicules();
-        setData(users ?? []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-    intervalId = setInterval(fetchUsers, 3000);
-
+    const intervalId = setInterval(refetch, 3000);
     return () => clearInterval(intervalId);
-  }, [getVehicules]);
+  }, [refetch]);
 
   return (
     <div className="py-6">

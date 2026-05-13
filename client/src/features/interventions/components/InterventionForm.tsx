@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createEntretienSchema, type CreateEntretien, type Entretien, type Maintenance, type Panne, type Vehicule } from "@/shared/types/types";
-import { useEntretien } from "@/features/interventions/hooks/useInterventions";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { createEntretienSchema, type CreateEntretien, type Entretien } from "@/features/interventions/types";
+import type { Maintenance } from "@/features/maintenance/types";
+import type { Panne } from "@/features/breakdowns/types";
+import type { Vehicule } from "@/features/vehicles/types";
+import { useInterventions } from "@/features/interventions/hooks/useInterventions";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { useMaintenance } from "@/features/maintenance/hooks/useMaintenance";
-import { usePanne } from "@/features/breakdowns/hooks/useBreakdowns";
+import { useBreakdowns } from "@/features/breakdowns/hooks/useBreakdowns";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
@@ -16,10 +19,10 @@ import { toast } from "sonner";
 type Props = { entretien?: Entretien };
 
 export default function EntretienForm({ entretien }: Props) {
-  const { createEntretien, updateEntretien } = useEntretien();
-  const { getVehicules } = useVehicule();
-  const { getMaintenances } = useMaintenance();
-  const { getPannes } = usePanne();
+  const { create: createEntretien, update: updateEntretien } = useInterventions();
+  const { getAll: getVehicules } = useVehicles();
+  const { getAll: getMaintenances } = useMaintenance();
+  const { getAll: getPannes } = useBreakdowns();
   const [vehicules, setVehicules] = useState<Vehicule[]>([]);
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [pannes, setPannes] = useState<Panne[]>([]);

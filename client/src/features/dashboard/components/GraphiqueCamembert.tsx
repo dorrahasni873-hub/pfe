@@ -26,8 +26,8 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
-import type { Vehicule } from "@/shared/types/types";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
+import type { Vehicule } from "@/features/vehicles/types";
 import { Car } from "lucide-react";
 
 const COLORS = [
@@ -40,7 +40,7 @@ const COLORS = [
 
 export function GraphiqueCamembert() {
   const id = "pie-interactive";
-  const { getVehicules } = useVehicule();
+  const { getAll: getVehicules } = useVehicles();
   const [vehicules, setVehicules] = React.useState<Vehicule[]>([]);
   const [activeBrand, setActiveBrand] = React.useState("");
 

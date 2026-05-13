@@ -7,17 +7,17 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import AffectationActionsMenu from "./AssignmentActionsMenu";
 import AffectationForm from "./AssignmentForm";
-import type { Affectation, Chauffeur } from "@/shared/types/types";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
+import type { Affectation } from "@/features/assignments/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import { driverService } from "@/features/drivers/api/driverService";
 import { IconArrowsExchange } from "@tabler/icons-react";
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
 import { format } from "date-fns";
 
 function useChauffeurMap() {
   const [map, setMap] = useState<Record<string, string>>({});
-  const { getChauffeurs } = useChauffeur();
   useEffect(() => {
-    getChauffeurs().then((data) => {
+    driverService.getAll().then((data) => {
       const m: Record<string, string> = {};
       (data || []).forEach((c: Chauffeur) => { m[c.id_chauffeur] = `${c.nom} ${c.prenom}`; });
       setMap(m);
@@ -28,7 +28,7 @@ function useChauffeurMap() {
 
 export function AffectationDataTable({ data }: { data: Affectation[] }) {
   const chauffeurMap = useChauffeurMap();
-  const { deleteAffectation } = useAffectation();
+  const { remove } = useAssignments();
 
   const columns: ColumnDef<Affectation>[] = [
     { id: "select", header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />, cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} /> },
@@ -53,7 +53,7 @@ export function AffectationDataTable({ data }: { data: Affectation[] }) {
       icon={IconArrowsExchange}
       emptyMessage="Aucune affectation enregistrée"
       createButton={<DialogueCreer label="Créer Affectation"><AffectationForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await deleteAffectation(id); }}
+      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
       filters={[
         { columnId: "etat", label: "État", placeholder: "Tous les états", options: [
           { label: "Active", value: "active" }, { label: "Terminée", value: "terminee" },

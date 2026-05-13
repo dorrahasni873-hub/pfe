@@ -18,8 +18,8 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { usePanne } from "@/features/breakdowns/hooks/useBreakdowns";
-import type { Panne } from "@/shared/types/types";
+import { useBreakdowns } from "@/features/breakdowns/hooks/useBreakdowns";
+import type { Panne } from "@/features/breakdowns/types";
 import { List } from "lucide-react";
 
 const COLORS = [
@@ -31,7 +31,7 @@ const COLORS = [
 ];
 
 export function GraphiqueTypesPannes() {
-  const { getPannes } = usePanne();
+  const { getAll: getPannes } = useBreakdowns();
   const [pannes, setPannes] = React.useState<Panne[]>([]);
 
   React.useEffect(() => {

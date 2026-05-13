@@ -19,11 +19,11 @@ import {
 } from "@/shared/components/ui/chart";
 
 import { useMaintenance } from "@/features/maintenance/hooks/useMaintenance";
-import type { Maintenance } from "@/shared/types/types";
+import type { Maintenance } from "@/features/maintenance/types";
 import { DollarSign } from "lucide-react";
 
 export function GraphiqueCoutMaintenance() {
-  const { getMaintenances } = useMaintenance();
+  const { getAll: getMaintenances } = useMaintenance();
   const [maintenances, setMaintenances] = React.useState<Maintenance[]>([]);
 
   React.useEffect(() => {

@@ -1,9 +1,6 @@
-import type {
-  Chauffeur,
-  LoginInput,
-  RegisterInput,
-  User,
-} from "@/shared/types/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import type { LoginInput, RegisterInput } from "@/features/auth/types";
+import type { User } from "@/features/users/types";
 import { createContext } from "react";
 
 export type AuthentificationContextType = {

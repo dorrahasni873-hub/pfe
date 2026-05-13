@@ -1,49 +1,18 @@
 import api from "@/shared/lib/axios";
 
-export const authentificationService = () => {
-  const loginApi = async (email: string, motDePasse: string) => {
-    try {
-      const res = await api.post("/authentification/login", {
-        email,
-        motDePasse,
-      });
+export const authService = {
+  login: async (email: string, motDePasse: string) => {
+    const response = await api.post("/authentification/login", { email, motDePasse });
+    return response.data;
+  },
 
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  register: async (email: string, motDePasse: string, nom: string, prenom: string, tel: string) => {
+    const response = await api.post("/authentification/register", { email, motDePasse, nom, prenom, tel });
+    return response.data;
+  },
 
-  const registerApi = async (
-    email: string,
-    motDePasse: string,
-    nom: string,
-    prenom: string,
-    tel: string,
-  ) => {
-    try {
-      const res = await api.post("/authentification/register", {
-        email,
-        motDePasse,
-        nom,
-        prenom,
-        tel,
-      });
-      return res.data;
-    } catch (error) {
-      console.error("Register API error:", error);
-      throw error;
-    }
-  };
-
-  const checkMe = async () => {
-    try {
-      const res = await api.get("/authentification/me");
-      return res.data;
-    } catch (error) {
-      console.error("CheckMe API error:", error);
-      throw error;
-    }
-  };
-  return { loginApi, registerApi, checkMe };
+  checkMe: async () => {
+    const response = await api.get("/authentification/me");
+    return response.data;
+  },
 };

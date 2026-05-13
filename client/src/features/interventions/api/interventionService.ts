@@ -1,29 +1,28 @@
-import type { CreateEntretien, UpdateEntretien } from "@/shared/types/types";
+import type { CreateEntretien, UpdateEntretien, Entretien } from "@/features/interventions/types";
 import api from "@/shared/lib/axios";
 
-export const entretienService = {
-  getEntretiens: async () => {
+export const interventionService = {
+  getAll: async (): Promise<Entretien[]> => {
     const response = await api.get("/entretiens");
     return response.data;
   },
 
-  getEntretien: async (id: string) => {
+  getById: async (id: string): Promise<Entretien> => {
     const response = await api.get(`/entretiens/${id}`);
     return response.data;
   },
 
-  createEntretien: async (data: CreateEntretien) => {
+  create: async (data: CreateEntretien): Promise<Entretien> => {
     const response = await api.post("/entretiens", data);
     return response.data;
   },
 
-  updateEntretien: async (id: string, data: UpdateEntretien) => {
+  update: async (id: string, data: UpdateEntretien): Promise<Entretien> => {
     const response = await api.put(`/entretiens/${id}`, data);
     return response.data;
   },
 
-  deleteEntretien: async (id: string) => {
-    const response = await api.delete(`/entretiens/${id}`);
-    return response.data;
+  remove: async (id: string): Promise<void> => {
+    await api.delete(`/entretiens/${id}`);
   },
 };

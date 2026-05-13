@@ -1,55 +1,49 @@
-import type { CreateMaintenance, UpdateMaintenance } from "@/shared/types/types";
-import { maintenanceService } from "@/features/maintenance/api/maintenanceService";
+import { useEffect, useState, useCallback } from "react";
+import type { Maintenance, CreateMaintenance, UpdateMaintenance } from "@/features/maintenance/types";
+import { maintenanceService } from "../api/maintenanceService";
 
-export const useMaintenance = () => {
-  const getMaintenances = async () => {
-    const { getMaintenances } = maintenanceService;
+export function useMaintenance() {
+  const [data, setData] = useState<Maintenance[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const maintenances = await getMaintenances();
-      return maintenances;
-    } catch (error) {
-      console.error("Error fetching maintenances:", error);
-      throw error;
+      const result = await maintenanceService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load maintenance records");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const createMaintenance = async (data: CreateMaintenance) => {
-    const { createMaintenance } = maintenanceService;
-    try {
-      const maintenance = await createMaintenance(data);
-      return maintenance;
-    } catch (error) {
-      console.error("Error creating maintenance:", error);
-      throw error;
-    }
-  };
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
-  const updateMaintenance = async (id: string, data: UpdateMaintenance) => {
-    const { updateMaintenance } = maintenanceService;
-    try {
-      const maintenance = await updateMaintenance(id, data);
-      return maintenance;
-    } catch (error) {
-      console.error("Error updating maintenance:", error);
-      throw error;
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await maintenanceService.getAll();
+  }, []);
 
-  const deleteMaintenance = async (id: string) => {
-    const { deleteMaintenance } = maintenanceService;
-    try {
-      await deleteMaintenance(id);
-      return true;
-    } catch (error) {
-      console.error("Error deleting maintenance:", error);
-      throw error;
-    }
-  };
+  const getById = useCallback(async (id: string) => {
+    return await maintenanceService.getById(id);
+  }, []);
 
-  return {
-    getMaintenances,
-    createMaintenance,
-    updateMaintenance,
-    deleteMaintenance,
-  };
-};
+  const create = useCallback(async (payload: CreateMaintenance) => {
+    return await maintenanceService.create(payload);
+  }, []);
+
+  const update = useCallback(async (id: string, payload: UpdateMaintenance) => {
+    return await maintenanceService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    await maintenanceService.remove(id);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

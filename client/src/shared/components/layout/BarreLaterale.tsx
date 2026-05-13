@@ -106,7 +106,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link to="/" className="flex items-center gap-3 group">
                 <div className="relative shrink-0">
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-primary/40 to-primary/5 blur-sm group-hover:blur-md transition-all duration-300" />
+                  <div className="absolute inset-0 rounded-xl bg-linear-to-br from-primary/40 to-primary/5 blur-sm group-hover:blur-md transition-all duration-300" />
                   <img
                     src="/logo.png"
                     alt="Logo"

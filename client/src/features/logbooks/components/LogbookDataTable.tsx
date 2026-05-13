@@ -7,14 +7,15 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import CarnetDeBordActionsMenu from "./LogbookActionsMenu";
 import CarnetDeBordForm from "./LogbookForm";
-import type { CarnetDeBord, Chauffeur } from "@/shared/types/types";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
+import type { CarnetDeBord } from "@/features/logbooks/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
 import { IconBook } from "@tabler/icons-react";
-import { useCarnetDeBord } from "@/features/logbooks/hooks/useLogbooks";
+import { useLogbooks } from "@/features/logbooks/hooks/useLogbooks";
 
 function useChauffeurMap() {
   const [map, setMap] = useState<Record<string, string>>({});
-  const { getChauffeurs } = useChauffeur();
+  const { getAll: getChauffeurs } = useDrivers();
   useEffect(() => {
     getChauffeurs().then((data) => {
       const m: Record<string, string> = {};
@@ -27,7 +28,7 @@ function useChauffeurMap() {
 
 export function CarnetDeBordDataTable({ data }: { data: CarnetDeBord[] }) {
   const chauffeurMap = useChauffeurMap();
-  const { deleteCarnet } = useCarnetDeBord();
+  const { remove: deleteCarnet } = useLogbooks();
 
   const columns: ColumnDef<CarnetDeBord>[] = [
     { id: "select", header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />, cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} /> },

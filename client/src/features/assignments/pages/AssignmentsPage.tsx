@@ -1,35 +1,17 @@
-import { useEffect, useState } from "react";
-import type { Affectation } from "@/shared/types/types";
+import { useEffect } from "react";
 import { IconArrowsExchange } from "@tabler/icons-react";
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
 import { AffectationDataTable } from "@/features/assignments/components/AssignmentDataTable";
 import EntetePage from "@/shared/components/EntetePage/EntetePage";
 import { SqueletteTableau } from "@/shared/components/SqueletteTableau/SqueletteTableau";
 
 const AffectationsPage = () => {
-  const { getAffectations } = useAffectation();
-  const [data, setData] = useState<Affectation[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, refetch } = useAssignments();
 
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval>;
-
-    const fetchUsers = async () => {
-      try {
-        const affectations = await getAffectations();
-        setData(affectations ?? []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-    intervalId = setInterval(fetchUsers, 3000);
-
+    const intervalId = setInterval(refetch, 3000);
     return () => clearInterval(intervalId);
-  }, [getAffectations]);
+  }, [refetch]);
 
   return (
     <div className="py-6">

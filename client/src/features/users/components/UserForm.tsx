@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createUserSchema, type CreateUser, type User } from "@/shared/types/types";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import { createUserSchema, type CreateUser, type User } from "@/features/users/types";
+import { useUsers } from "@/features/users/hooks/useUsers";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
@@ -12,7 +12,7 @@ import { toast } from "sonner";
 type Props = { user?: User };
 
 export default function UserForm({ user }: Props) {
-  const { createUser, updateUser } = useUtilisateur();
+  const { create, update } = useUsers();
   const { register, handleSubmit, setValue, formState: { errors, isSubmitting } } = useForm<CreateUser>({
     resolver: zodResolver(createUserSchema),
     defaultValues: user ?? { nom: "", prenom: "", email: "", motDePasse: "", role: "", tel: "" },
@@ -20,8 +20,8 @@ export default function UserForm({ user }: Props) {
 
   const onSubmit = async (values: CreateUser) => {
     try {
-      if (user) { await updateUser(user.id_utilisateur, values); toast.success("Utilisateur mis à jour"); }
-      else { await createUser(values); toast.success("Utilisateur créé"); }
+      if (user) { await update(user.id_utilisateur, values); toast.success("Utilisateur mis à jour"); }
+      else { await create(values); toast.success("Utilisateur créé"); }
     } catch { toast.error("Une erreur est survenue"); }
   };
 

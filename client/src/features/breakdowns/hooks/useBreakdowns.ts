@@ -1,58 +1,47 @@
-import type { CreatePanne, UpdatePanne } from "@/shared/types/types";
-import { panneService } from "@/features/breakdowns/api/breakdownService";
+import { useEffect, useState, useCallback } from "react";
+import type { Panne, CreatePanne, UpdatePanne } from "@/features/breakdowns/types";
+import { breakdownService } from "../api/breakdownService";
 
-export const usePanne = () => {
-  const getPannes = async () => {
+export function useBreakdowns() {
+  const [data, setData] = useState<Panne[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      return await panneService.getPannes();
-    } catch (error) {
-      console.error("Error fetching pannes:", error);
-      throw error;
+      const result = await breakdownService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load breakdowns");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const getPanne = async (id: string) => {
-    try {
-      return await panneService.getPanne(id);
-    } catch (error) {
-      console.error("Error fetching panne:", error);
-      throw error;
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const createPanne = async (data: CreatePanne) => {
-    try {
-      return await panneService.createPanne(data);
-    } catch (error) {
-      console.error("Error creating panne:", error);
-      throw error;
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await breakdownService.getAll();
+  }, []);
 
-  const updatePanne = async (id: string, data: UpdatePanne) => {
-    try {
-      return await panneService.updatePanne(id, data);
-    } catch (error) {
-      console.error("Error updating panne:", error);
-      throw error;
-    }
-  };
+  const getById = useCallback(async (id: string) => {
+    return await breakdownService.getById(id);
+  }, []);
 
-  const deletePanne = async (id: string) => {
-    try {
-      await panneService.deletePanne(id);
-      return true;
-    } catch (error) {
-      console.error("Error deleting panne:", error);
-      throw error;
-    }
-  };
+  const create = useCallback(async (payload: CreatePanne) => {
+    return await breakdownService.create(payload);
+  }, []);
 
-  return {
-    getPannes,
-    getPanne,
-    createPanne,
-    updatePanne,
-    deletePanne,
-  };
-};
+  const update = useCallback(async (id: string, payload: UpdatePanne) => {
+    return await breakdownService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    await breakdownService.remove(id);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

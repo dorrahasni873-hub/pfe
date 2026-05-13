@@ -1,58 +1,47 @@
-import { vehiculeService } from "@/features/vehicles/api/vehicleService";
+import { useEffect, useState, useCallback } from "react";
+import type { Vehicule, VehiculePayload } from "@/features/vehicles/types";
+import { vehicleService } from "../api/vehicleService";
 
-export type VehiculePayload = {
-  matricule: string;
-  marqueVoiture: string;
-  dateCirculation: string;
-  dateVisite: string;
-  dateTaxe: string;
-  etat: string;
-};
+export function useVehicles() {
+  const [data, setData] = useState<Vehicule[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export const useVehicule = () => {
-  const getVehicules = async () => {
-    const { getVehicules } = vehiculeService();
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const vehicules = await getVehicules();
-      return vehicules;
-    } catch (error) {
-      console.error("Error fetching vehicules:", error);
-      throw error;
+      const result = await vehicleService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load vehicles");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const createVehicule = async (data: VehiculePayload) => {
-    const { createVehicule } = vehiculeService();
-    try {
-      const vehicule = await createVehicule(data);
-      return vehicule;
-    } catch (error) {
-      console.error("Error creating vehicule:", error);
-      throw error;
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const updateVehicule = async (id: string, data: VehiculePayload) => {
-    const { updateVehicule } = vehiculeService();
-    try {
-      const vehicule = await updateVehicule(id, data);
-      return vehicule;
-    } catch (error) {
-      console.error("Error updating vehicule:", error);
-      throw error;
-    }
-  };
+  const create = useCallback(async (payload: VehiculePayload) => {
+    return await vehicleService.create(payload);
+  }, []);
 
-  const deleteVehicule = async (matricule: string) => {
-    const { deleteVehicule } = vehiculeService();
-    try {
-      await deleteVehicule(matricule);
-      return true;
-    } catch (error) {
-      console.error("Error deleting vehicule:", error);
-      throw error;
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await vehicleService.getAll();
+  }, []);
 
-  return { getVehicules, createVehicule, updateVehicule, deleteVehicule };
-};
+  const getById = useCallback(async (matricule: string) => {
+    return await vehicleService.getByMatricule(matricule);
+  }, []);
+
+  const update = useCallback(async (matricule: string, payload: Partial<VehiculePayload>) => {
+    return await vehicleService.update(matricule, payload);
+  }, []);
+
+  const remove = useCallback(async (matricule: string) => {
+    await vehicleService.remove(matricule);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

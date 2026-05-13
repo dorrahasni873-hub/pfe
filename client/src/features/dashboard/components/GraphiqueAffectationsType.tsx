@@ -18,8 +18,8 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
-import type { Affectation } from "@/shared/types/types";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
+import type { Affectation } from "@/features/assignments/types";
 import { ArrowLeftRight } from "lucide-react";
 
 const COLORS = [
@@ -31,7 +31,7 @@ const COLORS = [
 ];
 
 export function GraphiqueAffectationsType() {
-  const { getAffectations } = useAffectation();
+  const { getAll: getAffectations } = useAssignments();
   const [affectations, setAffectations] = React.useState<Affectation[]>([]);
 
   React.useEffect(() => {

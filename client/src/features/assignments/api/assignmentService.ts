@@ -1,46 +1,29 @@
-import type { AffectationPayload } from "@/shared/types/types";
+import type { AffectationPayload } from "@/features/assignments/types";
 import api from "@/shared/lib/axios";
 
-export const affectationService = () => {
-  const createAffectation = async (data: AffectationPayload) => {
-    try {
-      const res = await api.post("/affectations", data);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const getAffectations = async () => {
-    try {
-      const res = await api.get("/affectations");
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const assignmentService = {
+  getAll: async () => {
+    const response = await api.get("/affectations");
+    return response.data;
+  },
 
-  const deleteAffectation = async (id: string) => {
-    try {
-      const res = await api.delete(`/affectations/${id}`);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  getById: async (id: string) => {
+    const response = await api.get(`/affectations/${id}`);
+    return response.data;
+  },
 
-  const updateAffectation = async (id: string, data: AffectationPayload) => {
-    try {
-      const res = await api.put(`/affectations/${id}`, data);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  create: async (data: AffectationPayload) => {
+    const response = await api.post("/affectations", data);
+    return response.data;
+  },
 
-  return {
-    createAffectation,
-    getAffectations,
-    deleteAffectation,
-    updateAffectation,
-  };
+  update: async (id: string, data: Partial<AffectationPayload>) => {
+    const response = await api.put(`/affectations/${id}`, data);
+    return response.data;
+  },
+
+  remove: async (id: string) => {
+    const response = await api.delete(`/affectations/${id}`);
+    return response.data;
+  },
 };

@@ -4,7 +4,7 @@ import {
   VehiculeSchema,
   type Vehicule,
   type VehiculePayload,
-} from "@/shared/types/types";
+} from "@/features/vehicles/types";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/shared/components/ui/select";
 import { ChampDate } from "@/shared/components/ChampDate/ChampDate";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -47,7 +47,7 @@ const VehiculeForm = ({ vehicule }: Props) => {
       : { matricule: "", marqueVoiture: "", etat: "" },
   });
 
-  const { createVehicule, updateVehicule } = useVehicule();
+  const { create, update } = useVehicles();
 
   const onSubmit = async (data: Vehicule) => {
     try {
@@ -60,10 +60,10 @@ const VehiculeForm = ({ vehicule }: Props) => {
         etat: data.etat,
       };
       if (vehicule) {
-        await updateVehicule(vehicule.matricule, payload);
+        await update(vehicule.matricule, payload);
         toast.success("Véhicule mis à jour");
       } else {
-        await createVehicule(payload);
+        await create(payload);
         toast.success("Véhicule créé");
       }
     } catch {

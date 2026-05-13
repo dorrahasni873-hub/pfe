@@ -6,9 +6,9 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import UserActionsMenu from "./UserActionsMenu";
 import UserForm from "./UserForm";
-import type { User } from "@/shared/types/types";
+import type { User } from "@/features/users/types";
 import { IconUsers } from "@tabler/icons-react";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import { useUsers } from "@/features/users/hooks/useUsers";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -28,7 +28,7 @@ export const columns: ColumnDef<User>[] = [
 ];
 
 export function UserDataTable({ data }: { data: User[] }) {
-  const { deleteUser } = useUtilisateur();
+  const { remove } = useUsers();
   return (
     <TableauDonnees
       data={data}
@@ -38,7 +38,7 @@ export function UserDataTable({ data }: { data: User[] }) {
       icon={IconUsers}
       emptyMessage="Aucun utilisateur enregistré"
       createButton={<DialogueCreer label="Créer utilisateur"><UserForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await deleteUser(id); }}
+      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
       filters={[
         { columnId: "role", label: "Rôle", placeholder: "Tous les rôles", options: [
           { label: "Admin", value: "admin" },

@@ -1,58 +1,47 @@
-import type { CreateCarnetDeBord, UpdateCarnetDeBord } from "@/shared/types/types";
-import { carnetService } from "@/features/logbooks/api/logbookService";
+import { useEffect, useState, useCallback } from "react";
+import type { CarnetDeBord, CreateCarnetDeBord, UpdateCarnetDeBord } from "@/features/logbooks/types";
+import { logbookService } from "../api/logbookService";
 
-export const useCarnetDeBord = () => {
-  const getCarnets = async () => {
+export function useLogbooks() {
+  const [data, setData] = useState<CarnetDeBord[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      return await carnetService.getCarnets();
-    } catch (error) {
-      console.error("Error fetching carnets:", error);
-      throw error;
+      const result = await logbookService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load logbooks");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const getCarnet = async (id: string) => {
-    try {
-      return await carnetService.getCarnet(id);
-    } catch (error) {
-      console.error("Error fetching carnet:", error);
-      throw error;
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const createCarnet = async (data: CreateCarnetDeBord) => {
-    try {
-      return await carnetService.createCarnet(data);
-    } catch (error) {
-      console.error("Error creating carnet:", error);
-      throw error;
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await logbookService.getAll();
+  }, []);
 
-  const updateCarnet = async (id: string, data: UpdateCarnetDeBord) => {
-    try {
-      return await carnetService.updateCarnet(id, data);
-    } catch (error) {
-      console.error("Error updating carnet:", error);
-      throw error;
-    }
-  };
+  const getById = useCallback(async (id: string) => {
+    return await logbookService.getById(id);
+  }, []);
 
-  const deleteCarnet = async (id: string) => {
-    try {
-      await carnetService.deleteCarnet(id);
-      return true;
-    } catch (error) {
-      console.error("Error deleting carnet:", error);
-      throw error;
-    }
-  };
+  const create = useCallback(async (payload: CreateCarnetDeBord) => {
+    return await logbookService.create(payload);
+  }, []);
 
-  return {
-    getCarnets,
-    getCarnet,
-    createCarnet,
-    updateCarnet,
-    deleteCarnet,
-  };
-};
+  const update = useCallback(async (id: string, payload: UpdateCarnetDeBord) => {
+    return await logbookService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    await logbookService.remove(id);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

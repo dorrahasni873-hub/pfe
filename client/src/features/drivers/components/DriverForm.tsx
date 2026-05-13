@@ -1,11 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { updateChauffeurSchema, type Chauffeur, type CreateChauffeur, type UpdateChauffeur } from "@/shared/types/types";
+import { updateChauffeurSchema, type Chauffeur, type CreateChauffeur, type UpdateChauffeur } from "@/features/drivers/types";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
 import { Field, FieldLabel, FieldContent, FieldError } from "@/shared/components/ui/field";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
 import { toast } from "sonner";
 
 type Props = { chauffeur?: Chauffeur };
@@ -16,7 +16,7 @@ const ChauffeurForm = ({ chauffeur }: Props) => {
     defaultValues: chauffeur ?? { nom: "", prenom: "", tel: "", cin: "", numeroPermis: "", email: "" },
   });
 
-  const { createChauffeur, updateChauffeur } = useChauffeur();
+  const { create: createChauffeur, update: updateChauffeur } = useDrivers();
 
   const onSubmit = async (data: UpdateChauffeur) => {
     try {

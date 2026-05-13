@@ -1,35 +1,17 @@
-import { useEffect, useState } from "react";
-import type { User } from "@/shared/types/types";
-import { UserDataTable } from "@/features/users/components/UserDataTable";
+import { useEffect } from "react";
 import { IconUsers } from "@tabler/icons-react";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import { useUsers } from "@/features/users/hooks/useUsers";
+import { UserDataTable } from "@/features/users/components/UserDataTable";
 import EntetePage from "@/shared/components/EntetePage/EntetePage";
 import { SqueletteTableau } from "@/shared/components/SqueletteTableau/SqueletteTableau";
 
 const PageUtilisateurs = () => {
-  const { getUsers } = useUtilisateur();
-  const [data, setData] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data, loading, error, refetch } = useUsers();
 
   useEffect(() => {
-    let intervalId: ReturnType<typeof setInterval>;
-
-    const fetchUsers = async () => {
-      try {
-        const users = await getUsers();
-        setData(users ?? []);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-    intervalId = setInterval(fetchUsers, 3000);
-
+    const intervalId = setInterval(refetch, 3000);
     return () => clearInterval(intervalId);
-  }, [getUsers]);
+  }, [refetch]);
 
   return (
     <div className="py-6">

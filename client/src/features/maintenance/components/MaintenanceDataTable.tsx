@@ -7,16 +7,16 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import MaintenanceActionsMenu from "./MaintenanceActionsMenu";
 import MaintenanceForm from "./MaintenanceForm";
-import type { Maintenance, User } from "@/shared/types/types";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import type { Maintenance } from "@/features/maintenance/types";
+import type { User } from "@/features/users/types";
+import { userService } from "@/features/users/api/userService";
 import { IconTools } from "@tabler/icons-react";
 import { useMaintenance } from "@/features/maintenance/hooks/useMaintenance";
 
 function useUserMap() {
   const [map, setMap] = useState<Record<string, string>>({});
-  const { getUsers } = useUtilisateur();
   useEffect(() => {
-    getUsers().then((data) => {
+    userService.getAll().then((data) => {
       const m: Record<string, string> = {};
       (data || []).filter((u: User) => u.role === "maintenance").forEach((u: User) => { m[u.id_utilisateur] = `${u.nom} ${u.prenom}`; });
       setMap(m);
@@ -27,7 +27,7 @@ function useUserMap() {
 
 export function MaintenanceDataTable({ data }: { data: Maintenance[] }) {
   const userMap = useUserMap();
-  const { deleteMaintenance } = useMaintenance();
+  const { remove } = useMaintenance();
 
   const columns: ColumnDef<Maintenance>[] = [
     { id: "select", header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />, cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} /> },
@@ -50,7 +50,7 @@ export function MaintenanceDataTable({ data }: { data: Maintenance[] }) {
       icon={IconTools}
       emptyMessage="Aucune maintenance enregistrée"
       createButton={<DialogueCreer label="Créer Maintenance"><MaintenanceForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await deleteMaintenance(id); }}
+      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
     />
   );
 }

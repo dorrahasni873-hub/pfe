@@ -18,8 +18,8 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { useEntretien } from "@/features/interventions/hooks/useInterventions";
-import type { Entretien } from "@/shared/types/types";
+import { useInterventions } from "@/features/interventions/hooks/useInterventions";
+import type { Entretien } from "@/features/interventions/types";
 import { CheckCircle2 } from "lucide-react";
 
 const COLORS = [
@@ -37,7 +37,7 @@ const ETAT_LABELS: Record<string, string> = {
 };
 
 export function GraphiqueEntretiensEtat() {
-  const { getEntretiens } = useEntretien();
+  const { getAll: getEntretiens } = useInterventions();
   const [entretiens, setEntretiens] = React.useState<Entretien[]>([]);
 
   React.useEffect(() => {

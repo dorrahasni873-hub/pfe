@@ -1,14 +1,16 @@
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { affectationSchema, type Affectation, type AffectationPayload, type Chauffeur, type Vehicule } from "@/shared/types/types";
+import { affectationSchema, type Affectation, type AffectationPayload } from "@/features/assignments/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import type { Vehicule } from "@/features/vehicles/types";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
 import { Field, FieldLabel, FieldContent, FieldError } from "@/shared/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { ChampDate } from "@/shared/components/ChampDate/ChampDate";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
+import { vehicleService } from "@/features/vehicles/api/vehicleService";
+import { driverService } from "@/features/drivers/api/driverService";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -23,20 +25,18 @@ const AffectationForm = ({ affectation }: Props) => {
 
   const [chauffeurs, setChauffeurs] = useState<Chauffeur[]>([]);
   const [vehicules, setVehicules] = useState<Vehicule[]>([]);
-  const { createAffectation, updateAffectation } = useAffectation();
-  const { getVehicules } = useVehicule();
-  const { getChauffeurs } = useChauffeur();
+  const { create, update } = useAssignments();
 
   useEffect(() => {
-    Promise.all([getVehicules(), getChauffeurs()]).then(([v, c]) => { setVehicules(v || []); setChauffeurs(c || []); }).catch(() => toast.error("Erreur de chargement"));
+    Promise.all([vehicleService.getAll(), driverService.getAll()]).then(([v, c]) => { setVehicules(v || []); setChauffeurs(c || []); }).catch(() => toast.error("Erreur de chargement"));
   }, []);
 
   const onSubmit = async (data: Affectation) => {
     try {
       const { id_affectation, ...rest } = data;
       const payload: AffectationPayload = { ...rest, dateAffectation: format(data.dateAffectation, "yyyy-MM-dd"), dateDebut: format(data.dateDebut, "yyyy-MM-dd") };
-      if (affectation) { await updateAffectation(affectation.id_affectation, payload); toast.success("Affectation mise à jour"); }
-      else { await createAffectation(payload); toast.success("Affectation créée"); }
+      if (affectation) { await update(affectation.id_affectation, payload); toast.success("Affectation mise à jour"); }
+      else { await create(payload); toast.success("Affectation créée"); }
     } catch { toast.error("Une erreur est survenue"); }
   };
 

@@ -1,28 +1,28 @@
-import type { CreatePanne, UpdatePanne } from "@/shared/types/types";
+import type { CreatePanne, UpdatePanne, Panne } from "@/features/breakdowns/types";
 import api from "@/shared/lib/axios";
 
-export const panneService = {
-  getPannes: async () => {
+export const breakdownService = {
+  getAll: async (): Promise<Panne[]> => {
     const response = await api.get("/pannes");
     return response.data;
   },
 
-  getPanne: async (id: string) => {
+  getById: async (id: string): Promise<Panne> => {
     const response = await api.get(`/pannes/${id}`);
     return response.data;
   },
-  createPanne: async (data: CreatePanne) => {
+
+  create: async (data: CreatePanne): Promise<Panne> => {
     const response = await api.post("/pannes", data);
     return response.data;
   },
 
-  updatePanne: async (id: string, data: UpdatePanne) => {
+  update: async (id: string, data: UpdatePanne): Promise<Panne> => {
     const response = await api.put(`/pannes/${id}`, data);
     return response.data;
   },
 
-  deletePanne: async (id: string) => {
-    const response = await api.delete(`/pannes/${id}`);
-    return response.data;
+  remove: async (id: string): Promise<void> => {
+    await api.delete(`/pannes/${id}`);
   },
 };

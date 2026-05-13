@@ -3,19 +3,12 @@
 import React from "react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/shared/components/ui/card";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/shared/components/ui/card";
 
 import { ChartContainer, ChartTooltip, type ChartConfig } from "@/shared/components/ui/chart";
 
-import type { Vehicule } from "@/shared/types/types";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import type { Vehicule } from "@/features/vehicles/types";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { Badge } from "@/shared/components/ui/badge";
 import { CheckCircle } from "lucide-react";
 import { cn } from "@/shared/utils/utils";
@@ -27,7 +20,7 @@ const chartConfig: ChartConfig = {
 };
 
 export function GraphiquePannes({ className, small = false }: { className?: string; small?: boolean }) {
-  const { getVehicules } = useVehicule();
+  const { getAll: getVehicules } = useVehicles();
   const [vehicles, setVehicles] = React.useState<Vehicule[]>([]);
 
   React.useEffect(() => {
@@ -42,7 +35,10 @@ export function GraphiquePannes({ className, small = false }: { className?: stri
     };
     fetchData();
     const interval = setInterval(fetchData, 5000);
-    return () => { cancelled = true; clearInterval(interval); };
+    return () => {
+      cancelled = true;
+      clearInterval(interval);
+    };
   }, []);
 
   const chartData = React.useMemo(() => {
@@ -61,12 +57,7 @@ export function GraphiquePannes({ className, small = false }: { className?: stri
   const totalVehicles = React.useMemo(() => chartData.reduce((acc, curr) => acc + curr.value, 0), [chartData]);
 
   return (
-    <Card
-      className={cn(
-        "group relative flex flex-col overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl",
-        className,
-      )}
-    >
+    <Card className={cn("group relative flex flex-col overflow-hidden transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl", className)}>
       <div className="absolute -top-12 -right-12 h-24 w-24 rounded-full bg-primary/5 blur-2xl group-hover:bg-primary/10 transition-all duration-500" />
 
       <CardHeader className={small ? "items-center pb-0 pt-2 space-y-0" : "items-center pb-0 pt-4 space-y-0"}>
@@ -76,20 +67,12 @@ export function GraphiquePannes({ className, small = false }: { className?: stri
             État des véhicules
           </div>
         </CardTitle>
-        <CardDescription className={small ? "text-[10px] text-center" : "text-xs text-center"}>
-          Répartition globale des véhicules
-        </CardDescription>
+        <CardDescription className={small ? "text-[10px] text-center" : "text-xs text-center"}>Répartition globale des véhicules</CardDescription>
       </CardHeader>
 
       <CardContent className="flex flex-1 items-center justify-center p-1">
         <ChartContainer config={chartConfig} className={small ? "mx-auto h-[90px] w-[90px]" : "mx-auto h-[120px] w-[120px]"}>
-          <RadialBarChart
-            data={chartData}
-            startAngle={180}
-            endAngle={0}
-            innerRadius={small ? 28 : 38}
-            outerRadius={small ? 42 : 56}
-          >
+          <RadialBarChart data={chartData} startAngle={180} endAngle={0} innerRadius={small ? 28 : 38} outerRadius={small ? 42 : 56}>
             <RadialBar
               dataKey="value"
               cornerRadius={4}
@@ -143,7 +126,9 @@ export function GraphiquePannes({ className, small = false }: { className?: stri
           <Badge
             key={item.name}
             variant="secondary"
-            className={small ? "flex items-center gap-1 px-1.5 py-0 text-[9px] font-normal" : "flex items-center gap-1.5 px-2 py-0.5 text-xs font-normal"}
+            className={
+              small ? "flex items-center gap-1 px-1.5 py-0 text-[9px] font-normal" : "flex items-center gap-1.5 px-2 py-0.5 text-xs font-normal"
+            }
           >
             <span className={small ? "h-1.5 w-1.5 rounded-full" : "h-2 w-2 rounded-full"} style={{ backgroundColor: item.fill }} />
             {item.name}

@@ -1,14 +1,14 @@
-import type { CarnetDeBord } from "@/shared/types/types";
-import { useCarnetDeBord } from "@/features/logbooks/hooks/useLogbooks";
+import type { CarnetDeBord } from "@/features/logbooks/types";
+import { useLogbooks } from "@/features/logbooks/hooks/useLogbooks";
 import { ActionsLigne } from "@/shared/components/ActionsLigne/ActionsLigne";
 import CarnetDeBordForm from "./LogbookForm";
 
 type Props = { row: { original: CarnetDeBord } };
 
 const CarnetDeBordActionsMenu = ({ row }: Props) => {
-  const { deleteCarnet } = useCarnetDeBord();
+  const { remove } = useLogbooks();
   return (
-    <ActionsLigne onDelete={() => deleteCarnet(row.original.id_carnet)} editLabel="Modifier le carnet de bord">
+    <ActionsLigne onDelete={() => remove(row.original.id_carnet)} editLabel="Modifier le carnet de bord">
       <CarnetDeBordForm carnet={row.original} />
     </ActionsLigne>
   );

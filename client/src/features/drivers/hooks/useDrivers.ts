@@ -1,58 +1,47 @@
-import type {
-   CreateChauffeur,
-  UpdateChauffeur,
-} from "@/shared/types/types";
-import { chauffeurService } from "@/features/drivers/api/driverService";
+import { useEffect, useState, useCallback } from "react";
+import type { Chauffeur, CreateChauffeur, UpdateChauffeur } from "@/features/drivers/types";
+import { driverService } from "../api/driverService";
 
-export const useChauffeur = () => {
-  const getChauffeurs = async () => {
-    const { getChauffeurs } = chauffeurService;
+export function useDrivers() {
+  const [data, setData] = useState<Chauffeur[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const chauffeurs = await getChauffeurs();
-      return chauffeurs;
-    } catch (error) {
-      console.error("Error fetching chauffeurs:", error);
-      throw error;
+      const result = await driverService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load drivers");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const createChauffeur = async (data: CreateChauffeur) => {
-    const { createChauffeur } = chauffeurService;
-    try {
-      const chauffeur = await createChauffeur(data);
-      return chauffeur;
-    } catch (error) {
-      console.error("Error creating chauffeur:", error);
-      throw error;
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const updateChauffeur = async (id: string, data: UpdateChauffeur) => {
-    const { updateChauffeur } = chauffeurService;
-    try {
-      const chauffeur = await updateChauffeur(id, data);
-      return chauffeur;
-    } catch (error) {
-      console.error("Error updating chauffeur:", error);
-      throw error;
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await driverService.getAll();
+  }, []);
 
-  const deleteChauffeur = async (id: string) => {
-    const { deleteChauffeur } = chauffeurService;
-    try {
-      await deleteChauffeur(id);
-      return true;
-    } catch (error) {
-      console.error("Error deleting chauffeur:", error);
-      throw error;
-    }
-  };
+  const getById = useCallback(async (id: string) => {
+    return await driverService.getById(id);
+  }, []);
 
-  return {
-    getChauffeurs,
-    createChauffeur,
-    updateChauffeur,
-    deleteChauffeur,
-  };
-};
+  const create = useCallback(async (payload: CreateChauffeur) => {
+    return await driverService.create(payload);
+  }, []);
+
+  const update = useCallback(async (id: string, payload: UpdateChauffeur) => {
+    return await driverService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    await driverService.remove(id);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

@@ -6,9 +6,9 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import ChauffeurActionsMenu from "./DriverActionsMenu";
 import ChauffeurForm from "./DriverForm";
-import type { Chauffeur } from "@/shared/types/types";
+import type { Chauffeur } from "@/features/drivers/types";
 import { IconSteeringWheel } from "@tabler/icons-react";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
 
 export const columns: ColumnDef<Chauffeur>[] = [
   {
@@ -28,7 +28,7 @@ export const columns: ColumnDef<Chauffeur>[] = [
 ];
 
 export function ChauffeurDataTable({ data }: { data: Chauffeur[] }) {
-  const { deleteChauffeur } = useChauffeur();
+  const { remove } = useDrivers();
   return (
     <TableauDonnees
       data={data}
@@ -38,7 +38,7 @@ export function ChauffeurDataTable({ data }: { data: Chauffeur[] }) {
       icon={IconSteeringWheel}
       emptyMessage="Aucun chauffeur enregistré"
       createButton={<DialogueCreer label="Créer Chauffeur" adminOnly><ChauffeurForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await deleteChauffeur(id); }}
+      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
     />
   );
 }

@@ -1,15 +1,15 @@
-import type { Chauffeur } from "@/shared/types/types";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
+import type { Chauffeur } from "@/features/drivers/types";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
 import { ActionsLigne } from "@/shared/components/ActionsLigne/ActionsLigne";
 import ChauffeurForm from "./DriverForm";
 
 type Props = { row: { original: Chauffeur } };
 
 const ChauffeurActionsMenu = ({ row }: Props) => {
-  const { deleteChauffeur } = useChauffeur();
+  const { remove } = useDrivers();
   return (
     <ActionsLigne
-      onDelete={() => deleteChauffeur(row.original.id_chauffeur)}
+      onDelete={() => remove(row.original.id_chauffeur)}
       editLabel="Modifier le chauffeur"
       adminOnly
     >

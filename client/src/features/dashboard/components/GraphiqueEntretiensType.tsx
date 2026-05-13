@@ -18,8 +18,8 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { useEntretien } from "@/features/interventions/hooks/useInterventions";
-import type { Entretien } from "@/shared/types/types";
+import { useInterventions } from "@/features/interventions/hooks/useInterventions";
+import type { Entretien } from "@/features/interventions/types";
 import { Wrench } from "lucide-react";
 
 const COLORS = [
@@ -31,7 +31,7 @@ const COLORS = [
 ];
 
 export function GraphiqueEntretiensType() {
-  const { getEntretiens } = useEntretien();
+  const { getAll: getEntretiens } = useInterventions();
   const [entretiens, setEntretiens] = React.useState<Entretien[]>([]);
 
   React.useEffect(() => {

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createPanneSchema, type Chauffeur, type CreatePanne, type Panne, type Vehicule } from "@/shared/types/types";
-import { usePanne } from "@/features/breakdowns/hooks/useBreakdowns";
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { createPanneSchema, type CreatePanne, type Panne } from "@/features/breakdowns/types";
+import type { Chauffeur } from "@/features/drivers/types";
+import type { Vehicule } from "@/features/vehicles/types";
+import { useBreakdowns } from "@/features/breakdowns/hooks/useBreakdowns";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
@@ -15,9 +17,9 @@ import { toast } from "sonner";
 type Props = { panne?: Panne };
 
 export default function PanneForm({ panne }: Props) {
-  const { createPanne, updatePanne } = usePanne();
-  const { getChauffeurs } = useChauffeur();
-  const { getVehicules } = useVehicule();
+  const { create: createPanne, update: updatePanne } = useBreakdowns();
+  const { getAll: getChauffeurs } = useDrivers();
+  const { getAll: getVehicules } = useVehicles();
   const [chauffeurs, setChauffeurs] = useState<Chauffeur[]>([]);
   const [vehicules, setVehicules] = useState<Vehicule[]>([]);
 

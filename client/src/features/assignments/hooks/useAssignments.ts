@@ -1,51 +1,47 @@
-import type { Affectation, AffectationPayload } from "@/shared/types/types";
-import { affectationService } from "@/features/assignments/api/assignmentService";
+import { useEffect, useState, useCallback } from "react";
+import type { Affectation, AffectationPayload } from "@/features/assignments/types";
+import { assignmentService } from "../api/assignmentService";
 
-export const useAffectation = () => {
-  const createAffectation = async (data: AffectationPayload) => {
+export function useAssignments() {
+  const [data, setData] = useState<Affectation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const { createAffectation } = affectationService();
-      const res = await createAffectation(data);
-      return res;
-    } catch (error) {
-      console.log(error);
+      const result = await assignmentService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load assignments");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const getAffectations = async (): Promise<Affectation[] | undefined> => {
-    try {
-      const { getAffectations } = affectationService();
-      const res = await getAffectations();
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const deleteAffectation = async (id: string) => {
-    try {
-      const { deleteAffectation } = affectationService();
-      const res = await deleteAffectation(id);
-      return res?.message ?? "Affectation deleted";
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const create = useCallback(async (payload: AffectationPayload) => {
+    return await assignmentService.create(payload);
+  }, []);
 
-  const updateAffectation = async (id: string, data: AffectationPayload) => {
-    try {
-      const { updateAffectation } = affectationService();
-      const res = await updateAffectation(id, data);
-      return res;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await assignmentService.getAll();
+  }, []);
 
-  return {
-    createAffectation,
-    getAffectations,
-    deleteAffectation,
-    updateAffectation,
-  };
-};
+  const getById = useCallback(async (id: string) => {
+    return await assignmentService.getById(id);
+  }, []);
+
+  const update = useCallback(async (id: string, payload: Partial<AffectationPayload>) => {
+    return await assignmentService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    await assignmentService.remove(id);
+    return true;
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

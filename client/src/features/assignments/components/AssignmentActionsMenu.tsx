@@ -1,14 +1,14 @@
-import type { Affectation } from "@/shared/types/types";
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
+import type { Affectation } from "@/features/assignments/types";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
 import { ActionsLigne } from "@/shared/components/ActionsLigne/ActionsLigne";
 import AffectationForm from "./AssignmentForm";
 
 type Props = { row: { original: Affectation } };
 
 const AffectationActionsMenu = ({ row }: Props) => {
-  const { deleteAffectation } = useAffectation();
+  const { remove } = useAssignments();
   return (
-    <ActionsLigne onDelete={() => deleteAffectation(row.original.id_affectation)} editLabel="Modifier l'affectation">
+    <ActionsLigne onDelete={() => remove(row.original.id_affectation)} editLabel="Modifier l'affectation">
       <AffectationForm affectation={row.original} />
     </ActionsLigne>
   );

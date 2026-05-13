@@ -1,43 +1,46 @@
-import type { User, CreateUser, UpdateUser } from "@/shared/types/types";
-import { utilisateurService } from "@/features/users/api/userService";
+import { useEffect, useState, useCallback } from "react";
+import type { User, CreateUser, UpdateUser } from "@/features/users/types";
+import { userService } from "../api/userService";
 
-export const useUtilisateur = () => {
-  const createUser = async (data: CreateUser) => {
+export function useUsers() {
+  const [data, setData] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
     try {
-      const { createUser } = utilisateurService();
-      return await createUser(data);
-    } catch (error) {
-      console.log(error);
+      const result = await userService.getAll();
+      setData(result ?? []);
+    } catch {
+      setError("Failed to load users");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
-  const getUsers = async (): Promise<User[] | undefined> => {
-    try {
-      const { getUsers } = utilisateurService();
-      return await getUsers();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  useEffect(() => { fetchData(); }, [fetchData]);
 
-  const deleteUser = async (id: string) => {
-    try {
-      const { deleteUser } = utilisateurService();
-      const res = await deleteUser(id);
-      return res?.message ?? "User deleted";
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const create = useCallback(async (payload: CreateUser) => {
+    return await userService.create(payload);
+  }, []);
 
-  const updateUser = async (id: string, data: UpdateUser) => {
-    try {
-      const { updateUser } = utilisateurService();
-      return await updateUser(id, data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  const getAll = useCallback(async () => {
+    return await userService.getAll();
+  }, []);
 
-  return { createUser, getUsers, deleteUser, updateUser };
-};
+  const getById = useCallback(async (id: string) => {
+    return await userService.getById(id);
+  }, []);
+
+  const update = useCallback(async (id: string, payload: UpdateUser) => {
+    return await userService.update(id, payload);
+  }, []);
+
+  const remove = useCallback(async (id: string) => {
+    return await userService.remove(id);
+  }, []);
+
+  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+}

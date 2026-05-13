@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { useChauffeur } from "@/features/drivers/hooks/useDrivers";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { useDrivers } from "@/features/drivers/hooks/useDrivers";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { GraphiqueRadialText } from "./GraphiqueRadialText";
 import { GraphiquePannes } from "./GraphiquePannes";
-import { usePanne } from "@/features/breakdowns/hooks/useBreakdowns";
-import { useAffectation } from "@/features/assignments/hooks/useAssignments";
+import { useBreakdowns } from "@/features/breakdowns/hooks/useBreakdowns";
+import { useAssignments } from "@/features/assignments/hooks/useAssignments";
 import { useMaintenance } from "@/features/maintenance/hooks/useMaintenance";
-import { useCarnetDeBord } from "@/features/logbooks/hooks/useLogbooks";
-import { useEntretien } from "@/features/interventions/hooks/useInterventions";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import { useLogbooks } from "@/features/logbooks/hooks/useLogbooks";
+import { useInterventions } from "@/features/interventions/hooks/useInterventions";
+import { useUsers } from "@/features/users/hooks/useUsers";
 import {
   IconTruck,
   IconArrowsExchange,
@@ -24,14 +24,14 @@ import { useAuthentification } from "@/features/auth/hooks/useAuth";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 
 export function CartesSections() {
-  const { getChauffeurs } = useChauffeur();
-  const { getVehicules } = useVehicule();
-  const { getPannes } = usePanne();
-  const { getAffectations } = useAffectation();
-  const { getMaintenances } = useMaintenance();
-  const { getCarnets } = useCarnetDeBord();
-  const { getEntretiens } = useEntretien();
-  const { getUsers } = useUtilisateur();
+  const { getAll: getChauffeurs } = useDrivers();
+  const { getAll: getVehicules } = useVehicles();
+  const { getAll: getPannes } = useBreakdowns();
+  const { getAll: getAffectations } = useAssignments();
+  const { getAll: getMaintenances } = useMaintenance();
+  const { getAll: getCarnets } = useLogbooks();
+  const { getAll: getEntretiens } = useInterventions();
+  const { getAll: getUsers } = useUsers();
 
   const [data, setData] = useState<Record<string, number> | null>(null);
   const { user } = useAuthentification();

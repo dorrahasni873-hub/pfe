@@ -6,10 +6,12 @@ import { Input } from "@/shared/components/ui/input";
 import { DialogClose } from "@/shared/components/ui/dialog";
 import { Field, FieldLabel, FieldContent, FieldError } from "@/shared/components/ui/field";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
-import { useUtilisateur } from "@/features/users/hooks/useUsers";
+import { vehicleService } from "@/features/vehicles/api/vehicleService";
+import { userService } from "@/features/users/api/userService";
 import { useMaintenance } from "@/features/maintenance/hooks/useMaintenance";
-import type { Maintenance, User, Vehicule } from "@/shared/types/types";
+import type { Maintenance } from "@/features/maintenance/types";
+import type { User } from "@/features/users/types";
+import type { Vehicule } from "@/features/vehicles/types";
 
 const schema = z.object({
   matricule: z.string().min(1, "Véhicule requis"),
@@ -37,12 +39,10 @@ export default function MaintenanceForm({ maintenance }: Props) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [users, setUsers] = useState<User[]>([]);
   const [vehicules, setVehicules] = useState<Vehicule[]>([]);
-  const { getUsers } = useUtilisateur();
-  const { getVehicules } = useVehicule();
-  const { createMaintenance, updateMaintenance } = useMaintenance();
+  const { create, update } = useMaintenance();
 
   useEffect(() => {
-    Promise.all([getUsers(), getVehicules()]).then(([u, v]) => { setUsers(u || []); setVehicules(v || []); });
+    Promise.all([userService.getAll(), vehicleService.getAll()]).then(([u, v]) => { setUsers(u || []); setVehicules(v || []); });
   }, []);
 
   const set = (field: string, value: unknown) => setForm((prev) => ({ ...prev, [field]: value }));
@@ -58,8 +58,8 @@ export default function MaintenanceForm({ maintenance }: Props) {
     }
     setErrors({});
     try {
-      if (maintenance) { await updateMaintenance(maintenance.id_maintenance, form); toast.success("Maintenance modifiée"); }
-      else { await createMaintenance(form); toast.success("Maintenance créée"); }
+      if (maintenance) { await update(maintenance.id_maintenance, form); toast.success("Maintenance modifiée"); }
+      else { await create(form); toast.success("Maintenance créée"); }
     } catch { toast.error("Erreur serveur"); }
   };
 

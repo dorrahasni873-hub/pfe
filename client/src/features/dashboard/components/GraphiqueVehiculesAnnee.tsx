@@ -18,12 +18,12 @@ import {
   type ChartConfig,
 } from "@/shared/components/ui/chart";
 
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
-import type { Vehicule } from "@/shared/types/types";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
+import type { Vehicule } from "@/features/vehicles/types";
 import { Calendar } from "lucide-react";
 
 export function GraphiqueVehiculesAnnee() {
-  const { getVehicules } = useVehicule();
+  const { getAll: getVehicules } = useVehicles();
   const [vehicules, setVehicules] = React.useState<Vehicule[]>([]);
 
   React.useEffect(() => {

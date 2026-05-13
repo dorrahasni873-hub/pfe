@@ -6,7 +6,7 @@ import { TableauDonnees } from "@/shared/components/TableauDonnees/TableauDonnee
 import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import VehiculeActionsMenu from "./VehicleActionsMenu";
 import VehiculeForm from "./VehicleForm";
-import type { Vehicule } from "@/shared/types/types";
+import type { Vehicule } from "@/features/vehicles/types";
 import { format } from "date-fns";
 
 export const columns: ColumnDef<Vehicule>[] = [
@@ -28,10 +28,10 @@ export const columns: ColumnDef<Vehicule>[] = [
 ];
 
 import { IconTruck } from "@tabler/icons-react";
-import { useVehicule } from "@/features/vehicles/hooks/useVehicles";
+import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 
 export function VehiculeDataTable({ data }: { data: Vehicule[] }) {
-  const { deleteVehicule } = useVehicule();
+  const { remove } = useVehicles();
   return (
     <TableauDonnees
       data={data}
@@ -41,7 +41,7 @@ export function VehiculeDataTable({ data }: { data: Vehicule[] }) {
       icon={IconTruck}
       emptyMessage="Aucun véhicule enregistré"
       createButton={<DialogueCreer label="Créer Véhicule" adminOnly><VehiculeForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await deleteVehicule(id); }}
+      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
       filters={[
         { columnId: "etat", label: "État", placeholder: "Tous les états", options: [
           { label: "Disponible", value: "disponible" },

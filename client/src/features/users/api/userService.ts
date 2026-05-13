@@ -1,46 +1,29 @@
-import type { User, CreateUser, UpdateUser } from "@/shared/types/types";
+import type { User, CreateUser, UpdateUser } from "@/features/users/types";
 import api from "@/shared/lib/axios";
 
-export const utilisateurService = () => {
-  const createUser = async (data: CreateUser) => {
-    try {
-      const res = await api.post("/utilisateurs/", data);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+export const userService = {
+  getAll: async (): Promise<User[]> => {
+    const response = await api.get("/utilisateurs/");
+    return response.data;
+  },
 
-  const getUsers = async (): Promise<User[]> => {
-    try {
-      const res = await api.get("/utilisateurs/");
-      return res.data;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  };
+  getById: async (id: string): Promise<User> => {
+    const response = await api.get(`/utilisateurs/${id}`);
+    return response.data;
+  },
 
-  const deleteUser = async (id: string) => {
-    try {
-      const res = await api.delete(`/utilisateurs/${id}`);
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  create: async (data: CreateUser) => {
+    const response = await api.post("/utilisateurs/", data);
+    return response.data;
+  },
 
-  const updateUser = async (id: string, data: UpdateUser) => {
-    try {
-      const res = await api.put<{ message: string }>(
-        `/utilisateurs/${id}`,
-        data,
-      );
-      return res.data;
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  update: async (id: string, data: UpdateUser) => {
+    const response = await api.put(`/utilisateurs/${id}`, data);
+    return response.data;
+  },
 
-  return { createUser, getUsers, deleteUser, updateUser };
+  remove: async (id: string) => {
+    const response = await api.delete(`/utilisateurs/${id}`);
+    return response.data;
+  },
 };

@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuthentificationContext } from "@/features/auth/store/authContext";
-import { authentificationService } from "@/features/auth/api/authService";
-import type { LoginInput, RegisterInput } from "@/shared/types/types";
+import { authService } from "@/features/auth/api/authService";
+import type { LoginInput, RegisterInput } from "@/features/auth/types";
 
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -10,7 +10,7 @@ type AuthProviderProps = {
 export const AuthentificationProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const { loginApi, registerApi, checkMe } = useMemo(() => authentificationService(), []);
+  const { login: loginApi, register: registerApi, checkMe } = authService;
 
   useEffect(() => {
     const fetchUser = async () => {

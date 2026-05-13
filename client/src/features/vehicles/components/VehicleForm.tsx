@@ -1,26 +1,11 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  VehiculeSchema,
-  type Vehicule,
-  type VehiculePayload,
-} from "@/features/vehicles/types";
+import { VehiculeSchema, type Vehicule, type VehiculePayload } from "@/features/vehicles/types";
 import { Input } from "@/shared/components/ui/input";
 import { Button } from "@/shared/components/ui/button";
 import { DialogClose } from "@/shared/components/ui/dialog";
-import {
-  Field,
-  FieldLabel,
-  FieldContent,
-  FieldError,
-} from "@/shared/components/ui/field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/shared/components/ui/select";
+import { Field, FieldLabel, FieldContent, FieldError } from "@/shared/components/ui/field";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { ChampDate } from "@/shared/components/ChampDate/ChampDate";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 import { format } from "date-fns";
@@ -77,51 +62,24 @@ const VehiculeForm = ({ vehicule }: Props) => {
         <Field>
           <FieldLabel>Matricule</FieldLabel>
           <FieldContent>
-            <Input
-              {...register("matricule")}
-              placeholder="Matricule"
-              disabled={!!vehicule}
-              aria-invalid={!!errors.matricule}
-            />
+            <Input {...register("matricule")} placeholder="Matricule" disabled={!!vehicule} aria-invalid={!!errors.matricule} />
             <FieldError errors={[errors.matricule]} />
           </FieldContent>
         </Field>
         <Field>
           <FieldLabel>Marque</FieldLabel>
           <FieldContent>
-            <Input
-              {...register("marqueVoiture")}
-              placeholder="Marque"
-              aria-invalid={!!errors.marqueVoiture}
-            />
+            <Input {...register("marqueVoiture")} placeholder="Marque" aria-invalid={!!errors.marqueVoiture} />
             <FieldError errors={[errors.marqueVoiture]} />
           </FieldContent>
         </Field>
-        <ChampDate
-          label="Date de circulation"
-          name="dateCirculation"
-          watch={watch}
-          setValue={setValue}
-        />
-        <ChampDate
-          label="Date de visite"
-          name="dateVisite"
-          watch={watch}
-          setValue={setValue}
-        />
-        <ChampDate
-          label="Date de taxe"
-          name="dateTaxe"
-          watch={watch}
-          setValue={setValue}
-        />
+        <ChampDate label="Date de circulation" name="dateCirculation" watch={watch} setValue={setValue} />
+        <ChampDate label="Date de visite" name="dateVisite" watch={watch} setValue={setValue} />
+        <ChampDate label="Date de taxe" name="dateTaxe" watch={watch} setValue={setValue} />
         <Field>
           <FieldLabel>État</FieldLabel>
           <FieldContent>
-            <Select
-              onValueChange={(v) => setValue("etat", v)}
-              defaultValue={vehicule?.etat}
-            >
+            <Select onValueChange={(v) => setValue("etat", v)} defaultValue={vehicule?.etat}>
               <SelectTrigger>
                 <SelectValue placeholder="État du véhicule" />
               </SelectTrigger>

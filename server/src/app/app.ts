@@ -1,4 +1,6 @@
 import express from "express";
+import cors from "cors";
+import { corsConfig } from "../config";
 import { errorHandler } from "../shared/middleware/error.middleware";
 import { authRoutes } from "../modules/auth";
 import { userRoutes } from "../modules/users";
@@ -9,19 +11,10 @@ import { maintenanceRoutes } from "../modules/maintenances";
 import { panneRoutes } from "../modules/pannes";
 import { entretienRoutes } from "../modules/entretiens";
 import { carnetRoutes } from "../modules/carnets-de-bord";
-import dotenv from "dotenv";
-import cors from "cors";
 
 const app = express();
 app.use(express.json());
-
-dotenv.config();
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true,
-  }),
-);
+app.use(cors(corsConfig));
 
 app.use("/api/vehicules", vehicleRoutes);
 app.use("/api/utilisateurs", userRoutes);

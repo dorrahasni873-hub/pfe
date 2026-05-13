@@ -1,6 +1,7 @@
 import jwt, { SignOptions } from "jsonwebtoken";
+import { authConfig } from "../../config";
 
-const JWT_SECRET: jwt.Secret = process.env.JWT_SECRET!;
+const JWT_SECRET: jwt.Secret = authConfig.jwtSecret;
 
 export interface JwtPayload {
   id: string;
@@ -9,7 +10,7 @@ export interface JwtPayload {
 
 export const signToken = (payload: JwtPayload): string => {
   return jwt.sign(payload, JWT_SECRET, {
-    expiresIn: 24 * 60 * 60,
+    expiresIn: authConfig.jwtExpiresIn,
   } as SignOptions);
 };
 

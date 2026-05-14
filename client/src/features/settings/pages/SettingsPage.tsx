@@ -3,10 +3,11 @@ import { useTheme } from "@/app/providers/ThemeProvider";
 import { useSettings } from "@/app/providers/SettingsProvider";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/shared/components/ui/card";
 import { ToggleGroup, ToggleGroupItem } from "@/shared/components/ui/toggle-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 
 const ParametresPage = () => {
   const { theme, setTheme } = useTheme();
-  const { settings, setFontSize, setSidebarSide, setSidebarVariant, setSidebarCollapsible, setThemePreset, setMenuStyle } = useSettings();
+  const { settings, setFontSize, setSidebarSide, setSidebarVariant, setSidebarCollapsible, setSidebarDefaultOpen, setThemePreset, setMenuStyle } = useSettings();
 
   return (
     <div className="py-6 space-y-6">
@@ -176,6 +177,27 @@ const ParametresPage = () => {
                 Aucun
               </ToggleGroupItem>
             </ToggleGroup>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <IconLayoutSidebar className="size-4" />
+              État par défaut
+            </CardTitle>
+            <CardDescription>Ouvrir ou fermer la barre latérale au chargement</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Select value={settings.sidebarDefaultOpen ? "open" : "closed"} onValueChange={(v) => setSidebarDefaultOpen(v === "open")}>
+              <SelectTrigger className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="open">Ouverte</SelectItem>
+                <SelectItem value="closed">Fermée</SelectItem>
+              </SelectContent>
+            </Select>
           </CardContent>
         </Card>
 

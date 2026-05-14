@@ -13,6 +13,7 @@ type Settings = {
   sidebarSide: SidebarSide;
   sidebarVariant: SidebarVariant;
   sidebarCollapsible: SidebarCollapsible;
+  sidebarDefaultOpen: boolean;
   vehicleView: VehicleView;
   themePreset: ThemePreset;
   menuStyle: MenuStyle;
@@ -24,6 +25,7 @@ type SettingsProviderState = {
   setSidebarSide: (side: SidebarSide) => void;
   setSidebarVariant: (variant: SidebarVariant) => void;
   setSidebarCollapsible: (collapsible: SidebarCollapsible) => void;
+  setSidebarDefaultOpen: (open: boolean) => void;
   setVehicleView: (view: VehicleView) => void;
   setThemePreset: (preset: ThemePreset) => void;
   setMenuStyle: (style: MenuStyle) => void;
@@ -36,6 +38,7 @@ const defaults: Settings = {
   sidebarSide: "left",
   sidebarVariant: "inset",
   sidebarCollapsible: "icon",
+  sidebarDefaultOpen: true,
   vehicleView: "table",
   themePreset: "default",
   menuStyle: "sidebar",
@@ -91,6 +94,9 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
   const setSidebarCollapsible = (sidebarCollapsible: SidebarCollapsible) =>
     setSettings((prev) => ({ ...prev, sidebarCollapsible }));
 
+  const setSidebarDefaultOpen = (sidebarDefaultOpen: boolean) =>
+    setSettings((prev) => ({ ...prev, sidebarDefaultOpen }));
+
   const setVehicleView = (vehicleView: VehicleView) =>
     setSettings((prev) => ({ ...prev, vehicleView }));
 
@@ -102,7 +108,7 @@ export function SettingsProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <SettingsContext.Provider
-      value={{ settings, setFontSize, setSidebarSide, setSidebarVariant, setSidebarCollapsible, setVehicleView, setThemePreset, setMenuStyle }}
+      value={{ settings, setFontSize, setSidebarSide, setSidebarVariant, setSidebarCollapsible, setSidebarDefaultOpen, setVehicleView, setThemePreset, setMenuStyle }}
     >
       {children}
     </SettingsContext.Provider>

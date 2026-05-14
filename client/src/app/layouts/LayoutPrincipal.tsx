@@ -5,6 +5,7 @@ import { AppSidebar } from "@/shared/components/layout/BarreLaterale"
 import { MenuHorizontal } from "@/shared/components/layout/MenuHorizontal"
 import { Toaster } from "@/shared/components/ui/sonner"
 import { useSettings } from "@/app/providers/SettingsProvider"
+import { cn } from "@/shared/utils/utils"
 
 const PageLoader = () => (
   <div className="flex min-h-[60vh] items-center justify-center">
@@ -33,6 +34,7 @@ const LayoutPrincipal = () => {
 
   return (
     <SidebarProvider
+      defaultOpen={settings.sidebarDefaultOpen}
       className={settings.sidebarSide === "right" ? "flex-row-reverse" : ""}
       style={
         {
@@ -47,7 +49,7 @@ const LayoutPrincipal = () => {
           : ""
       }`}>
         <div className={settings.sidebarSide === "right" ? "flex justify-end" : ""}>
-          <SidebarTrigger className={settings.sidebarSide === "right" ? "[&_svg]:rotate-180" : ""} />
+          <SidebarTrigger className={cn(settings.sidebarSide === "right" ? "[&_svg]:rotate-180" : "", "sticky top-2 z-20")} />
         </div>
         <main>
           <Toaster />

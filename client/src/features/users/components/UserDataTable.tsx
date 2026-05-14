@@ -7,8 +7,9 @@ import { DialogueCreer } from "@/shared/components/DialogueCreer/DialogueCreer";
 import UserActionsMenu from "./UserActionsMenu";
 import UserForm from "./UserForm";
 import type { User } from "@/features/users/types";
-import { IconUsers } from "@tabler/icons-react";
+import { IconCopy, IconUsers } from "@tabler/icons-react";
 import { useUsers } from "@/features/users/hooks/useUsers";
+import { toast } from "sonner";
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -18,7 +19,19 @@ export const columns: ColumnDef<User>[] = [
   },
   { accessorKey: "nom", header: "Nom", cell: ({ row }) => <span className="font-medium">{row.original.nom}</span> },
   { accessorKey: "prenom", header: "Prénom" },
-  { accessorKey: "email", header: "Email" },
+  { accessorKey: "email", header: "Email", cell: ({ row }) => {
+    const email = row.original.email;
+    const copy = () => {
+      navigator.clipboard.writeText(email);
+      toast.success("Email copié");
+    };
+    return (
+      <button type="button" onClick={copy} className="flex items-center gap-1.5 cursor-pointer hover:text-primary transition-colors">
+        {email}
+        <IconCopy className="size-3 shrink-0 text-muted-foreground/50" />
+      </button>
+    );
+  }},
   { accessorKey: "role", header: "Rôle", cell: ({ row }) => {
     const colors: Record<string, string> = { admin: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300", maintenance: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" };
     return <Badge className={colors[row.original.role] || ""}>{row.original.role}</Badge>;

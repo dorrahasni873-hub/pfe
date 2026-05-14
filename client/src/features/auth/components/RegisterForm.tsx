@@ -10,6 +10,7 @@ import {
 import { Input } from "@/shared/components/ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthentification } from "@/features/auth/hooks/useAuth";
+import { Eye, EyeOff, Lock } from "lucide-react";
 import { useState } from "react";
 
 export function FormulaireInscription() {
@@ -24,6 +25,8 @@ export function FormulaireInscription() {
   const [tel, setTel] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,20 +124,42 @@ export function FormulaireInscription() {
                 <Field className="grid grid-cols-2 gap-3">
                   <Field>
                     <FieldLabel>Mot de passe</FieldLabel>
-                    <Input
-                      type="password"
-                      value={motDePasse}
-                      onChange={(e) => setMotDePasse(e.target.value)}
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <Input
+                        type={showPassword ? "text" : "password"}
+                        value={motDePasse}
+                        onChange={(e) => setMotDePasse(e.target.value)}
+                        className="pl-10 pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                      </button>
+                    </div>
                   </Field>
 
                   <Field>
                     <FieldLabel>Confirmer</FieldLabel>
-                    <Input
-                      type="password"
-                      value={confirmMotDePasse}
-                      onChange={(e) => setConfirmMotDePasse(e.target.value)}
-                    />
+                    <div className="relative">
+                      <Lock className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                      <Input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmMotDePasse}
+                        onChange={(e) => setConfirmMotDePasse(e.target.value)}
+                        className="pl-10 pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        {showConfirmPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                      </button>
+                    </div>
                   </Field>
                 </Field>
 

@@ -1,6 +1,9 @@
+import bcrypt from "bcrypt";
 import db from "../../database/client";
 import { utilisateur } from "../../database/schema";
 import { eq } from "drizzle-orm";
+
+const SALT_ROUNDS = 10;
 
 export const getAll = async () => {
   return await db.query.utilisateur.findMany();
@@ -52,7 +55,10 @@ export const create = async (data: {
   tel?: string;
   role: string;
 }) => {
-  return await db.insert(utilisateur).values(data);
+  const motDePasseHash = await bcrypt.hash(data.motDePasse, SALT_ROUNDS);
+  return await db
+    .insert(utilisateur)
+    .values({ ...data, motDePasse: motDePasseHash });
 };
 
 export const update = async (
@@ -67,9 +73,13 @@ export const update = async (
     dateMiseAJour: string;
   }>,
 ) => {
+  const updateData = { ...data };
+  if (updateData.motDePasse) {
+    updateData.motDePasse = await bcrypt.hash(updateData.motDePasse, SALT_ROUNDS);
+  }
   return await db
     .update(utilisateur)
-    .set(data)
+    .set(updateData)
     .where(eq(utilisateur.id_utilisateur, id));
 };
 

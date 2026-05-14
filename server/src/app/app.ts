@@ -11,6 +11,7 @@ import { maintenanceRoutes } from "../modules/maintenances";
 import { panneRoutes } from "../modules/pannes";
 import { entretienRoutes } from "../modules/entretiens";
 import { carnetRoutes } from "../modules/carnets-de-bord";
+import { aiRoutes } from "../modules/ai";
 
 const app = express();
 app.use(express.json());
@@ -25,6 +26,7 @@ app.use("/api/pannes", panneRoutes);
 app.use("/api/entretiens", entretienRoutes);
 app.use("/api/maintenances", maintenanceRoutes);
 app.use("/api/carnetsdebord", carnetRoutes);
+app.use("/api/ai", aiRoutes);
 
 app.use(errorHandler);
 

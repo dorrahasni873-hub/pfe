@@ -11,6 +11,7 @@ import { GraphiqueEntretiensEtat } from "@/features/dashboard/components/Graphiq
 import { GraphiqueVehiculesAnnee } from "@/features/dashboard/components/GraphiqueVehiculesAnnee";
 import { GraphiqueProchainsEntretiens } from "@/features/dashboard/components/GraphiqueProchainsEntretiens";
 import { CartesSections } from "@/features/dashboard/components/CartesSections";
+
 import { CartesChauffeur } from "@/features/dashboard/components/CartesChauffeur";
 import { IconDashboard, IconChartBar, IconChartPie, IconAlertTriangle, IconCalendarClock } from "@tabler/icons-react";
 import EntetePage from "@/shared/components/EntetePage/EntetePage";
@@ -93,6 +94,7 @@ const TableauDeBord = () => {
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150">
             {isChauffeur ? <CartesChauffeur /> : <CartesSections />}
           </div>
+
 
           {!isChauffeur && (
             <>

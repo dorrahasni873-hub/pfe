@@ -10,6 +10,8 @@ export const ROUTES = {
   CARNETS: "/carnets",
   ENTRETIENS: "/entretiens",
   PANNES: "/pannes",
+  CALENDRIER: "/calendrier",
+  AI: "/ai",
   PROFILE: "/profile",
   PARAMETRES: "/parametres",
 } as const;

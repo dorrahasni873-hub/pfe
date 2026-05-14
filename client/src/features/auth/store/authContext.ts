@@ -9,6 +9,7 @@ export type AuthentificationContextType = {
   login: (credentials: LoginInput) => Promise<boolean>;
   register: (credentials: RegisterInput) => Promise<boolean>;
   logout: () => void;
+  refreshUser: () => Promise<void>;
 };
 
 export const AuthentificationContext = createContext<AuthentificationContextType | null>(null);

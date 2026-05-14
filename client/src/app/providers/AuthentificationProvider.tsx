@@ -68,13 +68,28 @@ export const AuthentificationProvider = ({ children }: AuthProviderProps) => {
     return false;
   };
 
+  const refreshUser = async () => {
+    try {
+      const data = await checkMe();
+      const userData = data?.user;
+      if (userData) {
+        setUser(userData);
+        localStorage.setItem("data", JSON.stringify(userData));
+      }
+    } catch {
+      setUser(null);
+      localStorage.removeItem("token");
+      localStorage.removeItem("data");
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setUser(null);
   };
 
   return (
-    <AuthentificationContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthentificationContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
       {children}
     </AuthentificationContext.Provider>
   );

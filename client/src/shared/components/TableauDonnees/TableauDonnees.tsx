@@ -125,6 +125,25 @@ export function TableauDonnees<T>({
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
   const [deleting, setDeleting] = React.useState(false);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
+  const searchRef = React.useRef<HTMLInputElement>(null);
+  const createRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.target as HTMLElement)?.closest("input, textarea, select, [contenteditable]")) return;
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        e.preventDefault();
+        searchRef.current?.focus();
+        return;
+      }
+      if (e.key === "n" && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        createRef.current?.querySelector("button, a")?.click();
+      }
+    };
+    document.addEventListener("keydown", handler);
+    return () => document.removeEventListener("keydown", handler);
+  }, []);
 
   const handleRefresh = React.useCallback(async () => {
     if (!onRefresh) return;
@@ -242,9 +261,10 @@ export function TableauDonnees<T>({
         <div className="relative flex-1 max-w-sm min-w-[200px]">
           <IconSearch className="absolute left-2.5 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
           <Input
+            ref={searchRef}
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder={searchPlaceholder || "Rechercher..."}
+            placeholder={`${searchPlaceholder || "Rechercher..."} (Ctrl+F)`}
             className="pl-8 h-9 text-sm rounded-lg"
           />
         </div>
@@ -310,7 +330,7 @@ export function TableauDonnees<T>({
               <span>Supprimer ({selectedIds.length})</span>
             </Button>
           )}
-          {createButton}
+          <div ref={createRef}>{createButton}</div>
         </div>
       </div>
 

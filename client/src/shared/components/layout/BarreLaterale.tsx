@@ -1,5 +1,7 @@
 import * as React from "react";
 import {
+  IconBrain,
+  IconCalendarMonth,
   IconDashboard,
   IconUsers,
   IconSteeringWheel,
@@ -13,6 +15,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { ROUTES } from "@/routes";
+import { NotificationBell } from "@/shared/components/layout/NotificationBell";
 import { NavPrincipale } from "@/shared/components/layout/NavPrincipale";
 import { NavSecondaire } from "@/shared/components/layout/NavSecondaire";
 import { NavUtilisateur } from "@/shared/components/layout/NavUtilisateur";
@@ -85,6 +88,18 @@ const data = {
       icon: IconAlertTriangle,
       roles: ["admin", "user", "chauffeur"],
     },
+    {
+      title: "Calendrier",
+      url: ROUTES.CALENDRIER,
+      icon: IconCalendarMonth,
+      roles: ["admin", "user", "chauffeur"],
+    },
+    {
+      title: "Assistant IA",
+      url: ROUTES.AI,
+      icon: IconBrain,
+      roles: ["admin", "user", "chauffeur"],
+    },
   ],
   navSecondary: [
     {
@@ -128,33 +143,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="border-b border-sidebar-border/40 pb-2">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton
-              asChild
-              className="data-[slot=sidebar-menu-button]:p-1.5!"
-            >
-              <Link to={ROUTES.DASHBOARD} className="flex items-center gap-3 group">
-                <div className="relative shrink-0">
-                  <div className="absolute inset-0 rounded-xl bg-linear-to-br from-primary/30 to-primary/5 blur-md group-hover:blur-lg transition-all duration-300" />
-                  <img
-                    src="/logo.png"
-                    alt="Logo"
-                    className="relative h-12 w-12 rounded-xl object-cover ring-2 ring-sidebar-ring group-hover:ring-primary/60 transition-all duration-300"
-                  />
-                </div>
-                <div className="flex flex-col leading-tight min-w-0">
-                  <span className="text-base font-bold tracking-tight text-sidebar-foreground">
-                    STS Béja
-                  </span>
-                  <span className="text-[11px] font-medium text-sidebar-foreground/50 tracking-wide uppercase">
-                    Gestion de Parc
-                  </span>
-                </div>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="flex items-center gap-2 px-3 py-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-1">
+          <Link to={ROUTES.DASHBOARD} className="flex items-center gap-3 group flex-1 min-w-0 group-data-[collapsible=icon]:justify-center">
+            <div className="relative shrink-0">
+              <div className="absolute inset-0 rounded-xl bg-linear-to-br from-primary/30 to-primary/5 blur-md group-hover:blur-lg transition-all duration-300" />
+              <img
+                src="/logo.png"
+                alt="Logo"
+                className="relative h-12 w-12 group-data-[collapsible=icon]:h-8 group-data-[collapsible=icon]:w-8 rounded-xl object-cover ring-2 ring-sidebar-ring group-hover:ring-primary/60 transition-all duration-300"
+              />
+            </div>
+            <div className="flex flex-col leading-tight min-w-0 group-data-[collapsible=icon]:hidden">
+              <span className="text-base font-bold tracking-tight text-sidebar-foreground">
+                STS Béja
+              </span>
+              <span className="text-[11px] font-medium text-sidebar-foreground/50 tracking-wide uppercase">
+                Gestion de Parc
+              </span>
+            </div>
+          </Link>
+        </div>
       </SidebarHeader>
 
       <SidebarContent className="pt-6">
@@ -195,6 +203,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
 
       <SidebarFooter>
+        <div className="flex items-center justify-center p-2 border-b border-sidebar-border/40">
+          <NotificationBell />
+        </div>
         <NavUtilisateur user={user} />
       </SidebarFooter>
     </Sidebar>

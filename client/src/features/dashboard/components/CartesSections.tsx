@@ -119,13 +119,6 @@ export function CartesSections() {
   return (
     <div className="grid grid-cols-2 gap-3 px-4 lg:px-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
       <GraphiquePannes small />
-      <GraphiqueRadialText
-        small
-        title="Véhicules"
-        icon={IconTruck}
-        value={data.vehicules}
-        bg="from-sky-100 via-sky-200 to-sky-300 dark:from-sky-950 dark:via-sky-900 dark:to-sky-950"
-      />
       {user?.role === "admin" && (
         <GraphiqueRadialText
           small

@@ -1,10 +1,13 @@
+import { useState } from "react";
 import {
   IconDotsVertical,
   IconUserCircle,
   IconLogout,
   IconTrash,
   IconSettings,
-  IconSun,
+  IconAlertTriangle,
+  IconEye,
+  IconEyeOff,
 } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
 import {
@@ -25,7 +28,19 @@ import {
 import { ROUTES } from "@/routes";
 import { BasculeMode } from "./BasculeMode";
 import { useAuthentification } from "@/features/auth/hooks/useAuth";
+import { authService } from "@/features/auth/api/authService";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/components/ui/dialog";
+import { Input } from "@/shared/components/ui/input";
+import { Label } from "@/shared/components/ui/label";
+import { Button } from "@/shared/components/ui/button";
 
 export function NavUtilisateur({
   user,
@@ -38,6 +53,11 @@ export function NavUtilisateur({
 }) {
   const { logout } = useAuthentification();
   const { isMobile } = useSidebar();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletePassword, setDeletePassword] = useState("");
+  const [showDeletePassword, setShowDeletePassword] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const name = `${user.nom ?? ""} ${user.prenom ?? ""}`.trim();
   const email = user.email ?? "";
@@ -50,7 +70,33 @@ export function NavUtilisateur({
     navigate(ROUTES.LOGIN, { replace: true });
   };
 
+  const onDeleteAccount = async () => {
+    if (!deletePassword) {
+      setDeleteError("Veuillez entrer votre mot de passe");
+      return;
+    }
+    setDeleteError(null);
+    setDeleting(true);
+    try {
+      await authService.deleteAccount(deletePassword);
+      logout();
+      navigate(ROUTES.LOGIN, { replace: true });
+    } catch {
+      setDeleteError("Mot de passe incorrect");
+      setDeleting(false);
+    }
+  };
+
+  const onDeleteDialogOpenChange = (open: boolean) => {
+    if (!open) {
+      setDeletePassword("");
+      setDeleteError(null);
+    }
+    setDeleteDialogOpen(open);
+  };
+
   return (
+    <>
     <SidebarMenu>
       <SidebarMenuItem>
         <DropdownMenu>
@@ -109,11 +155,8 @@ export function NavUtilisateur({
                   <span>Paramètres</span>
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem asChild className="cursor-pointer gap-3">
-                <span className="flex items-center gap-3">
-                  <IconSun className="h-4 w-4" />
-                  <BasculeMode />
-                </span>
+              <DropdownMenuItem className="cursor-pointer">
+                <BasculeMode />
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
@@ -127,7 +170,10 @@ export function NavUtilisateur({
               <span>Se déconnecter</span>
             </DropdownMenuItem>
 
-            <DropdownMenuItem className="cursor-pointer gap-3 text-muted-foreground focus:text-destructive">
+            <DropdownMenuItem
+              onClick={() => setDeleteDialogOpen(true)}
+              className="cursor-pointer gap-3 text-muted-foreground focus:text-destructive"
+            >
               <IconTrash className="h-4 w-4" />
               <span>Supprimer le compte</span>
             </DropdownMenuItem>
@@ -135,5 +181,51 @@ export function NavUtilisateur({
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
+
+      <Dialog open={deleteDialogOpen} onOpenChange={onDeleteDialogOpenChange}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <IconAlertTriangle className="size-5 text-destructive" />
+              Supprimer le compte
+            </DialogTitle>
+            <DialogDescription>
+              Cette action est irréversible. Confirmez avec votre mot de passe.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-2">
+            <Label htmlFor="delete-password">Mot de passe</Label>
+            <div className="relative">
+              <Input
+                id="delete-password"
+                type={showDeletePassword ? "text" : "password"}
+                value={deletePassword}
+                onChange={(e) => setDeletePassword(e.target.value)}
+                placeholder="Entrez votre mot de passe"
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowDeletePassword(!showDeletePassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {showDeletePassword ? <IconEyeOff className="size-4" /> : <IconEye className="size-4" />}
+              </button>
+            </div>
+            {deleteError && (
+              <p className="text-xs text-destructive">{deleteError}</p>
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => onDeleteDialogOpenChange(false)} disabled={deleting}>
+              Annuler
+            </Button>
+            <Button variant="destructive" onClick={onDeleteAccount} disabled={deleting}>
+              {deleting ? "Suppression..." : "Supprimer"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }

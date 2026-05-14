@@ -15,4 +15,14 @@ export const authService = {
     const response = await api.get("/authentification/me");
     return response.data;
   },
+
+  changePassword: async (oldPassword: string, newPassword: string) => {
+    const response = await api.put("/authentification/change-password", { oldPassword, newPassword });
+    return response.data;
+  },
+
+  deleteAccount: async (password: string) => {
+    const response = await api.delete("/authentification/account", { data: { password } });
+    return response.data;
+  },
 };

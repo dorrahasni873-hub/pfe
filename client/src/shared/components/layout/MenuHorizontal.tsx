@@ -2,6 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { ROUTES } from "@/routes";
 import { useAuthentification } from "@/features/auth/hooks/useAuth";
 import {
+  IconBrain,
+  IconCalendarMonth,
   IconDashboard,
   IconUsers,
   IconSteeringWheel,
@@ -25,6 +27,7 @@ import {
   DropdownMenuTrigger,
 } from "@/shared/components/ui/dropdown-menu";
 import { BasculeMode } from "./BasculeMode";
+import { NotificationBell } from "./NotificationBell";
 
 const navItems = [
   { title: "Tableau de bord", url: ROUTES.DASHBOARD, icon: IconDashboard, roles: ["admin", "chauffeur", "user"] },
@@ -36,6 +39,8 @@ const navItems = [
   { title: "Carnets", url: ROUTES.CARNETS, icon: IconBook, roles: ["admin", "user", "chauffeur"] },
   { title: "Entretiens", url: ROUTES.ENTRETIENS, icon: IconTools, roles: ["admin", "user", "chauffeur"] },
   { title: "Pannes", url: ROUTES.PANNES, icon: IconAlertTriangle, roles: ["admin", "user", "chauffeur"] },
+  { title: "Calendrier", url: ROUTES.CALENDRIER, icon: IconCalendarMonth, roles: ["admin", "user", "chauffeur"] },
+  { title: "Assistant IA", url: ROUTES.AI, icon: IconBrain, roles: ["admin", "user", "chauffeur"] },
 ];
 
 type MenuStyle = "floating" | "fixed" | "fullWidth";
@@ -92,6 +97,7 @@ export function MenuHorizontal({ style }: { style: MenuStyle }) {
         </div>
 
         <div className="flex items-center gap-2 shrink-0 ml-2">
+          <NotificationBell />
           <Link to={ROUTES.PARAMETRES}>
             <Button variant="ghost" size="icon" className="size-8">
               <IconSettings className="size-4" />

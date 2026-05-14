@@ -22,6 +22,8 @@ const EntretiensPage = lazy(() => import("@/features/interventions/pages/Interve
 const PannesPage = lazy(() => import("@/features/breakdowns/pages/BreakdownsPage"));
 const ProfilePage = lazy(() => import("@/shared/components/Profile/ProfilePage"));
 const ParametresPage = lazy(() => import("@/features/settings/pages/SettingsPage"));
+const CalendrierPage = lazy(() => import("@/features/calendar/pages/CalendarPage"));
+const AiPage = lazy(() => import("@/features/ai/pages/AiPage"));
 
 export const RoutesApp = () => {
   return (
@@ -49,6 +51,8 @@ export const RoutesApp = () => {
           <Route path={ROUTES.PANNES} element={<PannesPage />} />
           <Route path={ROUTES.PROFILE} element={<ProfilePage />} />
           <Route path={ROUTES.PARAMETRES} element={<ParametresPage />} />
+          <Route path={ROUTES.CALENDRIER} element={<CalendrierPage />} />
+          <Route path={ROUTES.AI} element={<AiPage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />

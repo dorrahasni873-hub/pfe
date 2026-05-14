@@ -6,9 +6,10 @@ export function useAssignments() {
   const [data, setData] = useState<Affectation[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (isRefresh = false) => {
+    isRefresh ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
       const result = await assignmentService.getAll();
@@ -16,11 +17,13 @@ export function useAssignments() {
     } catch {
       setError("Failed to load assignments");
     } finally {
-      setLoading(false);
+      isRefresh ? setRefreshing(false) : setLoading(false);
     }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const refetch = useCallback(() => fetchData(true), [fetchData]);
 
   const create = useCallback(async (payload: AffectationPayload) => {
     return await assignmentService.create(payload);
@@ -43,5 +46,5 @@ export function useAssignments() {
     return true;
   }, []);
 
-  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+  return { data, loading, error, refetch, refreshing, getAll, getById, create, update, remove };
 }

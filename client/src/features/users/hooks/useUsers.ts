@@ -6,9 +6,10 @@ export function useUsers() {
   const [data, setData] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (isRefresh = false) => {
+    isRefresh ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
       const result = await userService.getAll();
@@ -16,11 +17,13 @@ export function useUsers() {
     } catch {
       setError("Failed to load users");
     } finally {
-      setLoading(false);
+      isRefresh ? setRefreshing(false) : setLoading(false);
     }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const refetch = useCallback(() => fetchData(true), [fetchData]);
 
   const create = useCallback(async (payload: CreateUser) => {
     return await userService.create(payload);
@@ -42,5 +45,5 @@ export function useUsers() {
     return await userService.remove(id);
   }, []);
 
-  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+  return { data, loading, error, refetch, refreshing, getAll, getById, create, update, remove };
 }

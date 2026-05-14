@@ -25,6 +25,7 @@ export function NavPrincipale({
         <SidebarMenu>
           {items.map((item) => {
             const isActive = pathname === item.url || (item.url !== "/" && pathname.startsWith(item.url));
+            const label = item.title;
 
             return (
               <SidebarMenuItem key={item.title}>
@@ -50,7 +51,7 @@ export function NavPrincipale({
                         `}
                       />
                     )}
-                    <span className="truncate">{item.title}</span>
+                    <span className="truncate">{label}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

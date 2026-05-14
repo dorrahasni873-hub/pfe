@@ -6,9 +6,10 @@ export function useVehicles() {
   const [data, setData] = useState<Vehicule[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  const fetchData = useCallback(async (isRefresh = false) => {
+    isRefresh ? setRefreshing(true) : setLoading(true);
     setError(null);
     try {
       const result = await vehicleService.getAll();
@@ -16,11 +17,13 @@ export function useVehicles() {
     } catch {
       setError("Failed to load vehicles");
     } finally {
-      setLoading(false);
+      isRefresh ? setRefreshing(false) : setLoading(false);
     }
   }, []);
 
   useEffect(() => { fetchData(); }, [fetchData]);
+
+  const refetch = useCallback(() => fetchData(true), [fetchData]);
 
   const create = useCallback(async (payload: VehiculePayload) => {
     return await vehicleService.create(payload);
@@ -43,5 +46,5 @@ export function useVehicles() {
     return true;
   }, []);
 
-  return { data, loading, error, refetch: fetchData, getAll, getById, create, update, remove };
+  return { data, loading, error, refetch, refreshing, getAll, getById, create, update, remove };
 }

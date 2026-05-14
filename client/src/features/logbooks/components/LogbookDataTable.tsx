@@ -26,7 +26,7 @@ function useChauffeurMap() {
   return map;
 }
 
-export function CarnetDeBordDataTable({ data }: { data: CarnetDeBord[] }) {
+export function CarnetDeBordDataTable({ data, loading, onRefresh }: { data: CarnetDeBord[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const chauffeurMap = useChauffeurMap();
   const { remove: deleteCarnet } = useLogbooks();
 
@@ -48,6 +48,8 @@ export function CarnetDeBordDataTable({ data }: { data: CarnetDeBord[] }) {
       getRowId={(row) => row.id_carnet}
       title="Carnets de bord"
       icon={IconBook}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucun carnet de bord enregistré"
       createButton={<DialogueCreer label="Créer Carnet de bord"><CarnetDeBordForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await deleteCarnet(id); }}

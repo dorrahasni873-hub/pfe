@@ -11,4 +11,5 @@ export const ROUTES = {
   ENTRETIENS: "/entretiens",
   PANNES: "/pannes",
   PROFILE: "/profile",
+  PARAMETRES: "/parametres",
 } as const;

@@ -57,7 +57,11 @@ export const getAuthenticatedUser = async (userId: string, role: string) => {
       where: eq(utilisateur.id_utilisateur, userId),
     });
   }
-  return await db.query.chauffeur.findFirst({
+  const chauffeurUser = await db.query.chauffeur.findFirst({
     where: eq(chauffeur.id_chauffeur, userId),
   });
+  if (chauffeurUser) {
+    return { ...chauffeurUser, role: "chauffeur" };
+  }
+  return null;
 };

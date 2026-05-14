@@ -26,7 +26,7 @@ function useChauffeurMap() {
   return map;
 }
 
-export function AffectationDataTable({ data }: { data: Affectation[] }) {
+export function AffectationDataTable({ data, loading, onRefresh }: { data: Affectation[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const chauffeurMap = useChauffeurMap();
   const { remove } = useAssignments();
 
@@ -51,6 +51,8 @@ export function AffectationDataTable({ data }: { data: Affectation[] }) {
       getRowId={(row) => row.id_affectation}
       title="Affectations"
       icon={IconArrowsExchange}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucune affectation enregistrée"
       createButton={<DialogueCreer label="Créer Affectation"><AffectationForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}

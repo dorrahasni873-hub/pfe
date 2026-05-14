@@ -4,6 +4,7 @@ import {
   IconLogout,
   IconTrash,
   IconSettings,
+  IconSun,
 } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/components/ui/avatar";
 import {
@@ -103,8 +104,14 @@ export function NavUtilisateur({
                 </Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer gap-3">
-                <span className="flex items-center gap-3">
+                <Link to={ROUTES.PARAMETRES} className="flex items-center gap-3">
                   <IconSettings className="h-4 w-4" />
+                  <span>Paramètres</span>
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer gap-3">
+                <span className="flex items-center gap-3">
+                  <IconSun className="h-4 w-4" />
                   <BasculeMode />
                 </span>
               </DropdownMenuItem>

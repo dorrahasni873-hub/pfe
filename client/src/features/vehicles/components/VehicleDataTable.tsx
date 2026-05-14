@@ -30,7 +30,7 @@ export const columns: ColumnDef<Vehicule>[] = [
 import { IconTruck } from "@tabler/icons-react";
 import { useVehicles } from "@/features/vehicles/hooks/useVehicles";
 
-export function VehiculeDataTable({ data }: { data: Vehicule[] }) {
+export function VehiculeDataTable({ data, loading, onRefresh }: { data: Vehicule[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const { remove } = useVehicles();
   return (
     <TableauDonnees
@@ -39,6 +39,8 @@ export function VehiculeDataTable({ data }: { data: Vehicule[] }) {
       getRowId={(row) => row.matricule}
       title="Véhicules"
       icon={IconTruck}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucun véhicule enregistré"
       createButton={<DialogueCreer label="Créer Véhicule" adminOnly><VehiculeForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}

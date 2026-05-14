@@ -42,14 +42,18 @@ export const AuthentificationProvider = ({ children }: AuthProviderProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const login = async ({ email, motDePasse }: LoginInput) => {
-    const data = await loginApi(email, motDePasse);
+    try {
+      const data = await loginApi(email, motDePasse);
 
-    if (data && data.user) {
-      localStorage.setItem("token", data.token);
-      setUser(data.user);
-      return true;
+      if (data && data.user) {
+        localStorage.setItem("token", data.token);
+        setUser(data.user);
+        return true;
+      }
+      return false;
+    } catch {
+      return false;
     }
-    return false;
   };
 
   const register = async ({

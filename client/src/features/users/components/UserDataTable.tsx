@@ -27,7 +27,7 @@ export const columns: ColumnDef<User>[] = [
   { id: "actions", cell: ({ row }) => <UserActionsMenu row={row} /> },
 ];
 
-export function UserDataTable({ data }: { data: User[] }) {
+export function UserDataTable({ data, loading, onRefresh }: { data: User[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const { remove } = useUsers();
   return (
     <TableauDonnees
@@ -36,6 +36,8 @@ export function UserDataTable({ data }: { data: User[] }) {
       getRowId={(row) => row.id_utilisateur}
       title="Utilisateurs"
       icon={IconUsers}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucun utilisateur enregistré"
       createButton={<DialogueCreer label="Créer utilisateur"><UserForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}

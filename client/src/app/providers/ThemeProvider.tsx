@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { useSettings } from "./SettingsProvider";
 
 type Theme = "dark" | "light" | "system";
 
@@ -29,6 +30,7 @@ export function ThemeProvider({
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
   );
+  const { settings } = useSettings();
 
   useEffect(() => {
     const root = window.document.documentElement;
@@ -47,6 +49,17 @@ export function ThemeProvider({
 
     root.classList.add(theme);
   }, [theme]);
+
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const preset = settings.themePreset;
+
+    if (preset === "default") {
+      root.removeAttribute("data-theme");
+    } else {
+      root.setAttribute("data-theme", preset);
+    }
+  }, [settings.themePreset]);
 
   const value = {
     theme,

@@ -39,8 +39,16 @@ import {
   IconChevronsLeft,
   IconChevronsRight,
   IconGripVertical,
+  IconRefresh,
   IconSearch,
   IconTrash,
+  IconArrowUp,
+  IconArrowDown,
+  IconArrowsSort,
+  IconDownload,
+  IconFileTypeCsv,
+  IconFileDescription,
+  IconFileTypePdf,
 } from "@tabler/icons-react";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
@@ -50,6 +58,13 @@ import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Input } from "@/shared/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/shared/components/ui/dropdown-menu";
+import { exportToCsv, exportToJson, exportToPdf } from "./exportData";
 
 function DragHandle({ id }: { id: string }) {
   const { attributes, listeners } = useSortable({ id });
@@ -92,11 +107,13 @@ type TableauDonneesProps<T> = {
   icon?: React.ComponentType<{ className?: string }>;
   createButton?: React.ReactNode;
   onDeleteSelected?: (ids: string[]) => Promise<void>;
+  onRefresh?: () => Promise<void>;
   searchPlaceholder?: string;
   filters?: FiltreColonne[];
   emptyMessage?: string;
   loading?: boolean;
   skeletonRows?: number;
+  exportFilename?: string;
 };
 
 export function TableauDonnees<T>({
@@ -107,11 +124,13 @@ export function TableauDonnees<T>({
   icon: Icon,
   createButton,
   onDeleteSelected,
-  searchPlaceholder = "Rechercher...",
+  onRefresh,
+  searchPlaceholder,
   filters = [],
-  emptyMessage = "Aucune donnée",
+  emptyMessage,
   loading = false,
   skeletonRows = 8,
+  exportFilename,
 }: TableauDonneesProps<T>) {
   const [data, setData] = React.useState(initialData);
   React.useEffect(() => { setData(initialData); }, [initialData]);
@@ -123,6 +142,14 @@ export function TableauDonnees<T>({
   const [globalFilter, setGlobalFilter] = React.useState("");
   const [pagination, setPagination] = React.useState({ pageIndex: 0, pageSize: 10 });
   const [deleting, setDeleting] = React.useState(false);
+  const [isRefreshing, setIsRefreshing] = React.useState(false);
+
+  const handleRefresh = React.useCallback(async () => {
+    if (!onRefresh) return;
+    setIsRefreshing(true);
+    try { await onRefresh(); }
+    finally { setIsRefreshing(false); }
+  }, [onRefresh]);
 
   const sortableId = React.useId();
   const sensors = useSensors(
@@ -145,6 +172,7 @@ export function TableauDonnees<T>({
     columns,
     state: { sorting, columnVisibility, rowSelection, columnFilters, pagination, globalFilter },
     getRowId: (row) => getRowId(row),
+    enableSorting: true,
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,
@@ -230,7 +258,7 @@ export function TableauDonnees<T>({
           <Input
             value={globalFilter}
             onChange={(e) => setGlobalFilter(e.target.value)}
-            placeholder={searchPlaceholder}
+            placeholder={searchPlaceholder || "Rechercher..."}
             className="pl-8 h-9 text-sm rounded-lg"
           />
         </div>
@@ -262,6 +290,32 @@ export function TableauDonnees<T>({
         })}
 
         <div className="flex items-center gap-2 ml-auto">
+          {onRefresh && (
+            <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing} className="size-9 p-0" title="Actualiser">
+              <IconRefresh className={`size-4 ${isRefreshing ? "animate-spin" : ""}`} />
+            </Button>
+          )}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="sm" className="size-9 p-0" title="Exporter">
+                <IconDownload className="size-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => exportToCsv(table.getFilteredRowModel().rows, columns, exportFilename || title || "export")}>
+                <IconFileTypeCsv className="size-4 mr-2" />
+                CSV
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportToJson(table.getFilteredRowModel().rows, columns, exportFilename || title || "export")}>
+                <IconFileDescription className="size-4 mr-2" />
+                JSON
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => exportToPdf(table.getFilteredRowModel().rows, columns, exportFilename || title || "export", title)}>
+                <IconFileTypePdf className="size-4 mr-2" />
+                PDF
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           {selectedIds.length > 0 && onDeleteSelected && (
             <Button
               variant="destructive"
@@ -290,11 +344,29 @@ export function TableauDonnees<T>({
             <TableHeader className="bg-muted/50 sticky top-0 z-10">
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                    </TableHead>
-                  ))}
+                  {headerGroup.headers.map((header) => {
+                    const sorted = header.column.getIsSorted();
+                    return (
+                      <TableHead key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder ? null : (
+                          <button
+                            type="button"
+                            onClick={header.column.getToggleSortingHandler()}
+                            className="flex items-center gap-1.5 w-full text-left cursor-pointer select-none hover:text-foreground transition-colors"
+                          >
+                            {flexRender(header.column.columnDef.header, header.getContext())}
+                            {sorted === "asc" ? (
+                              <IconArrowUp className="size-3.5 shrink-0" />
+                            ) : sorted === "desc" ? (
+                              <IconArrowDown className="size-3.5 shrink-0" />
+                            ) : header.column.getCanSort() ? (
+                              <IconArrowsSort className="size-3.5 shrink-0 text-muted-foreground/40" />
+                            ) : null}
+                          </button>
+                        )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
               ))}
             </TableHeader>
@@ -312,7 +384,7 @@ export function TableauDonnees<T>({
                       <div className="rounded-full bg-muted p-3">
                         <IconGripVertical className="size-6 opacity-40" />
                       </div>
-                      <span className="text-sm">{emptyMessage}</span>
+                      <span className="text-sm">{emptyMessage || "Aucune donnée"}</span>
                     </div>
                   </TableCell>
                 </TableRow>
@@ -324,8 +396,7 @@ export function TableauDonnees<T>({
 
       <div className="flex items-center justify-between px-4 lg:px-6">
         <div className="hidden flex-1 text-sm text-muted-foreground lg:flex">
-          {table.getFilteredSelectedRowModel().rows.length} de{" "}
-          {table.getFilteredRowModel().rows.length} ligne(s) sélectionnée(s)
+          {table.getFilteredSelectedRowModel().rows.length} sur {table.getFilteredRowModel().rows.length} ligne(s) sélectionnée(s)
         </div>
 
         <div className="flex w-full items-center gap-8 lg:w-fit">

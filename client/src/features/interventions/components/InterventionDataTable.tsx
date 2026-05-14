@@ -14,7 +14,7 @@ import { useInterventions } from "@/features/interventions/hooks/useIntervention
 const typeColors: Record<string, string> = { préventive: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", corrective: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300" };
 const etatColors: Record<string, string> = { en_attente: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300", en_cours: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", terminé: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" };
 
-export function EntretienDataTable({ data }: { data: Entretien[] }) {
+export function EntretienDataTable({ data, loading, onRefresh }: { data: Entretien[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const { remove: deleteEntretien } = useInterventions();
   const columns: ColumnDef<Entretien>[] = [
     { id: "select", header: ({ table }) => <Checkbox checked={table.getIsAllPageRowsSelected()} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />, cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} /> },
@@ -35,6 +35,8 @@ export function EntretienDataTable({ data }: { data: Entretien[] }) {
       getRowId={(row) => row.id_entretien}
       title="Entretiens"
       icon={IconTools}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucun entretien enregistré"
       createButton={<DialogueCreer label="Planifier un entretien"><EntretienForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await deleteEntretien(id); }}

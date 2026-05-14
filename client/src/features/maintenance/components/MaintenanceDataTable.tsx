@@ -25,7 +25,7 @@ function useUserMap() {
   return map;
 }
 
-export function MaintenanceDataTable({ data }: { data: Maintenance[] }) {
+export function MaintenanceDataTable({ data, loading, onRefresh }: { data: Maintenance[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const userMap = useUserMap();
   const { remove } = useMaintenance();
 
@@ -48,6 +48,8 @@ export function MaintenanceDataTable({ data }: { data: Maintenance[] }) {
       getRowId={(row) => row.id_maintenance}
       title="Maintenances"
       icon={IconTools}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucune maintenance enregistrée"
       createButton={<DialogueCreer label="Créer Maintenance"><MaintenanceForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}

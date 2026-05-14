@@ -18,7 +18,7 @@ import { useBreakdowns } from "@/features/breakdowns/hooks/useBreakdowns";
 const typeColors: Record<string, string> = { MECANIQUE: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300", ELECTRIQUE: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", HYDRAULIQUE: "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-300", CARROSSERIE: "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300", PNEU: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300", FREIN: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300", MOTEUR: "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-300" };
 const statusColors: Record<string, string> = { en_attente: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-300", en_cours: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300", resolue: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300" };
 
-export function PanneDataTable({ data }: { data: Panne[] }) {
+export function PanneDataTable({ data, loading, onRefresh }: { data: Panne[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const [chauffeurMap, setChauffeurMap] = useState<Record<string, string>>({});
   const [vehiculeMap, setVehiculeMap] = useState<Record<string, string>>({});
   const { getAll: getChauffeurs } = useDrivers();
@@ -47,6 +47,8 @@ export function PanneDataTable({ data }: { data: Panne[] }) {
       getRowId={(row) => row.id_panne}
       title="Pannes"
       icon={IconAlertTriangle}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucune panne enregistrée"
       createButton={<DialogueCreer label="Déclarer une panne"><PanneForm /></DialogueCreer>}
       onDeleteSelected={async (ids) => { for (const id of ids) await deletePanne(id); }}

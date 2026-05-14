@@ -14,20 +14,31 @@ export const columns: ColumnDef<Chauffeur>[] = [
   {
     id: "select",
     header: ({ table }) => (
-      <Checkbox checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")} onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)} />
+      <Checkbox
+        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+        onCheckedChange={(v) => table.toggleAllPageRowsSelected(!!v)}
+      />
     ),
     cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} />,
   },
   { accessorKey: "nom", header: "Nom", cell: ({ row }) => <span className="font-medium">{row.original.nom}</span> },
   { accessorKey: "prenom", header: "Prénom" },
   { accessorKey: "cin", header: "CIN", cell: ({ row }) => <Badge variant="outline">{row.original.cin}</Badge> },
-  { accessorKey: "email", header: "Email", cell: ({ row }) => <Badge variant="outline" className="text-muted-foreground">{row.original.email}</Badge> },
+  {
+    accessorKey: "email",
+    header: "Email",
+    cell: ({ row }) => (
+      <Badge variant="outline" className="text-muted-foreground">
+        {row.original.email}
+      </Badge>
+    ),
+  },
   { accessorKey: "numeroPermis", header: "Permis", cell: ({ row }) => <Badge variant="outline">{row.original.numeroPermis}</Badge> },
   { accessorKey: "tel", header: "Téléphone", cell: ({ row }) => <Badge variant="outline">{row.original.tel}</Badge> },
   { id: "actions", cell: ({ row }) => <ChauffeurActionsMenu row={row} /> },
 ];
 
-export function ChauffeurDataTable({ data }: { data: Chauffeur[] }) {
+export function ChauffeurDataTable({ data, loading, onRefresh }: { data: Chauffeur[]; loading?: boolean; onRefresh?: () => Promise<void> }) {
   const { remove } = useDrivers();
   return (
     <TableauDonnees
@@ -36,9 +47,17 @@ export function ChauffeurDataTable({ data }: { data: Chauffeur[] }) {
       getRowId={(row) => row.id_chauffeur}
       title="Chauffeurs"
       icon={IconSteeringWheel}
+      loading={loading}
+      onRefresh={onRefresh}
       emptyMessage="Aucun chauffeur enregistré"
-      createButton={<DialogueCreer label="Créer Chauffeur" adminOnly><ChauffeurForm /></DialogueCreer>}
-      onDeleteSelected={async (ids) => { for (const id of ids) await remove(id); }}
+      createButton={
+        <DialogueCreer label="Créer Chauffeur" adminOnly>
+          <ChauffeurForm />
+        </DialogueCreer>
+      }
+      onDeleteSelected={async (ids) => {
+        for (const id of ids) await remove(id);
+      }}
     />
   );
 }

@@ -21,6 +21,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/shared/components/ui/sidebar";
+import { ROUTES } from "@/routes";
 import { BasculeMode } from "./BasculeMode";
 import { useAuthentification } from "@/features/auth/hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
@@ -45,7 +46,7 @@ export function NavUtilisateur({
 
   const onLogout = () => {
     logout();
-    navigate("/login", { replace: true });
+    navigate(ROUTES.LOGIN, { replace: true });
   };
 
   return (
@@ -96,7 +97,7 @@ export function NavUtilisateur({
 
             <DropdownMenuGroup>
               <DropdownMenuItem asChild className="cursor-pointer gap-3">
-                <Link to="/profile" className="flex items-center gap-3">
+                <Link to={ROUTES.PROFILE} className="flex items-center gap-3">
                   <IconUserCircle className="h-4 w-4" />
                   <span>Profil</span>
                 </Link>

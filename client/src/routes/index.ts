@@ -1,0 +1,14 @@
+export const ROUTES = {
+  LOGIN: "/login",
+  REGISTER: "/register",
+  DASHBOARD: "/",
+  CHAUFFEURS: "/chauffeurs",
+  VEHICULES: "/vehicules",
+  UTILISATEURS: "/utilisateurs",
+  AFFECTATIONS: "/affectations",
+  MAINTENANCES: "/maintenances",
+  CARNETS: "/carnets",
+  ENTRETIENS: "/entretiens",
+  PANNES: "/pannes",
+  PROFILE: "/profile",
+} as const;

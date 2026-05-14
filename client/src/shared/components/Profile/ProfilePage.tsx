@@ -8,7 +8,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 
-const Profile = () => {
+const ProfilePage = () => {
   const { user } = useAuthentification();
 
   if (!user) return null;
@@ -29,7 +29,6 @@ const Profile = () => {
           <div className="absolute -top-20 -right-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
 
           <div className="relative z-10 p-6 md:p-8">
-            {/* HEADER */}
             <div className="flex flex-col items-center text-center">
               <div className="relative">
                 <div className="h-24 w-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center text-3xl font-semibold text-primary shadow-lg ring-4 ring-background">
@@ -54,7 +53,6 @@ const Profile = () => {
 
             <div className="mt-6 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-            {/* INFO GRID */}
             <div className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="group rounded-xl border bg-card/50 p-4 transition-all duration-200 hover:border-primary/30 hover:shadow-md">
                 <div className="flex items-start gap-3">
@@ -121,4 +119,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfilePage;

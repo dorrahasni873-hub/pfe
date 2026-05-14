@@ -10,6 +10,7 @@ import {
   IconAlertTriangle,
   IconSearch,
 } from "@tabler/icons-react";
+import { ROUTES } from "@/routes";
 import { NavPrincipale } from "@/shared/components/layout/NavPrincipale";
 import { NavSecondaire } from "@/shared/components/layout/NavSecondaire";
 import { NavUtilisateur } from "@/shared/components/layout/NavUtilisateur";
@@ -29,55 +30,55 @@ const data = {
   navMain: [
     {
       title: "Tableau de bord",
-      url: "/",
+      url: ROUTES.DASHBOARD,
       icon: IconDashboard,
       roles: ["admin", "chauffeur", "user"],
     },
     {
       title: "Utilisateurs",
-      url: "/utilisateurs",
+      url: ROUTES.UTILISATEURS,
       icon: IconUsers,
       roles: ["admin", "user"],
     },
     {
       title: "Chauffeurs",
-      url: "/chauffeurs",
+      url: ROUTES.CHAUFFEURS,
       icon: IconSteeringWheel,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Véhicules",
-      url: "/vehicules",
+      url: ROUTES.VEHICULES,
       icon: IconTruck,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Affectations",
-      url: "/affectations",
+      url: ROUTES.AFFECTATIONS,
       icon: IconArrowsExchange,
       roles: ["admin", "user"],
     },
     {
       title: "Maintenance",
-      url: "/maintenances",
+      url: ROUTES.MAINTENANCES,
       icon: IconTools,
       roles: ["admin", "user"],
     },
     {
       title: "Carnets de Bord",
-      url: "/carnets",
+      url: ROUTES.CARNETS,
       icon: IconBook,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Entretiens",
-      url: "/entretiens",
+      url: ROUTES.ENTRETIENS,
       icon: IconTools,
       roles: ["admin", "user", "chauffeur"],
     },
     {
       title: "Pannes",
-      url: "/pannes",
+      url: ROUTES.PANNES,
       icon: IconAlertTriangle,
       roles: ["admin", "user", "chauffeur"],
     },
@@ -104,7 +105,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:p-1.5!"
             >
-              <Link to="/" className="flex items-center gap-3 group">
+              <Link to={ROUTES.DASHBOARD} className="flex items-center gap-3 group">
                 <div className="relative shrink-0">
                   <div className="absolute inset-0 rounded-xl bg-linear-to-br from-primary/40 to-primary/5 blur-sm group-hover:blur-md transition-all duration-300" />
                   <img

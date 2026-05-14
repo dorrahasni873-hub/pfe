@@ -25,12 +25,7 @@ import {
   type UniqueIdentifier,
 } from "@dnd-kit/core";
 import { restrictToVerticalAxis } from "@dnd-kit/modifiers";
-import {
-  arrayMove,
-  SortableContext,
-  useSortable,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { arrayMove, SortableContext, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
 import {
@@ -54,26 +49,11 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/components/ui/table";
 import { Badge } from "@/shared/components/ui/badge";
 import { Button } from "@/shared/components/ui/button";
-import { Checkbox } from "@/shared/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/components/ui/select";
 import { Skeleton } from "@/shared/components/ui/skeleton";
 import { Input } from "@/shared/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shared/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/shared/components/ui/dropdown-menu";
 import { exportToCsv, exportToJson, exportToPdf } from "./exportData";
-
-function DragHandle({ id }: { id: string }) {
-  const { attributes, listeners } = useSortable({ id });
-  return (
-    <Button {...attributes} {...listeners} variant="ghost" size="icon" className="size-7 cursor-grab active:cursor-grabbing hover:bg-transparent">
-      <IconGripVertical className="size-3 text-muted-foreground" />
-    </Button>
-  );
-}
 
 function DraggableRow<T>({ row, id }: { row: Row<T>; id: string }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({ id });
@@ -133,7 +113,9 @@ export function TableauDonnees<T>({
   exportFilename,
 }: TableauDonneesProps<T>) {
   const [data, setData] = React.useState(initialData);
-  React.useEffect(() => { setData(initialData); }, [initialData]);
+  React.useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
 
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
@@ -147,8 +129,11 @@ export function TableauDonnees<T>({
   const handleRefresh = React.useCallback(async () => {
     if (!onRefresh) return;
     setIsRefreshing(true);
-    try { await onRefresh(); }
-    finally { setIsRefreshing(false); }
+    try {
+      await onRefresh();
+    } finally {
+      setIsRefreshing(false);
+    }
   }, [onRefresh]);
 
   const sortableId = React.useId();
@@ -158,10 +143,7 @@ export function TableauDonnees<T>({
     useSensor(KeyboardSensor),
   );
 
-  const dataIds = React.useMemo<UniqueIdentifier[]>(
-    () => data.map((row) => getRowId(row)),
-    [data, getRowId],
-  );
+  const dataIds = React.useMemo<UniqueIdentifier[]>(() => data.map((row) => getRowId(row)), [data, getRowId]);
 
   const selectedIds = React.useMemo(() => {
     return Object.keys(rowSelection).filter((k) => rowSelection[k as keyof typeof rowSelection]);
@@ -222,7 +204,9 @@ export function TableauDonnees<T>({
             <TableHeader className="bg-muted/50">
               <TableRow>
                 {columns.slice(0, Math.min(columns.length, 6)).map((_, i) => (
-                  <TableHead key={i}><Skeleton className="h-4 w-20" /></TableHead>
+                  <TableHead key={i}>
+                    <Skeleton className="h-4 w-20" />
+                  </TableHead>
                 ))}
               </TableRow>
             </TableHeader>
@@ -230,7 +214,9 @@ export function TableauDonnees<T>({
               {Array.from({ length: skeletonRows }).map((_, i) => (
                 <TableRow key={i}>
                   {columns.slice(0, Math.min(columns.length, 6)).map((_, j) => (
-                    <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
+                    <TableCell key={j}>
+                      <Skeleton className="h-4 w-full" />
+                    </TableCell>
                   ))}
                 </TableRow>
               ))}
@@ -282,7 +268,9 @@ export function TableauDonnees<T>({
               <SelectContent>
                 <SelectItem value="__all__">Tous</SelectItem>
                 {filter.options.map((opt) => (
-                  <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+                  <SelectItem key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -317,13 +305,7 @@ export function TableauDonnees<T>({
             </DropdownMenuContent>
           </DropdownMenu>
           {selectedIds.length > 0 && onDeleteSelected && (
-            <Button
-              variant="destructive"
-              size="sm"
-              onClick={handleDeleteSelected}
-              disabled={deleting}
-              className="gap-2"
-            >
+            <Button variant="destructive" size="sm" onClick={handleDeleteSelected} disabled={deleting} className="gap-2">
               <IconTrash className="size-4" />
               <span>Supprimer ({selectedIds.length})</span>
             </Button>
@@ -348,7 +330,7 @@ export function TableauDonnees<T>({
                     const sorted = header.column.getIsSorted();
                     return (
                       <TableHead key={header.id} colSpan={header.colSpan}>
-                        {header.isPlaceholder ? null : (
+                        {header.isPlaceholder ? null : header.column.getCanSort() ? (
                           <button
                             type="button"
                             onClick={header.column.getToggleSortingHandler()}
@@ -359,10 +341,12 @@ export function TableauDonnees<T>({
                               <IconArrowUp className="size-3.5 shrink-0" />
                             ) : sorted === "desc" ? (
                               <IconArrowDown className="size-3.5 shrink-0" />
-                            ) : header.column.getCanSort() ? (
+                            ) : (
                               <IconArrowsSort className="size-3.5 shrink-0 text-muted-foreground/40" />
-                            ) : null}
+                            )}
                           </button>
+                        ) : (
+                          flexRender(header.column.columnDef.header, header.getContext())
                         )}
                       </TableHead>
                     );
@@ -402,16 +386,15 @@ export function TableauDonnees<T>({
         <div className="flex w-full items-center gap-8 lg:w-fit">
           <div className="hidden items-center gap-2 lg:flex">
             <span className="text-sm text-muted-foreground">Lignes/page</span>
-            <Select
-              value={`${table.getState().pagination.pageSize}`}
-              onValueChange={(v) => table.setPageSize(Number(v))}
-            >
+            <Select value={`${table.getState().pagination.pageSize}`} onValueChange={(v) => table.setPageSize(Number(v))}>
               <SelectTrigger size="sm" className="w-20">
                 <SelectValue placeholder={table.getState().pagination.pageSize} />
               </SelectTrigger>
               <SelectContent side="top">
                 {[5, 10, 20, 30, 40, 50].map((size) => (
-                  <SelectItem key={size} value={`${size}`}>{size}</SelectItem>
+                  <SelectItem key={size} value={`${size}`}>
+                    {size}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -422,7 +405,12 @@ export function TableauDonnees<T>({
           </div>
 
           <div className="flex items-center gap-1">
-            <Button variant="outline" className="hidden size-8 p-0 lg:flex" onClick={() => table.setPageIndex(0)} disabled={!table.getCanPreviousPage()}>
+            <Button
+              variant="outline"
+              className="hidden size-8 p-0 lg:flex"
+              onClick={() => table.setPageIndex(0)}
+              disabled={!table.getCanPreviousPage()}
+            >
               <IconChevronsLeft className="size-4" />
             </Button>
             <Button variant="outline" className="size-8 p-0" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
@@ -431,7 +419,12 @@ export function TableauDonnees<T>({
             <Button variant="outline" className="size-8 p-0" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
               <IconChevronRight className="size-4" />
             </Button>
-            <Button variant="outline" className="hidden size-8 p-0 lg:flex" onClick={() => table.setPageIndex(table.getPageCount() - 1)} disabled={!table.getCanNextPage()}>
+            <Button
+              variant="outline"
+              className="hidden size-8 p-0 lg:flex"
+              onClick={() => table.setPageIndex(table.getPageCount() - 1)}
+              disabled={!table.getCanNextPage()}
+            >
               <IconChevronsRight className="size-4" />
             </Button>
           </div>

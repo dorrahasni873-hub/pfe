@@ -7,7 +7,7 @@ export const chauffeurSchema = z.object({
   cin: z.string(),
   tel: z.string(),
   numeroPermis: z.string(),
-  password: z.string(),
+  motdepasse: z.string(),
   email: z.string().email(),
   role: z.string().optional(),
 });

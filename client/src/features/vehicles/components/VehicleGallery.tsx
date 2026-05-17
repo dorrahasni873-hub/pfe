@@ -38,7 +38,7 @@ export function VehicleGallery({ data }: { data: Vehicule[] }) {
                 </div>
                 <div>
                   <CardTitle className="text-base">{vehicle.matricule}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{vehicle.marqueVoiture}</p>
+                  <p className="text-sm text-muted-foreground">{vehicle.marque}</p>
                 </div>
               </div>
               <Badge className={etatColors[vehicle.etat] || ""}>

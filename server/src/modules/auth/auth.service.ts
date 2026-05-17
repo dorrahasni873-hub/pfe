@@ -44,7 +44,7 @@ export const loginUser = async (email: string, motDePasse: string) => {
       account = {
         id: chauffeurUser.id_chauffeur,
         email: chauffeurUser.email,
-        password: chauffeurUser.password,
+        password: chauffeurUser.motdepasse,
         role: "chauffeur",
       };
     }
@@ -81,7 +81,7 @@ export const deleteAccount = async (userId: string, role: string, password: stri
       account = {
         id: chauffeurUser.id_chauffeur,
         email: chauffeurUser.email,
-        password: chauffeurUser.password,
+        password: chauffeurUser.motdepasse,
         role: "chauffeur",
       };
     }
@@ -147,7 +147,7 @@ export const changePassword = async (
       account = {
         id: chauffeurUser.id_chauffeur,
         email: chauffeurUser.email,
-        password: chauffeurUser.password,
+        password: chauffeurUser.motdepasse,
         role: "chauffeur",
       };
     }
@@ -167,7 +167,7 @@ export const changePassword = async (
   } else {
     await db
       .update(chauffeur)
-      .set({ password: newHash })
+      .set({ motdepasse: newHash })
       .where(eq(chauffeur.id_chauffeur, userId));
   }
 

@@ -17,7 +17,7 @@ export const getByMatricule = async (matricule: string) => {
 
 export const create = async (data: {
   matricule: string;
-  marqueVoiture: string;
+  marque: string;
   dateCirculation: string;
   dateVisite: string;
   dateTaxe: string;
@@ -29,7 +29,7 @@ export const create = async (data: {
 export const update = async (
   matricule: string,
   data: Partial<{
-    marqueVoiture: string;
+    marque: string;
     dateCirculation: string;
     dateVisite: string;
     dateTaxe: string;

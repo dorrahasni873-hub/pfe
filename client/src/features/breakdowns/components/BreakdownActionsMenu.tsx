@@ -24,7 +24,6 @@ const PanneActionsMenu = ({ row }: Props) => {
             ],
             [
               { label: "Date déclaration", value: p.dateDeclaration },
-              { label: "Status", value: p.status },
             ],
           ],
         })

@@ -16,7 +16,7 @@ export const columns: ColumnDef<Vehicule>[] = [
     cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(v) => row.toggleSelected(!!v)} />,
   },
   { accessorKey: "matricule", header: "Matricule", cell: ({ row }) => <span className="font-medium">{row.original.matricule}</span> },
-  { accessorKey: "marqueVoiture", header: "Marque" },
+  { accessorKey: "marque", header: "Marque" },
   { accessorKey: "dateCirculation", header: "Mise en circulation", cell: ({ row }) => <span className="text-sm text-muted-foreground">{format(row.original.dateCirculation, "dd/MM/yyyy")}</span> },
   { accessorKey: "dateVisite", header: "Visite technique", cell: ({ row }) => <span className="text-sm text-muted-foreground">{format(row.original.dateVisite, "dd/MM/yyyy")}</span> },
   { accessorKey: "dateTaxe", header: "Taxe", cell: ({ row }) => <span className="text-sm text-muted-foreground">{format(row.original.dateTaxe, "dd/MM/yyyy")}</span> },

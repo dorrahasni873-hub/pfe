@@ -60,7 +60,7 @@ export function GraphiqueCamembert() {
   const chartData = React.useMemo(() => {
     const counts: Record<string, number> = {};
     vehicules.forEach((vehicule) => {
-      const marque = vehicule.marqueVoiture || "Unknown";
+      const marque = vehicule.marque || "Unknown";
       counts[marque] = (counts[marque] || 0) + 1;
     });
     return Object.entries(counts).map(([marque, total], index) => ({

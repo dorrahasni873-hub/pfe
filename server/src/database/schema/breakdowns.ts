@@ -6,5 +6,5 @@ export const panne = pgTable("panne", {
   dateDeclaration: date("date_declaration").notNull(),
   chauffeurId: uuid("id_chauffeur").notNull(),
   matricule: varchar("matricule", { length: 300 }).notNull(),
-  status: varchar("status", { length: 100 }).notNull().default("en_attente"),
+  maintenanceId: uuid("maintenance_id"),
 });

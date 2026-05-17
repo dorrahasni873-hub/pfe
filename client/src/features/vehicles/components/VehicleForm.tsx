@@ -29,7 +29,7 @@ const VehiculeForm = ({ vehicule }: Props) => {
           dateVisite: new Date(vehicule.dateVisite),
           dateTaxe: new Date(vehicule.dateTaxe),
         }
-      : { matricule: "", marqueVoiture: "", etat: "" },
+      : { matricule: "", marque: "", etat: "" },
   });
 
   const { create, update } = useVehicles();
@@ -38,7 +38,7 @@ const VehiculeForm = ({ vehicule }: Props) => {
     try {
       const payload: VehiculePayload = {
         matricule: data.matricule,
-        marqueVoiture: data.marqueVoiture,
+        marque: data.marque,
         dateCirculation: format(data.dateCirculation, "yyyy-MM-dd"),
         dateVisite: format(data.dateVisite, "yyyy-MM-dd"),
         dateTaxe: format(data.dateTaxe, "yyyy-MM-dd"),
@@ -69,8 +69,8 @@ const VehiculeForm = ({ vehicule }: Props) => {
         <Field>
           <FieldLabel>Marque</FieldLabel>
           <FieldContent>
-            <Input {...register("marqueVoiture")} placeholder="Marque" aria-invalid={!!errors.marqueVoiture} />
-            <FieldError errors={[errors.marqueVoiture]} />
+            <Input {...register("marque")} placeholder="Marque" aria-invalid={!!errors.marque} />
+            <FieldError errors={[errors.marque]} />
           </FieldContent>
         </Field>
         <ChampDate label="Date de circulation" name="dateCirculation" watch={watch} setValue={setValue} />

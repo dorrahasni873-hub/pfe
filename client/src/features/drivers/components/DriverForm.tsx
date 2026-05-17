@@ -34,7 +34,7 @@ const ChauffeurForm = ({ chauffeur }: Props) => {
     { name: "nom" as const, label: "Nom", placeholder: "Nom" },
     { name: "prenom" as const, label: "Prénom", placeholder: "Prénom" },
     { name: "email" as const, label: "Email", placeholder: "Email", type: "email" },
-    { name: "password" as const, label: "Mot de passe", placeholder: "Mot de passe", type: "password" },
+    { name: "motdepasse" as const, label: "Mot de passe", placeholder: "Mot de passe", type: "password" },
     { name: "tel" as const, label: "Téléphone", placeholder: "Téléphone" },
     { name: "cin" as const, label: "CIN", placeholder: "CIN" },
     { name: "numeroPermis" as const, label: "Numéro de permis", placeholder: "Numéro de permis" },

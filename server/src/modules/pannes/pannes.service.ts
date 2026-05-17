@@ -31,7 +31,7 @@ export const create = async (data: {
   dateDeclaration: string;
   chauffeurId: string;
   matricule: string;
-  status?: string;
+  maintenanceId?: string;
 }) => db.insert(panne).values(data).returning();
 
 export const update = async (id: string, data: PanneUpdate) =>

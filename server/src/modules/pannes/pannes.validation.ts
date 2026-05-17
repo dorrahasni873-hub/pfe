@@ -6,7 +6,7 @@ export const panneSchema = z.object({
   dateDeclaration: z.string(),
   chauffeurId: z.string(),
   matricule: z.string(),
-  status: z.string().default("en_attente"),
+  maintenanceId: z.string().optional(),
 });
 
 export const createPanneSchema = panneSchema.omit({

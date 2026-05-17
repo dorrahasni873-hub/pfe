@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const VehiculeSchema = z.object({
   matricule: z.string(),
-  marqueVoiture: z.string(),
+  marque: z.string(),
   dateCirculation: z.date(),
   dateVisite: z.date(),
   dateTaxe: z.date(),
@@ -17,7 +17,7 @@ export const updateVehiculeSchema = VehiculeSchema.partial().omit({
 
 export type VehiculePayload = {
   matricule: string;
-  marqueVoiture: string;
+  marque: string;
   dateCirculation: string;
   dateVisite: string;
   dateTaxe: string;

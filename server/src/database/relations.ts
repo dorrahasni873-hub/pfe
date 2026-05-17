@@ -1,14 +1,5 @@
 import { relations } from "drizzle-orm";
-import {
-  utilisateur,
-  vehicules,
-  maintenance,
-  chauffeur,
-  panne,
-  affectation,
-  entretien,
-  carnetDeBord,
-} from "./schema";
+import { utilisateur, vehicules, maintenance, chauffeur, panne, affectation, entretien, carnetDeBord } from "./schema";
 
 export const utilisateurRelations = relations(utilisateur, ({ many }) => ({
   maintenances: many(maintenance),
@@ -19,7 +10,7 @@ export const vehiculesRelations = relations(vehicules, ({ many }) => ({
   affectations: many(affectation),
 }));
 
-export const maintenanceRelations = relations(maintenance, ({ one }) => ({
+export const maintenanceRelations = relations(maintenance, ({ one, many }) => ({
   utilisateur: one(utilisateur, {
     fields: [maintenance.id_utilisateur],
     references: [utilisateur.id_utilisateur],
@@ -28,6 +19,7 @@ export const maintenanceRelations = relations(maintenance, ({ one }) => ({
     fields: [maintenance.matricule],
     references: [vehicules.matricule],
   }),
+  pannes: many(panne),
 }));
 
 export const affectationRelations = relations(affectation, ({ one }) => ({
@@ -54,6 +46,10 @@ export const panneRelations = relations(panne, ({ one }) => ({
   vehicule: one(vehicules, {
     fields: [panne.matricule],
     references: [vehicules.matricule],
+  }),
+  maintenance: one(maintenance, {
+    fields: [panne.maintenanceId],
+    references: [maintenance.id_maintenance],
   }),
 }));
 

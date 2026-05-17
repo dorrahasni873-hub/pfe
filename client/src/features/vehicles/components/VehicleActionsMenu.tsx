@@ -19,11 +19,11 @@ const VehiculeActionsMenu = ({ row }: Props) => {
       onPrint={() =>
         openPrintFiche({
           title: `Véhicule ${v.matricule}`,
-          subtitle: v.marqueVoiture,
+          subtitle: v.marque,
           sections: [
             [
               { label: "Matricule", value: v.matricule },
-              { label: "Marque", value: v.marqueVoiture },
+              { label: "Marque", value: v.marque },
             ],
             [
               { label: "Mise en circulation", value: format(v.dateCirculation, "dd/MM/yyyy", { locale: fr }) },

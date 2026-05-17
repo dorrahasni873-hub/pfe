@@ -61,7 +61,7 @@ const AffectationForm = ({ affectation }: Props) => {
             <Controller control={control} name="matricule" render={({ field }) => (
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger><SelectValue placeholder="Choisir un véhicule" /></SelectTrigger>
-                <SelectContent>{vehicules.map((v) => <SelectItem key={v.matricule} value={v.matricule}>{v.marqueVoiture} ({v.matricule})</SelectItem>)}</SelectContent>
+                <SelectContent>{vehicules.map((v) => <SelectItem key={v.matricule} value={v.matricule}>{v.marque} ({v.matricule})</SelectItem>)}</SelectContent>
               </Select>
             )} />
             <FieldError errors={[errors.matricule]} />

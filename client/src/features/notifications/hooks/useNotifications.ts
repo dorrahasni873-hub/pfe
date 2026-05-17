@@ -28,7 +28,7 @@ export function useNotifications() {
         for (const v of vehicules) {
           const veh = v as Record<string, unknown>;
           const matricule = veh.matricule as string;
-          const marque = veh.marqueVoiture as string;
+          const marque = veh.marque as string;
           const label = `${matricule} (${marque})`;
 
           if (veh.dateVisite) {

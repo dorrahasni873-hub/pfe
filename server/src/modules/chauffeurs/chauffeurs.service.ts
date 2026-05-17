@@ -24,10 +24,10 @@ export const getById = async (id: string): Promise<Chauffeur | null> => {
 export const create = async (
   data: ChauffeurInsert,
 ): Promise<Chauffeur[]> => {
-  const passwordHash = await bcrypt.hash(data.password, SALT_ROUNDS);
+  const passwordHash = await bcrypt.hash(data.motdepasse, SALT_ROUNDS);
   return db
     .insert(chauffeur)
-    .values({ ...data, password: passwordHash })
+    .values({ ...data, motdepasse: passwordHash })
     .returning();
 };
 
@@ -36,8 +36,8 @@ export const update = async (
   data: ChauffeurUpdate,
 ): Promise<Chauffeur[]> => {
   const updateData = { ...data };
-  if (updateData.password) {
-    updateData.password = await bcrypt.hash(updateData.password, SALT_ROUNDS);
+  if (updateData.motdepasse) {
+    updateData.motdepasse = await bcrypt.hash(updateData.motdepasse, SALT_ROUNDS);
   }
   return db
     .update(chauffeur)

@@ -25,7 +25,7 @@ export default function PanneForm({ panne }: Props) {
 
   const form = useForm({
     resolver: zodResolver(createPanneSchema),
-    defaultValues: panne ?? { typePanne: "", dateDeclaration: new Date().toISOString().split("T")[0], chauffeurId: "", matricule: "", status: "en_attente" },
+    defaultValues: panne ?? { typePanne: "", dateDeclaration: new Date().toISOString().split("T")[0], chauffeurId: "", matricule: "" },
   });
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function PanneForm({ panne }: Props) {
           <FieldContent>
             <Select onValueChange={(v) => form.setValue("matricule", v)} defaultValue={panne?.matricule}>
               <SelectTrigger><SelectValue placeholder="Véhicule" /></SelectTrigger>
-              <SelectContent>{vehicules.map((v) => <SelectItem key={v.matricule} value={v.matricule}>{v.marqueVoiture} ({v.matricule})</SelectItem>)}</SelectContent>
+              <SelectContent>{vehicules.map((v) => <SelectItem key={v.matricule} value={v.matricule}>{v.marque} ({v.matricule})</SelectItem>)}</SelectContent>
             </Select>
             <FieldError errors={[errors.matricule]} />
           </FieldContent>
@@ -83,21 +83,6 @@ export default function PanneForm({ panne }: Props) {
               <SelectContent>{chauffeurs.map((c) => <SelectItem key={c.id_chauffeur} value={c.id_chauffeur}>{c.nom} {c.prenom}</SelectItem>)}</SelectContent>
             </Select>
             <FieldError errors={[errors.chauffeurId]} />
-          </FieldContent>
-        </Field>
-        <Field>
-          <FieldLabel>Statut</FieldLabel>
-          <FieldContent>
-            <Select onValueChange={(v) => form.setValue("status", v)} defaultValue={panne?.status || "en_attente"}>
-              <SelectTrigger><SelectValue placeholder="Statut" /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="en_attente">En attente</SelectItem>
-                <SelectItem value="en_cours">En cours</SelectItem>
-                <SelectItem value="resolue">Résolue</SelectItem>
-                <SelectItem value="annulee">Annulée</SelectItem>
-              </SelectContent>
-            </Select>
-            <FieldError errors={[errors.status]} />
           </FieldContent>
         </Field>
       </div>
